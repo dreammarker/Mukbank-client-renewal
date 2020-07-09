@@ -1,20 +1,18 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {Text, Button} from 'react-native';
+// import {StackNavigationProp} from '@react-navigation/stack';
+// import {Text, Button} from 'react-native';
+import MapView from 'react-native-maps';
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList, 'Search'>;
-interface Props {
-  navigation: NavigationProp;
-}
-
-function MapScreen({navigation}: Props) {
+// type NavigationProp = StackNavigationProp<MainStackNaviParamList, 'Search'>;
+// interface Props {
+//   navigation: NavigationProp;
+// }
+function MapScreen() {
+  console.log('MapScreen');
   return (
     <>
-      <Text>hi</Text>
-      <Button
-        title="Search로 이동"
-        onPress={() => navigation.navigate('Search')}
-      />
+      <MapView style={{flex: 1}} />
     </>
   );
 }
