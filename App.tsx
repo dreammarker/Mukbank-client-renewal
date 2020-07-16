@@ -26,7 +26,10 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false, // 위에 바 없애줌
+        }}>
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
         <Stack.Screen name="SearchList" component={SearchListScreen} />
