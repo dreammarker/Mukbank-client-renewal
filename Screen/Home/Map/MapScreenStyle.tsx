@@ -6,6 +6,7 @@ type Style = {
   marker: ViewStyle;
   container: ViewStyle;
   gpsBtn: ImageStyle;
+  searchBar: ViewStyle;
 };
 
 const styles = StyleSheet.create<Style>({
@@ -41,6 +42,13 @@ const styles = StyleSheet.create<Style>({
     overflow: 'hidden',
     backgroundColor: '#007AFF',
     borderColor: 'white',
+  },
+  searchBar: {
+    top: '5%',
+    left: '2%',
+    right: '2%',
+    position: 'absolute',
+    backgroundColor: 'white',
   },
   gpsBtn: {
     margin: 2,

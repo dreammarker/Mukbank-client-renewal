@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import {Searchbar} from 'react-native-paper';
 import MapView, {Marker} from 'react-native-maps';
+import {StackNavigationProp} from '@react-navigation/stack';
 import Geolocation from '@react-native-community/geolocation';
 import {View} from 'react-native';
 
@@ -10,7 +12,12 @@ type Location = {
   longitude: number; // 127.5896299
 };
 
-function MapScreen() {
+type NavigationProp = StackNavigationProp<MainStackNaviParamList, 'Search'>;
+interface Props {
+  navigation: NavigationProp;
+}
+
+function MapScreen({navigation}: Props) {
   const [location, setLocation] = useState<Location | undefined>(undefined);
 
   const getCurrentLocation = () => {
@@ -35,7 +42,6 @@ function MapScreen() {
     getCurrentLocation();
   }, []);
 
-  console.log('MapScreen');
   return (
     <View style={styles.container}>
       {location && (
@@ -61,6 +67,11 @@ function MapScreen() {
           </Marker>
         </MapView>
       )}
+      <Searchbar
+        style={styles.searchBar as any}
+        placeholder="검색"
+        onFocus={() => navigation.navigate('Search')}
+      />
     </View>
   );
 }
