@@ -1,22 +1,26 @@
-import React from 'react';
-import {Text, Button} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useState} from 'react';
+import 'rxjs/add/operator/map';
+import {View} from 'react-native';
+import {Searchbar} from 'react-native-paper';
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList, 'SearchList'>;
-interface Props {
-  navigation: NavigationProp;
-}
+import styles from './SearchScreenStyle';
+import {FilterData} from './Components/FilterData';
+import SelectFilter from './Components/SelectFilter';
 
-function SearchScreen({navigation}: Props) {
-  // 검색 했을 때 모달창으로 list를 띄어야 하는지.. 아니면 새로운 창으로 넣어야 하는지
+function SearchScreen() {
+  const [FilterDatas] = useState<object>(FilterData);
+
   return (
-    <>
-      <Text>Search이다</Text>
-      <Button
-        title="SearchList로 이동"
-        onPress={() => navigation.navigate('SearchList')}
-      />
-    </>
+    <View style={styles.container as any}>
+      <Searchbar style={styles.searchBar as any} placeholder="검색" />
+      <View style={styles.chipView as any}>
+        {FilterDatas.map((item: object) => (
+          <View key={JSON.stringify(item)}>
+            <SelectFilter list={item} />
+          </View>
+        ))}
+      </View>
+    </View>
   );
 }
 
