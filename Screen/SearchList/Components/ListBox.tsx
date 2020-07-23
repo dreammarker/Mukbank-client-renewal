@@ -1,21 +1,22 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {Grid, Col} from 'react-native-easy-grid';
+import {View, TouchableOpacity} from 'react-native';
+
 import ListBoxImg from './ListBoxImg';
 import ListBoxText from './ListBoxText';
-type list = {
-  id: number;
-  name: string;
-  kind: string;
-  address: string;
-};
 
-function ListBox(list: list) {
-  console.log(list);
+function ListBox({list}: any) {
   return (
     <View>
       <TouchableOpacity>
-        <ListBoxImg />
-        <ListBoxText list={list} />
+        <Grid>
+          <Col size={1}>
+            <ListBoxImg />
+          </Col>
+          <Col size={3}>
+            <ListBoxText list={list} />
+          </Col>
+        </Grid>
       </TouchableOpacity>
     </View>
   );
