@@ -1,12 +1,19 @@
 import React from 'react';
+import {StackNavigationProp} from '@react-navigation/stack';
+
 import {Avatar} from 'react-native-paper';
 import {Grid, Col} from 'react-native-easy-grid';
 import {View, TouchableOpacity} from 'react-native';
 
-function ListBoxImg() {
+type NavigationProp = StackNavigationProp<MainStackNaviParamList, 'Detail'>;
+interface Props {
+  navigation: NavigationProp;
+}
+
+function ListBoxImg({navigation}: Props) {
   return (
     <>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
         <Grid>
           <Col
             size={1}

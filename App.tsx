@@ -7,21 +7,19 @@
  *
  * @format
  */
+// declare const global: {HermesInternal: null | {}};
 
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-// import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import MapScreen from './Screen/Home/Map/MapScreen';
-import SearchScreen from './Screen/Search/SearchScreen';
-import SearchListScreen from './Screen/SearchList/SearchListScreen';
-import DetailScreen from './Screen/Detail/DetailScreen';
-
-// declare const global: {HermesInternal: null | {}};
+import Home from './Screen/Home/Home';
+import SearchScreen from './Screen/Main/Screen/Search/SearchScreen';
+import SearchListScreen from './Screen/Main/Screen/SearchList/SearchListScreen';
+import DetailScreen from './Screen/Main/Screen/Detail/DetailScreen';
+import LoadNaviScreen from './Screen/Main/Screen/LoadNavi/LoadNaviScreen';
 
 const Stack = createStackNavigator();
-// const Drawer = createDrawerNavigator();
 
 const App = () => {
   return (
@@ -30,10 +28,11 @@ const App = () => {
         screenOptions={{
           headerShown: false, // 위에 바 없애줌
         }}>
-        <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Search" component={SearchScreen} />
         <Stack.Screen name="SearchList" component={SearchListScreen} />
-        <Stack.Screen name="DetailS" component={DetailScreen} />
+        <Stack.Screen name="Detail" component={DetailScreen} />
+        <Stack.Screen name="LoadNavi" component={LoadNaviScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

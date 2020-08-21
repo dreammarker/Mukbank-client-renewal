@@ -16,7 +16,7 @@
      <!-- 구글 맵 api -->
       <meta-data 
       android:name="com.google.android.geo.API_KEY"
-      android:value=""/>
+      android:value="AIzaSyCx6xqqo1LJwrmv9U8KMpseAQK6KeGT91Q"/>
       
       <activity
         android:name=".MainActivity"
