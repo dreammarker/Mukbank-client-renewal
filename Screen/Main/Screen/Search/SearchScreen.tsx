@@ -1,24 +1,44 @@
 import React, {useState} from 'react';
-import 'rxjs/add/operator/map';
-import {View} from 'react-native';
-import {Searchbar} from 'react-native-paper';
+import {Searchbar, Chip} from 'react-native-paper';
+import {View, Button, ScrollView} from 'react-native';
 
 import styles from './SearchScreenStyle';
-import {FilterData} from './Components/FilterData';
-import SelectFilter from './Components/SelectFilter';
+import {ChipListData} from './Components/FoodChips/ChipListData';
+import FoodChipList from './Components/FoodChips/ChipList';
 
-function SearchScreen() {
-  const [FilterDatas] = useState<object>(FilterData);
+function SearchScreen({navigation}: any) {
+  const [chipListData] = useState<Array<object>>(ChipListData);
 
   return (
     <View style={styles.container as any}>
-      <Searchbar style={styles.searchBar as any} placeholder="검색" />
-      <View style={styles.chipView as any}>
-        {FilterDatas.map((item: object) => (
-          <View key={JSON.stringify(item)}>
-            <SelectFilter list={item} />
-          </View>
-        ))}
+      <Searchbar
+        icon="chevron-left"
+        style={styles.searchBar as any}
+        placeholder="검색"
+        onIconPress={() => navigation.goBack()}
+      />
+      {/* ------------------------------------------------------------  */}
+      <View style={styles.filterView}>
+        <View style={styles.selectedChipView}>
+          <ScrollView horizontal={true}>
+            <Chip mode="outlined">한식</Chip>
+            <Chip mode="outlined">일식</Chip>
+            <Chip mode="outlined">퓨전음식</Chip>
+            <Chip mode="outlined">머시기</Chip>
+            <Chip mode="outlined">아시아음식</Chip>
+            <Chip mode="outlined">아시아음식</Chip>
+            <Chip mode="outlined">아시아음식</Chip>
+            <Chip mode="outlined">아시아음식</Chip>
+          </ScrollView>
+          <Button title="검색" />
+        </View>
+        <View style={styles.chipView as any}>
+          {chipListData.map((item: object) => (
+            <View key={JSON.stringify(item)}>
+              <FoodChipList list={item} navigation={navigation} />
+            </View>
+          ))}
+        </View>
       </View>
     </View>
   );

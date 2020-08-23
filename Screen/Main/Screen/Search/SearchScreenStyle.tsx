@@ -4,6 +4,8 @@ type Style = {
   container: ViewStyle;
   searchBar: ViewStyle;
   chipView: ViewStyle;
+  filterView: ViewStyle;
+  selectedChipView: ViewStyle;
 };
 
 const styles = StyleSheet.create<Style>({
@@ -17,6 +19,10 @@ const styles = StyleSheet.create<Style>({
     position: 'absolute',
     backgroundColor: 'white',
   },
+  selectedChipView: {
+    top: '3%',
+  },
+  filterView: {top: '10%'},
   chipView: {
     margin: '5%',
     flexWrap: 'wrap',
