@@ -1,16 +1,19 @@
 import React from 'react';
+
 import {Chip} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 // import axios from 'axios';
 
-import styles from './SelectFilterStyles';
+import styles from './ChipListStyles';
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList, 'SearchList'>;
-interface Props {
+type NavigationProp = StackNavigationProp<HomeStackNaviParamList, 'SearchList'>;
+
+interface ChipListProps {
   navigation: NavigationProp;
+  list: any;
 }
 
-function SelectFilter({list}: any, {navigation}: Props) {
+function ChipList({navigation, list}: ChipListProps) {
   // const ClickFilter = (kind:string) => {
   //   axios({method: 'post', url : `~~~~~~~~`, data: {
   //     latitude: latitude,
@@ -24,7 +27,7 @@ function SelectFilter({list}: any, {navigation}: Props) {
     <>
       <Chip
         mode="outlined"
-        height={30}
+        height={35}
         textStyle={{fontSize: 16}}
         style={styles.chips as any}
         // onPress={() => ClickFilter(list.name)}
@@ -34,4 +37,4 @@ function SelectFilter({list}: any, {navigation}: Props) {
     </>
   );
 }
-export default SelectFilter;
+export default ChipList;
