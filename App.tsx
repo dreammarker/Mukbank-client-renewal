@@ -9,9 +9,10 @@
  */
 // declare const global: {HermesInternal: null | {}};
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import Geolocation from '@react-native-community/geolocation';
 
 import Home from './Screen/Home/Home';
 import SearchScreen from './Screen/Main/Screen/Search/SearchScreen';
@@ -21,21 +22,49 @@ import LoadNaviScreen from './Screen/Main/Screen/LoadNavi/LoadNaviScreen';
 
 const Stack = createStackNavigator();
 
-const App = () => {
+interface AppProps {
+  Location: {
+    latitude: number;
+    longitude: number;
+  };
+  // 36.9919666, 127.5896299
+}
+
+function App({Location}: AppProps) {
+  const [location, setLocation] = useState(Location);
+
+  const GetCurrentLocation: any = () => {
+    // 현재위치 표시
+    Geolocation.getCurrentPosition((locationInfo) => {
+      setLocation({
+        latitude: locationInfo.coords.latitude,
+        longitude: locationInfo.coords.longitude,
+      });
+    });
+  };
+
+  useEffect(() => {
+    GetCurrentLocation();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false, // 위에 바 없애줌
         }}>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="Home">
+          {(props) => <Home {...props} location={location} />}
+        </Stack.Screen>
+        <Stack.Screen name="Search">
+          {(props) => <SearchScreen {...props} location={location} />}
+        </Stack.Screen>
         <Stack.Screen name="SearchList" component={SearchListScreen} />
         <Stack.Screen name="Detail" component={DetailScreen} />
         <Stack.Screen name="LoadNavi" component={LoadNaviScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
+}
 
 export default App;
