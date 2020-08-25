@@ -8,6 +8,8 @@ import {ChipListData} from './Components/ChipListData';
 
 function SelectFilter() {
   const [chipListData] = useState<Array<object>>(ChipListData);
+  const [select, setSelect] = useState<string>('');
+  console.log(select);
 
   return (
     <View>
@@ -18,9 +20,9 @@ function SelectFilter() {
         <Button>검색</Button>
       </View>
       <View style={styles.selectedChipView as any}>
-        {chipListData.map((item: object) => (
-          <View key={JSON.stringify(item)}>
-            <ChipList list={item} />
+        {chipListData.map((list: object) => (
+          <View key={JSON.stringify(list)}>
+            <ChipList list={list} select={select} setSelect={setSelect} />
           </View>
         ))}
       </View>

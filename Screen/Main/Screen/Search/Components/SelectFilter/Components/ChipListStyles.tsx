@@ -1,11 +1,11 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
 type Style = {
-  chips: ViewStyle;
+  unSelectChips: ViewStyle;
 };
 
 const styles = StyleSheet.create<Style>({
-  chips: {
+  unSelectChips: {
     backgroundColor: 'white',
     textAlign: 'center',
   },
