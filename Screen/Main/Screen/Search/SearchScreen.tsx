@@ -14,7 +14,7 @@ interface SearchScreenProps {
 }
 
 function SearchScreen({navigation, location}: SearchScreenProps) {
-  const [text, setText] = useState<String>('');
+  const [text, setText] = useState<string>('');
 
   const sendText: any = () => {
     // 서치 했을 때 axios
