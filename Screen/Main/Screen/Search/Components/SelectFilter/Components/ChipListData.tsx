@@ -1,8 +1,3 @@
-interface FilterData {
-  id: number;
-  name: string;
-}
-
 export const ChipListData = [
   {
     id: 0,

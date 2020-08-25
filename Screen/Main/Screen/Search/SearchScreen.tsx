@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Searchbar, Chip} from 'react-native-paper';
-import {View, Button, ScrollView} from 'react-native';
-
+import {Searchbar} from 'react-native-paper';
+import {View} from 'react-native';
+import SelectFilter from './Components/SelectFilter/SelectFilter';
 import styles from './SearchScreenStyle';
-import {ChipListData} from './Components/FoodChips/ChipListData';
-import FoodChipList from './Components/FoodChips/ChipList';
 
-type NavigationProp = StackNavigationProp<HomeStackNaviParamList, 'SearchList'>;
+type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
 interface SearchScreenProps {
   navigation: NavigationProp;
@@ -16,10 +14,10 @@ interface SearchScreenProps {
 }
 
 function SearchScreen({navigation, location}: SearchScreenProps) {
-  const [chipListData] = useState<Array<object>>(ChipListData);
   const [text, setText] = useState<String>('');
 
   const sendText: any = () => {
+    // 서치 했을 때 axios
     axios
       .post(
         'http://192.168.0.4:5001/restaurant/search',
@@ -44,28 +42,9 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
         onSubmitEditing={() => sendText()}
       />
 
-      {/* ------------------------------------------------------------  */}
       <View style={styles.filterView}>
-        <View style={styles.selectedChipView}>
-          <ScrollView horizontal={true}>
-            <Chip mode="outlined">한식</Chip>
-            <Chip mode="outlined">일식</Chip>
-            <Chip mode="outlined">퓨전음식</Chip>
-            <Chip mode="outlined">머시기</Chip>
-            <Chip mode="outlined">아시아음식</Chip>
-            <Chip mode="outlined">아시아음식</Chip>
-            <Chip mode="outlined">아시아음식</Chip>
-            <Chip mode="outlined">아시아음식</Chip>
-          </ScrollView>
-          <Button title="검색" />
-        </View>
-        <View style={styles.chipView as any}>
-          {chipListData.map((item: object) => (
-            <View key={JSON.stringify(item)}>
-              <FoodChipList list={item} navigation={navigation} />
-            </View>
-          ))}
-        </View>
+        {/* 필터 */}
+        <SelectFilter />
       </View>
     </View>
   );

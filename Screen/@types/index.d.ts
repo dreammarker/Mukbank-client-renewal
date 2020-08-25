@@ -1,5 +1,4 @@
-type HomeStackNaviParamList = {
-  Map: undefined;
+type MainStackNaviParamList = {
   Search: undefined;
   SearchList: undefined;
   SignIn: undefined;
@@ -9,6 +8,7 @@ type HomeStackNaviParamList = {
 };
 
 type HomeDrawerNaviParamList = {
+  Map: undefined;
   Login: undefined;
   Mypage: undefined;
 };
