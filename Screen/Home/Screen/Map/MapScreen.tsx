@@ -7,20 +7,12 @@ import {View} from 'react-native';
 
 import styles from './MapScreenStyle';
 
-type NavigationProp = StackNavigationProp<HomeStackNaviParamList, 'Search'>;
-
 type Location = {
   latitude: number; // 36.9919666
   longitude: number; // 127.5896299
 };
 
-interface MapProps {
-  navigation: NavigationProp;
-  MapSeacrhBar: any;
-}
-
-function MapScreen({navigation, MapSeacrhBar}: MapProps) {
-  console.log(MapSeacrhBar);
+function MapScreen({navigation}: any) {
   const [location, setLocation] = useState<Location | undefined>(undefined);
 
   const GetCurrentLocation = () => {
@@ -59,7 +51,7 @@ function MapScreen({navigation, MapSeacrhBar}: MapProps) {
         style={styles.searchBar as any}
         icon="menu"
         placeholder="검색"
-        onIconPress={() => MapSeacrhBar()}
+        onIconPress={() => navigation.openDrawer()}
         onFocus={() => navigation.navigate('Search')}
       />
     </View>
