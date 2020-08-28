@@ -18,14 +18,15 @@
      <!-- 구글 맵 api -->
       <meta-data 
       android:name="com.google.android.geo.API_KEY"
-      android:value="AIzaSyCx6xqqo1LJwrmv9U8KMpseAQK6KeGT91Q"/>
+      android:value=""/>
       
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize">
+        android:windowSoftInputMode="adjustPan"
+        >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

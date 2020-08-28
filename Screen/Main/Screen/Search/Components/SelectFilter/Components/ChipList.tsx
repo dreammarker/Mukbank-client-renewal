@@ -1,7 +1,8 @@
 import React from 'react';
-
+import {Image} from 'react-native';
 import {Chip} from 'react-native-paper';
 
+import FoodCategory from './foodImage/FoodCategory';
 import styles from './ChipListStyles';
 
 interface ChipListProps {
@@ -29,10 +30,9 @@ function ChipList({list, select, setSelect}: ChipListProps) {
   return (
     <>
       <Chip
-        style={styles.unSelectChips as any}
+        avatar={<Image source={FoodCategory[list.name]} />}
+        style={styles.filterchips as any}
         mode="outlined"
-        height={35}
-        textStyle={{fontSize: 16}}
         onPress={() => SelectChip(list.name)}>
         {list.name}
       </Chip>

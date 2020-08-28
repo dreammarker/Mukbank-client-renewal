@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {Searchbar} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {View, ToastAndroid} from 'react-native';
+
 import SelectFilter from './Components/SelectFilter/SelectFilter';
 import styles from './SearchScreenStyle';
 
@@ -42,17 +43,18 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
 
   return (
     <View style={styles.container as any}>
-      <Searchbar
-        icon="chevron-left"
-        style={styles.searchBar as any}
-        placeholder="검색"
-        onIconPress={() => navigation.goBack()}
-        onChangeText={(t) => setText(t)}
-        onSubmitEditing={() => sendText()}
-      />
-
-      <View style={styles.filterView}>
-        {/* 필터 */}
+      <View style={styles.searchBarView as any}>
+        <Searchbar
+          icon="chevron-left"
+          style={styles.searchBar as any}
+          placeholder="검색"
+          onIconPress={() => navigation.goBack()}
+          onChangeText={(t) => setText(t)}
+          onSubmitEditing={() => sendText()}
+        />
+      </View>
+      {/* 필터 */}
+      <View style={styles.filterChipsContainer as any}>
         <SelectFilter location={location} navigation={navigation} />
       </View>
     </View>
