@@ -2,26 +2,29 @@ import {StyleSheet, ViewStyle} from 'react-native';
 
 type Style = {
   container: ViewStyle;
+  searchBarView: ViewStyle;
   searchBar: ViewStyle;
-  filterView: ViewStyle;
-  selectedChipView: ViewStyle;
+  filterChipsContainer: ViewStyle;
 };
 
 const styles = StyleSheet.create<Style>({
   container: {
     flex: 1,
   },
+  searchBarView: {
+    flex: 1,
+    position: 'relative',
+  },
   searchBar: {
-    top: '5%',
-    left: '2%',
-    right: '2%',
+    top: '40%',
+    marginLeft: '2%',
+    marginRight: '2%',
     position: 'absolute',
     backgroundColor: 'white',
   },
-  selectedChipView: {
-    top: '3%',
+  filterChipsContainer: {
+    flex: 7.5,
   },
-  filterView: {top: '10%'},
 });
 
 export default styles;

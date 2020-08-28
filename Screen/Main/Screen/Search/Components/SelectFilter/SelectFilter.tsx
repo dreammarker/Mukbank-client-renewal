@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Button} from 'react-native-paper';
+import {Button, List} from 'react-native-paper';
 import {View, ScrollView, ToastAndroid} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -61,29 +61,46 @@ function SelectFilter({location, navigation}: SelectFilterProps) {
   }, [canceledChip]);
 
   return (
-    <View>
+    <>
       <View style={styles.selectedChipView as any}>
-        <ScrollView horizontal={true}>
-          {select.map((list: string) => (
-            <SelectedChip
-              key={JSON.stringify(list)}
-              list={list}
-              select={select}
-              setSelect={setSelect}
-              setCanceledChip={setCanceledChip}
-            />
-          ))}
-        </ScrollView>
-        <Button onPress={() => sendFilterText()}>검색</Button>
+        <View style={styles.selectedChip as any}>
+          <ScrollView horizontal={true}>
+            {select.map((list: string) => (
+              <SelectedChip
+                key={JSON.stringify(list)}
+                list={list}
+                select={select}
+                setSelect={setSelect}
+                setCanceledChip={setCanceledChip}
+              />
+            ))}
+          </ScrollView>
+        </View>
+        <View style={styles.selectedChipBtnView as any}>
+          <Button
+            style={styles.selectedChipBtn}
+            mode="contained"
+            onPress={() => sendFilterText()}>
+            검색
+          </Button>
+        </View>
       </View>
-      <View style={styles.selectedChipView as any}>
-        {chipListData.map((list: ChipData) => (
-          <View key={JSON.stringify(list)}>
-            <ChipList list={list} select={select} setSelect={setSelect} />
+
+      <View style={styles.chipView as any}>
+        <List.Section title="필터" style={styles.chipListTitle as any}>
+          <View style={styles.row as any}>
+            {chipListData.map((list: ChipData) => (
+              <ChipList
+                key={JSON.stringify(list)}
+                list={list}
+                select={select}
+                setSelect={setSelect}
+              />
+            ))}
           </View>
-        ))}
+        </List.Section>
       </View>
-    </View>
+    </>
   );
 }
 export default SelectFilter;

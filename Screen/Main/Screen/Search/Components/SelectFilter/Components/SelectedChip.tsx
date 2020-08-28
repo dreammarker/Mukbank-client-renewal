@@ -1,5 +1,7 @@
 import React from 'react';
+
 import {Chip} from 'react-native-paper';
+import styles from './SelectedChipStyles';
 
 interface SelectedProp {
   list: string;
@@ -24,7 +26,11 @@ function SelectedChip({
 
   return (
     <>
-      <Chip icon="close-circle" onPress={() => CancelChip(list)}>
+      <Chip
+        style={styles.selectedChip as any}
+        mode="outlined"
+        onClose={() => CancelChip(list)}
+        onPress={() => CancelChip(list)}>
         {list}
       </Chip>
     </>
