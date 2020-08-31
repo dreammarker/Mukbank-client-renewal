@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
 import {Button, List} from 'react-native-paper';
 import {View, ScrollView, ToastAndroid} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -19,10 +18,9 @@ interface ChipData {
 
 interface SelectFilterProps {
   navigation: NavigationProp;
-  location: {latitude: number; longitude: number};
 }
 
-function SelectFilter({location, navigation}: SelectFilterProps) {
+function SelectFilter({navigation}: SelectFilterProps) {
   const [chipListData] = useState<ChipData[]>(ChipListData); // 기존 선택사항 chip들
   const [select, setSelect] = useState<string[]>([]); // 선택된 chip의 name들
   const [canceledChip, setCanceledChip] = useState<string>(''); // SelectedChip에서 취소된 chip의 name 표시
@@ -36,15 +34,7 @@ function SelectFilter({location, navigation}: SelectFilterProps) {
         ToastAndroid.CENTER,
       );
     } else {
-      const filterText: string = select.join(', ');
-      axios
-        .post('http://192.168.0.4:5001/restaurant/selectFilter', {
-          latitude: location.latitude, // 37.570652,
-          longitude: location.longitude, // 127.007307,
-          filterText: filterText,
-        })
-        .catch((error) => console.log(error));
-      navigation.navigate('SearchList');
+      navigation.navigate('SearchList', {sendText: select});
     }
   };
 

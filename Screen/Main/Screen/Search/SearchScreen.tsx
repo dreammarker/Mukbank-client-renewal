@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import axios from 'axios';
 import {Searchbar} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, ToastAndroid} from 'react-native';
@@ -27,17 +26,7 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
         ToastAndroid.CENTER,
       );
     } else {
-      axios
-        .post(
-          'http://192.168.0.4:5001/restaurant/search',
-          JSON.stringify({
-            latitude: location.latitude, // 37.570652,
-            longitude: location.longitude, // 127.007307,
-            searchText: text,
-          }),
-        )
-        .catch((error) => console.log(error));
-      navigation.navigate('SearchList');
+      navigation.navigate('SearchList', {sendText: text});
     }
   };
 
