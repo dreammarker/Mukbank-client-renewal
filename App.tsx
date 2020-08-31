@@ -33,7 +33,7 @@ interface AppProps {
 function App({Location}: AppProps) {
   const [location, setLocation] = useState(Location);
 
-  const GetCurrentLocation: any = () => {
+  const GetCurrentLocation = () => {
     // 현재위치 표시
     Geolocation.getCurrentPosition((locationInfo) => {
       setLocation({
@@ -57,9 +57,11 @@ function App({Location}: AppProps) {
           {(props) => <Home {...props} location={location} />}
         </Stack.Screen>
         <Stack.Screen name="Search">
-          {(props) => <SearchScreen {...props} location={location} />}
+          {(props) => <SearchScreen {...props} />}
         </Stack.Screen>
-        <Stack.Screen name="SearchList" component={SearchListScreen} />
+        <Stack.Screen name="SearchList">
+          {(props) => <SearchListScreen {...props} location={location} />}
+        </Stack.Screen>
         <Stack.Screen name="Detail" component={DetailScreen} />
         <Stack.Screen name="LoadNavi" component={LoadNaviScreen} />
       </Stack.Navigator>
