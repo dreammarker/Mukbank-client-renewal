@@ -10,10 +10,9 @@ type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
 interface SearchScreenProps {
   navigation: NavigationProp;
-  location: {latitude: number; longitude: number};
 }
 
-function SearchScreen({navigation, location}: SearchScreenProps) {
+function SearchScreen({navigation}: SearchScreenProps) {
   const [text, setText] = useState<string>('');
 
   const sendText = () => {
@@ -44,7 +43,7 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
       </View>
       {/* 필터 */}
       <View style={styles.filterChipsContainer as any}>
-        <SelectFilter location={location} navigation={navigation} />
+        <SelectFilter navigation={navigation} />
       </View>
     </View>
   );
