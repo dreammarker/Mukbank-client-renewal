@@ -34,7 +34,10 @@ function SelectFilter({navigation}: SelectFilterProps) {
         ToastAndroid.CENTER,
       );
     } else {
-      navigation.navigate('SearchList', {sendText: select});
+      const postText: string = select.join(', ');
+      console.log(postText, '포트스텍스트');
+      const postURL: string = 'selectFilter';
+      navigation.navigate('SearchList', {sendText: postText, sendURL: postURL});
     }
   };
 
