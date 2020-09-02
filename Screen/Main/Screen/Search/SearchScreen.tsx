@@ -25,7 +25,9 @@ function SearchScreen({navigation}: SearchScreenProps) {
         ToastAndroid.CENTER,
       );
     } else {
-      navigation.navigate('SearchList', {sendText: text});
+      const postText: string = text.trim();
+      const postURL: string = 'search';
+      navigation.navigate('SearchList', {sendText: postText, sendURL: postURL});
     }
   };
 
