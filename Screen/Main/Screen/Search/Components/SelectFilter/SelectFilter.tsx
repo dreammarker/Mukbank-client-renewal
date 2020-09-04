@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {Button, List} from 'react-native-paper';
 import {View, ScrollView, ToastAndroid} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -18,9 +19,10 @@ interface ChipData {
 
 interface SelectFilterProps {
   navigation: NavigationProp;
+  location: {latitude: number; longitude: number};
 }
 
-function SelectFilter({navigation}: SelectFilterProps) {
+function SelectFilter({navigation, location}: SelectFilterProps) {
   const [chipListData] = useState<ChipData[]>(ChipListData); // 기존 선택사항 chip들
   const [select, setSelect] = useState<string[]>([]); // 선택된 chip의 name들
   const [canceledChip, setCanceledChip] = useState<string>(''); // SelectedChip에서 취소된 chip의 name 표시
@@ -35,9 +37,23 @@ function SelectFilter({navigation}: SelectFilterProps) {
       );
     } else {
       const postText: string = select.join(', ');
-      console.log(postText, '포트스텍스트');
       const postURL: string = 'selectFilter';
-      navigation.navigate('SearchList', {sendText: postText, sendURL: postURL});
+      axios
+        .post('http://172.30.1.52:5001/restaurant/selectFilter', {
+          latitude: Math.floor(location.latitude * 10000) / 10000,
+          longitude: Math.floor(location.longitude * 10000) / 10000,
+          text: postText,
+          paging: 1,
+        })
+        .then((res) => res.data)
+        .then((data) =>
+          navigation.navigate('SearchList', {
+            sendText: postText,
+            sendURL: postURL,
+            data: data,
+            location: location,
+          }),
+        );
     }
   };
 
