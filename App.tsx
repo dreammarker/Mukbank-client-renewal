@@ -23,11 +23,7 @@ import LoadNaviScreen from './Screen/Main/Screen/LoadNavi/LoadNaviScreen';
 const Stack = createStackNavigator();
 
 interface AppProps {
-  Location: {
-    latitude: number;
-    longitude: number;
-  };
-  // 36.9919666, 127.5896299
+  Location: {latitude: number; longitude: number};
 }
 
 function App({Location}: AppProps) {
@@ -57,10 +53,10 @@ function App({Location}: AppProps) {
           {(props) => <Home {...props} location={location} />}
         </Stack.Screen>
         <Stack.Screen name="Search">
-          {(props) => <SearchScreen {...props} />}
+          {(props) => <SearchScreen {...props} location={location} />}
         </Stack.Screen>
         <Stack.Screen name="SearchList">
-          {(props) => <SearchListScreen {...props} location={location} />}
+          {(props) => <SearchListScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name="Detail" component={DetailScreen} />
         <Stack.Screen name="LoadNavi" component={LoadNaviScreen} />
