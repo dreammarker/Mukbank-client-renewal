@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import {Avatar} from 'react-native-paper';
 
 interface SearchListData {
@@ -17,36 +17,41 @@ interface SearchListData {
   secondchild: string;
 }
 
-function ResultList({list}: SearchListData) {
+interface RandomListProps {
+  randomList: SearchListData;
+  resetRandomData: any;
+}
+
+function RandomList({randomList, resetRandomData}: RandomListProps) {
   const convertDistance = () => {
-    if (list.distance >= 1) {
-      return Math.ceil(list.distance * 100) / 100 + 'km';
+    if (randomList.distance >= 1) {
+      return Math.ceil(randomList.distance * 100) / 100 + 'km';
     } else {
-      return Math.ceil(list.distance * 1000) + 'm';
+      return Math.ceil(randomList.distance * 1000) + 'm';
     }
   };
 
   return (
     <View style={{height: 200}}>
       <View>
-        {list.image === null ? (
+        {randomList.image === null ? (
           <Avatar.Image size={24} source={require('./BAB.jpg')} />
         ) : (
           <Avatar.Image
             size={24}
             source={{
-              uri: `${list.image}`,
+              uri: `${randomList.image}`,
             }}
           />
         )}
       </View>
-      <Text>{list.name}</Text>
-      <Text>{list.secondchild}</Text>
+      <Text>{randomList.name}</Text>
+      <Text>{randomList.secondchild}</Text>
       <Text>{convertDistance()}</Text>
-      <Text>{list.address}</Text>
-      <Text>{list.phone}</Text>
+      <Text>{randomList.address}</Text>
+      <Text>{randomList.phone}</Text>
     </View>
   );
 }
 
-export default ResultList;
+export default RandomList;

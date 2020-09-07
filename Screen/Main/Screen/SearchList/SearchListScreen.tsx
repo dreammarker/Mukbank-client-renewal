@@ -10,7 +10,7 @@ import ResultList from './Components/ResultList';
 import RandomList from './Components/RandomList';
 
 interface SearchListData {
-  adress: string;
+  address: string;
   distance: number;
   firstchild: string;
   id: number;
