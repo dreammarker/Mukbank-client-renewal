@@ -4,6 +4,7 @@ type Style = {
   container: ViewStyle;
   noneResult: ViewStyle;
   noneResultText: TextStyle;
+  flatListContainer: ViewStyle;
 };
 
 const styles = StyleSheet.create<Style>({
@@ -14,8 +15,12 @@ const styles = StyleSheet.create<Style>({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
   },
   noneResultText: {fontSize: 15},
+  flatListContainer: {
+    margin: '5.5%',
+  },
 });
 
 export default styles;

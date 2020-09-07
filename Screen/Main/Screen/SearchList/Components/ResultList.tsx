@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {Avatar} from 'react-native-paper';
 
 interface SearchListData {
@@ -27,7 +27,7 @@ function ResultList({list}: SearchListData) {
   };
 
   return (
-    <View style={{height: 200}}>
+    <TouchableOpacity>
       <View>
         {list.image === null ? (
           <Avatar.Image size={24} source={require('./BAB.jpg')} />
@@ -45,7 +45,7 @@ function ResultList({list}: SearchListData) {
       <Text>{convertDistance()}</Text>
       <Text>{list.address}</Text>
       <Text>{list.phone}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

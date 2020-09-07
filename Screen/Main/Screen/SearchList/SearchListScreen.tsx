@@ -2,9 +2,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, FlatList, Text} from 'react-native';
-import {ActivityIndicator} from 'react-native-paper';
-
+import {View, FlatList, Text, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, List} from 'react-native-paper';
 import styles from './SearchListScreenStyle';
 import ResultList from './Components/ResultList';
 import RandomList from './Components/RandomList';
@@ -39,11 +38,7 @@ interface SearchListScreenProps {
   };
 }
 
-function SearchListScreen({
-  navigation,
-  location,
-  route,
-}: SearchListScreenProps) {
+function SearchListScreen({navigation, route}: SearchListScreenProps) {
   const [data, setData] = useState<SearchListData[]>(route.params.data); // 데이터 담을 list
   const [refreshing, setRefreshing] = useState<boolean>(false); // 위로 새로 고침 확인
   const [count, setCount] = useState<number>(1); // pagination 기능을 위한 page 숫자
@@ -58,7 +53,7 @@ function SearchListScreen({
     const postURL: string = route.params.sendURL;
     try {
       const sendPost = await axios
-        .post(`http://172.30.1.52:5001/restaurant/${postURL}`, {
+        .post(`http://172.30.1.30:5001/restaurant/${postURL}`, {
           latitude: latitude, // 37.570652
           longitude: longitude, // 127.007307
           text: postText,
@@ -69,7 +64,7 @@ function SearchListScreen({
         // pulldown 새로고침 시
         setRefreshing(false); // 새로고침 false
         setData(sendPost);
-        resetRandomData(data.length - 1, 0, data);
+        resetRandomData();
       } else {
         setData(data.concat(sendPost));
       }
@@ -78,18 +73,18 @@ function SearchListScreen({
     }
   }
 
-  function resetRandomData(max: number, min: number, list: any) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
+  function resetRandomData() {
+    const min = 0;
+    const max = Math.floor(data.length - 1);
     const par: any = Math.floor(Math.random() * (max - min)) + min;
-    setRandomData(list[par]);
+    setRandomData(data[par]);
   }
 
   useEffect(() => {
     // 맨 처음 랜덤리스트 가지고 오기
     if (data.length !== 0) {
       // 결과데이터가 있다면
-      resetRandomData(data.length - 1, 0, data);
+      resetRandomData();
     }
   }, []);
 
@@ -102,9 +97,9 @@ function SearchListScreen({
 
   const renderItem = ({item}: SearchListData) => (
     // paging 랜더 될 리스트 컴포넌트
-    <View>
+    <List.Section>
       <ResultList list={item} />
-    </View>
+    </List.Section>
   );
 
   const onEndReached = () => {
@@ -142,17 +137,19 @@ function SearchListScreen({
           <Text style={styles.noneResultText}>검색결과가 없습니다</Text>
         </View>
       ) : (
-        <FlatList
-          data={data}
-          keyExtractor={(item) => JSON.stringify(item.id)}
-          ListHeaderComponent={listHeaderComponent}
-          renderItem={renderItem}
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={ListFooterComponent}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
+        <View style={styles.flatListContainer}>
+          <FlatList
+            data={data}
+            keyExtractor={(item) => JSON.stringify(item.id)}
+            ListHeaderComponent={listHeaderComponent}
+            renderItem={renderItem}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={ListFooterComponent}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        </View>
       )}
     </View>
   );
