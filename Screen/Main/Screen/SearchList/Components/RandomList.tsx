@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
-import {Avatar} from 'react-native-paper';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {List, Avatar} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import styles from './listStyles';
 
 interface SearchListData {
   address: string;
@@ -32,24 +35,48 @@ function RandomList({randomList, resetRandomData}: RandomListProps) {
   };
 
   return (
-    <View style={{height: 200}}>
-      <View>
-        {randomList.image === null ? (
-          <Avatar.Image size={24} source={require('./BAB.jpg')} />
-        ) : (
-          <Avatar.Image
-            size={24}
-            source={{
-              uri: `${randomList.image}`,
-            }}
-          />
-        )}
+    <View>
+      <List.Section style={{marginBottom: '13%'}}>
+        <View style={styles.subHeader}>
+          <View style={styles.sectionTitleView}>
+            <Text style={styles.sectionTitle}>오늘의 추천</Text>
+          </View>
+          <View style={styles.refreshBtnView}>
+            <Icon
+              onPress={() => {
+                resetRandomData();
+              }}
+              name="refresh"
+              size={22}
+              color="black"
+            />
+          </View>
+        </View>
+        <TouchableOpacity>
+          <View>
+            {randomList.image === null ? (
+              <Avatar.Image size={24} source={require('./BAB.jpg')} />
+            ) : (
+              <Avatar.Image
+                size={24}
+                source={{
+                  uri: `${randomList.image}`,
+                }}
+              />
+            )}
+          </View>
+          <Text>{randomList.name}</Text>
+          <Text>{randomList.secondchild}</Text>
+          <Text>{convertDistance()}</Text>
+          <Text>{randomList.address}</Text>
+          <Text>{randomList.phone}</Text>
+        </TouchableOpacity>
+      </List.Section>
+      <View style={styles.subHeader}>
+        <View style={styles.sectionTitleView}>
+          <Text style={styles.sectionTitle}>검색 결과</Text>
+        </View>
       </View>
-      <Text>{randomList.name}</Text>
-      <Text>{randomList.secondchild}</Text>
-      <Text>{convertDistance()}</Text>
-      <Text>{randomList.address}</Text>
-      <Text>{randomList.phone}</Text>
     </View>
   );
 }
