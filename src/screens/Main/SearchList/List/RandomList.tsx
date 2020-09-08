@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import styles from './listStyles';
+import styles from './ListStyles';
 import ListBox from './ListBox';
 
 interface SearchListData {

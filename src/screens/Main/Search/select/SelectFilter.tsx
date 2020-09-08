@@ -6,9 +6,9 @@ import {View, ScrollView, ToastAndroid} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import styles from './SelectFilterStyles';
-import ChipList from './Components/ChipList';
-import SelectedChip from './Components/SelectedChip';
-import {ChipListData} from './Components/ChipListData';
+import SelectedChip from './SelectedChip';
+import ChipList from './components/ChipList';
+import {ChipListData} from './components/ChipListData';
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {Image} from 'react-native';
 import {Chip} from 'react-native-paper';
 
-import FoodCategory from './foodImage/FoodCategory';
+import FoodCategory from './FoodCategory';
 import styles from './ChipListStyles';
 
 interface ChipListProps {
