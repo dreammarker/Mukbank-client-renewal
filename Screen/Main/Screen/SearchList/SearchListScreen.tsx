@@ -2,10 +2,10 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, FlatList, Text, TouchableOpacity} from 'react-native';
-import {ActivityIndicator, List} from 'react-native-paper';
+import {View, FlatList, Text} from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 import styles from './SearchListScreenStyle';
-import ResultList from './Components/ResultList';
+import ListBox from './Components/ListBox';
 import RandomList from './Components/RandomList';
 
 interface SearchListData {
@@ -97,9 +97,7 @@ function SearchListScreen({navigation, route}: SearchListScreenProps) {
 
   const renderItem = ({item}: SearchListData) => (
     // paging 랜더 될 리스트 컴포넌트
-    <List.Section>
-      <ResultList list={item} />
-    </List.Section>
+    <ListBox list={item} />
   );
 
   const onEndReached = () => {
