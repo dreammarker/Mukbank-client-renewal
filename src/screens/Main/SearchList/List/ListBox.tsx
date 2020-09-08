@@ -11,7 +11,7 @@ import {
 import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import styles from './listStyles';
+import styles from './ListStyles';
 
 interface SearchListData {
   address: string;

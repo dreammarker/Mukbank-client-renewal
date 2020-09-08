@@ -2,10 +2,10 @@ import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
-import SearchScreen from './Screen/Search/SearchScreen';
-import SearchListScreen from './Screen/SearchList/SearchListScreen';
-import DetailScreen from './Screen/Detail/DetailScreen';
-import LoadNaviScreen from './Screen/LoadNavi/LoadNaviScreen';
+import SearchScreen from './Search/SearchScreen';
+import SearchListScreen from './SearchList/SearchListScreen';
+import DetailScreen from './Detail/DetailScreen';
+import LoadNaviScreen from './LoadNavi/LoadNaviScreen';
 
 const Stack = createStackNavigator();
 

@@ -4,9 +4,9 @@ import {
   DrawerNavigationProp,
 } from '@react-navigation/drawer';
 
-import MapScreen from './Screen/Map/MapScreen';
-import SignScreen from './Screen/Sign/SignScreen';
-import MypageScreen from './Screen/Mypage/MypageScreen';
+import MapScreen from './Map/MapScreen';
+import SignScreen from './Sign/SignScreen';
+import MypageScreen from './Mypage/MypageScreen';
 import CustomDrawerContent from './CustomDrawerContent';
 
 const Drawer = createDrawerNavigator();

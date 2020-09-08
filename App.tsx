@@ -14,11 +14,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Geolocation from '@react-native-community/geolocation';
 
-import Home from './Screen/Home/Home';
-import SearchScreen from './Screen/Main/Screen/Search/SearchScreen';
-import SearchListScreen from './Screen/Main/Screen/SearchList/SearchListScreen';
-import DetailScreen from './Screen/Main/Screen/Detail/DetailScreen';
-import LoadNaviScreen from './Screen/Main/Screen/LoadNavi/LoadNaviScreen';
+import Home from './src/screens/Home/Home';
+import SearchScreen from './src/screens/Main/Search/SearchScreen';
+import SearchListScreen from './src/screens/Main/SearchList/SearchListScreen';
+import DetailScreen from './src/screens/Main/Detail/DetailScreen';
+import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
 
 const Stack = createStackNavigator();
 

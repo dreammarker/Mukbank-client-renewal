@@ -4,7 +4,7 @@ import {Searchbar} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, ToastAndroid} from 'react-native';
 
-import SelectFilter from './Components/SelectFilter/SelectFilter';
+import SelectFilter from './select/SelectFilter';
 import styles from './SearchScreenStyle';
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
