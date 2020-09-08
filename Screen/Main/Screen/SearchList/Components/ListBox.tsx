@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ToastAndroid,
+  Linking,
+} from 'react-native';
 import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -21,7 +28,7 @@ interface SearchListData {
   secondchild: string;
 }
 
-function ResultList({list}: SearchListData) {
+function ListBox({list}: SearchListData) {
   const convertDistance = () => {
     if (list.distance >= 1) {
       return Math.ceil(list.distance * 100) / 100 + 'km';
@@ -30,9 +37,30 @@ function ResultList({list}: SearchListData) {
     }
   };
 
+  const phoneCall = () => {
+    if (list.phone === '') {
+      ToastAndroid.showWithGravity(
+        '번호가 존재하지 않습니다.',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else {
+      const phone: string = list.phone.split('-').join('');
+      Linking.openURL(`tel:${phone}`);
+    }
+  };
+
   return (
     <List.Section>
-      <TouchableOpacity activeOpacity={1} style={styles.sectionCard}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.sectionCard}
+        onPress={
+          () => console.log('goToDetail')
+          // navigation.navigate('Detail', {
+          //   id: list.id,
+          // })
+        }>
         <View style={styles.imageView}>
           {list.image === null ? (
             <Avatar.Image
@@ -69,12 +97,20 @@ function ResultList({list}: SearchListData) {
 
           <View style={styles.listBtn}>
             <View style={styles.listBtnFlex}>
-              <Button icon="phone" mode="text" color={'black'}>
+              <Button
+                icon="phone"
+                mode="text"
+                color={'black'}
+                onPress={() => phoneCall()}>
                 전화
               </Button>
             </View>
             <View style={styles.listBtnFlex}>
-              <Button icon="map" mode="text" color={'black'}>
+              <Button
+                icon="map"
+                mode="text"
+                color={'black'}
+                onPress={() => console.log('길찾기')}>
                 길찾기
               </Button>
             </View>
@@ -85,4 +121,4 @@ function ResultList({list}: SearchListData) {
   );
 }
 
-export default ResultList;
+export default ListBox;
