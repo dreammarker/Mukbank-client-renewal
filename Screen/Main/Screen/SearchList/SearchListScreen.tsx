@@ -5,8 +5,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {View, FlatList, Text} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 import styles from './SearchListScreenStyle';
-import ListBox from './Components/ListBox';
-import RandomList from './Components/RandomList';
+import ListBox from './List/ListBox';
+import RandomList from './List/RandomList';
 
 interface SearchListData {
   address: string;
@@ -92,12 +92,16 @@ function SearchListScreen({navigation, route}: SearchListScreenProps) {
 
   const listHeaderComponent = () => (
     // 첫 헤더에 랜덤리스트
-    <RandomList randomList={randomData} resetRandomData={resetRandomData} />
+    <RandomList
+      randomList={randomData}
+      resetRandomData={resetRandomData}
+      navigation={navigation}
+    />
   );
 
   const renderItem = ({item}: SearchListData) => (
     // paging 랜더 될 리스트 컴포넌트
-    <ListBox list={item} />
+    <ListBox list={item} navigation={navigation} />
   );
 
   const onEndReached = () => {

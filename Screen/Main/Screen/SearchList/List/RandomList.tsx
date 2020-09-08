@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './listStyles';
@@ -21,12 +22,19 @@ interface SearchListData {
   secondchild: string;
 }
 
+type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
+
 interface RandomListProps {
+  navigation: NavigationProp;
   randomList: SearchListData;
   resetRandomData: any;
 }
 
-function RandomList({randomList, resetRandomData}: RandomListProps) {
+function RandomList({
+  randomList,
+  resetRandomData,
+  navigation,
+}: RandomListProps) {
   return (
     <>
       <View style={{marginBottom: '5%'}}>
@@ -45,7 +53,7 @@ function RandomList({randomList, resetRandomData}: RandomListProps) {
             />
           </View>
         </View>
-        <ListBox list={randomList} />
+        <ListBox list={randomList} navigation={navigation} />
       </View>
       <View style={styles.subHeader}>
         <View style={styles.sectionTitleView}>
