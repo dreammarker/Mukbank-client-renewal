@@ -32,7 +32,7 @@ const styles = StyleSheet.create<Style>({
     backgroundColor: '#fff',
     elevation: 2,
     flexDirection: 'row',
-    height: 145,
+    height: 148,
   },
   sectionTitle: {fontSize: 17.5, color: 'black'},
   refreshBtnView: {
