@@ -12,6 +12,7 @@ import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './ListStyles';
+import FoodCategory from '../../../../assets/FoodCategory';
 
 interface SearchListData {
   address: string;
@@ -63,11 +64,19 @@ function ListBox({list}: SearchListData) {
         }>
         <View style={styles.imageView}>
           {list.image === null ? (
-            <Avatar.Image
-              size={90}
-              style={styles.avatar}
-              source={require('./BAB.jpg')}
-            />
+            list.firstchild === 'null' ? (
+              <Avatar.Image
+                size={90}
+                style={styles.avatar}
+                source={FoodCategory['카페']}
+              />
+            ) : (
+              <Avatar.Image
+                size={90}
+                style={styles.avatar}
+                source={FoodCategory[list.firstchild]}
+              />
+            )
           ) : (
             <Image
               source={{
