@@ -10,6 +10,7 @@ type Style = {
 const styles = StyleSheet.create<Style>({
   container: {
     flex: 1,
+    backgroundColor: '#fafafa',
   },
   noneResult: {
     flex: 1,
