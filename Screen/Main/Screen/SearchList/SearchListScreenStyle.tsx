@@ -20,7 +20,7 @@ const styles = StyleSheet.create<Style>({
   },
   noneResultText: {fontSize: 15},
   flatListContainer: {
-    margin: '5.5%',
+    margin: '6%',
   },
 });
 
