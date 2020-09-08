@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import {List, Avatar} from 'react-native-paper';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {List, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './listStyles';
@@ -36,7 +37,7 @@ function RandomList({randomList, resetRandomData}: RandomListProps) {
 
   return (
     <View>
-      <List.Section style={{marginBottom: '13%'}}>
+      <List.Section style={{marginBottom: '8%'}}>
         <View style={styles.subHeader}>
           <View style={styles.sectionTitleView}>
             <Text style={styles.sectionTitle}>오늘의 추천</Text>
@@ -52,24 +53,60 @@ function RandomList({randomList, resetRandomData}: RandomListProps) {
             />
           </View>
         </View>
-        <TouchableOpacity>
-          <View>
+        <TouchableOpacity activeOpacity={1} style={styles.sectionCard}>
+          <View style={styles.imageView}>
             {randomList.image === null ? (
-              <Avatar.Image size={24} source={require('./BAB.jpg')} />
+              <Image style={styles.image} source={require('./BAB.jpg')} />
             ) : (
-              <Avatar.Image
-                size={24}
+              <Image
                 source={{
                   uri: `${randomList.image}`,
                 }}
+                style={styles.image}
               />
             )}
           </View>
-          <Text>{randomList.name}</Text>
-          <Text>{randomList.secondchild}</Text>
-          <Text>{convertDistance()}</Text>
-          <Text>{randomList.address}</Text>
-          <Text>{randomList.phone}</Text>
+          <View style={styles.textView}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 7}}>
+                <View style={{marginBottom: '2%'}}>
+                  <Text style={{fontSize: 16}}>{randomList.name}</Text>
+                </View>
+                <View style={styles.caDiView}>
+                  <View style={{marginRight: '3%'}}>
+                    <Text style={{fontSize: 12.5}}>
+                      {randomList.secondchild}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={{fontSize: 12.5}}>|</Text>
+                  </View>
+                  <View style={{marginLeft: '3%'}}>
+                    <Text style={{fontSize: 12.5}}>{convertDistance()}</Text>
+                  </View>
+                </View>
+                <View>
+                  <Text>{randomList.address}</Text>
+                </View>
+              </View>
+              <View style={styles.rightIcon}>
+                <Icon name="chevron-right" size={28} color="black" />
+              </View>
+            </View>
+
+            <View style={styles.listBtn}>
+              <View style={{flex: 1}}>
+                <Button icon="phone" mode="text" color={'black'}>
+                  전화
+                </Button>
+              </View>
+              <View style={{flex: 1}}>
+                <Button icon="map" mode="text" color={'black'}>
+                  길찾기
+                </Button>
+              </View>
+            </View>
+          </View>
         </TouchableOpacity>
       </List.Section>
       <View style={styles.subHeader}>
