@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {View} from 'react-native';
 import MapView from 'react-native-maps';
+import styles from './LoadNaviStyles';
 
 interface LoadNaviProps {
   GetCurrentLocation: any;
@@ -33,16 +34,10 @@ function LoadNaviScreen({GetCurrentLocation, location, route}: LoadNaviProps) {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#F5FCFF',
-      }}>
+    <View style={styles.container}>
       {direction ? (
         <MapView
-          style={{left: 0, right: 0, top: 0, bottom: 0, position: 'absolute'}}
+          style={styles.map}
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
