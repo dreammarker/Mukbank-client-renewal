@@ -29,39 +29,58 @@ interface AppProps {
 function App({Location}: AppProps) {
   const [location, setLocation] = useState(Location);
 
-  const GetCurrentLocation = () => {
+  function GetCurrentLocation() {
     // 현재위치 표시
-    Geolocation.getCurrentPosition((locationInfo) => {
+    return Geolocation.getCurrentPosition((locationInfo) => {
       setLocation({
         latitude: locationInfo.coords.latitude,
         longitude: locationInfo.coords.longitude,
       });
     });
-  };
+  }
 
   useEffect(() => {
     GetCurrentLocation();
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false, // 위에 바 없애줌
-        }}>
-        <Stack.Screen name="Home">
-          {(props) => <Home {...props} location={location} />}
-        </Stack.Screen>
-        <Stack.Screen name="Search">
-          {(props) => <SearchScreen {...props} location={location} />}
-        </Stack.Screen>
-        <Stack.Screen name="SearchList">
-          {(props) => <SearchListScreen {...props} />}
-        </Stack.Screen>
-        <Stack.Screen name="Detail" component={DetailScreen} />
-        <Stack.Screen name="LoadNavi" component={LoadNaviScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      {location ? (
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false, // 위에 바 없애줌
+            }}>
+            <Stack.Screen name="Home">
+              {(props) => <Home {...props} location={location} />}
+            </Stack.Screen>
+            <Stack.Screen name="Search">
+              {(props) => <SearchScreen {...props} location={location} />}
+            </Stack.Screen>
+            <Stack.Screen name="SearchList">
+              {(props) => (
+                <SearchListScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Detail" component={DetailScreen} />
+            <Stack.Screen name="LoadNavi">
+              {(props) => (
+                <LoadNaviScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                  location={location}
+                />
+              )}
+            </Stack.Screen>
+          </Stack.Navigator>
+        </NavigationContainer>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 
