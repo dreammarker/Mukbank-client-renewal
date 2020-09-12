@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import {StackNavigationProp} from '@react-navigation/stack';
 import styles from './ListStyles';
 import FoodCategory from '../../../../assets/FoodCategory';
 
@@ -28,8 +28,15 @@ interface SearchListData {
   roadAddress: string;
   secondchild: string;
 }
+type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
-function ListBox({list}: SearchListData) {
+interface ListBoxProps {
+  list: SearchListData;
+  navigation: NavigationProp;
+  GetCurrentLocation: any;
+}
+
+function ListBox({list, navigation, GetCurrentLocation}: ListBoxProps) {
   const convertDistance = () => {
     if (list.distance >= 1) {
       return Math.ceil(list.distance * 100) / 100 + 'km';
@@ -103,7 +110,6 @@ function ListBox({list}: SearchListData) {
               <Icon name="chevron-right" size={28} color="black" />
             </View>
           </View>
-
           <View style={styles.listBtn}>
             <View style={styles.listBtnFlex}>
               <Button
@@ -119,7 +125,16 @@ function ListBox({list}: SearchListData) {
                 icon="map"
                 mode="text"
                 color={'black'}
-                onPress={() => console.log('길찾기')}>
+                onPress={() =>
+                  GetCurrentLocation().then(() =>
+                    navigation.navigate('LoadNavi', {
+                      destination: {
+                        latitude: list.latitude,
+                        longitude: list.longitude,
+                      },
+                    }),
+                  )
+                }>
                 길찾기
               </Button>
             </View>

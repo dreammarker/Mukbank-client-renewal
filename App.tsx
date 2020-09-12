@@ -58,7 +58,12 @@ function App({Location}: AppProps) {
               {(props) => <SearchScreen {...props} location={location} />}
             </Stack.Screen>
             <Stack.Screen name="SearchList">
-              {(props) => <SearchListScreen {...props} />}
+              {(props) => (
+                <SearchListScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                />
+              )}
             </Stack.Screen>
             <Stack.Screen name="Detail" component={DetailScreen} />
             <Stack.Screen name="LoadNavi">

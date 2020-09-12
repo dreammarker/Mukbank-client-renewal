@@ -35,10 +35,15 @@ interface SearchListScreenProps {
       data: SearchListData;
       location: {latitude: number; longitude: number};
     };
+    GetCurrentLocation: any;
   };
 }
 
-function SearchListScreen({navigation, route}: SearchListScreenProps) {
+function SearchListScreen({
+  navigation,
+  route,
+  GetCurrentLocation,
+}: SearchListScreenProps) {
   const [data, setData] = useState<SearchListData[]>(route.params.data); // 데이터 담을 list
   const [refreshing, setRefreshing] = useState<boolean>(false); // 위로 새로 고침 확인
   const [count, setCount] = useState<number>(1); // pagination 기능을 위한 page 숫자
@@ -93,6 +98,7 @@ function SearchListScreen({navigation, route}: SearchListScreenProps) {
   const listHeaderComponent = () => (
     // 첫 헤더에 랜덤리스트
     <RandomList
+      GetCurrentLocation={GetCurrentLocation}
       randomList={randomData}
       resetRandomData={resetRandomData}
       navigation={navigation}
@@ -101,7 +107,11 @@ function SearchListScreen({navigation, route}: SearchListScreenProps) {
 
   const renderItem = ({item}: SearchListData) => (
     // paging 랜더 될 리스트 컴포넌트
-    <ListBox list={item} navigation={navigation} />
+    <ListBox
+      list={item}
+      navigation={navigation}
+      GetCurrentLocation={GetCurrentLocation}
+    />
   );
 
   const onEndReached = () => {

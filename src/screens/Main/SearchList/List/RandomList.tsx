@@ -28,12 +28,14 @@ interface RandomListProps {
   navigation: NavigationProp;
   randomList: SearchListData;
   resetRandomData: any;
+  GetCurrentLocation: any;
 }
 
 function RandomList({
   randomList,
   resetRandomData,
   navigation,
+  GetCurrentLocation,
 }: RandomListProps) {
   return (
     <>
@@ -53,7 +55,12 @@ function RandomList({
             />
           </View>
         </View>
-        <ListBox list={randomList} navigation={navigation} />
+
+        <ListBox
+          list={randomList}
+          navigation={navigation}
+          GetCurrentLocation={GetCurrentLocation}
+        />
       </View>
       <View style={styles.subHeader}>
         <View style={styles.sectionTitleView}>
