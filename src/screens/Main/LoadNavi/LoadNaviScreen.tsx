@@ -1,19 +1,37 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import {View} from 'react-native';
 import MapView from 'react-native-maps';
 
 interface LoadNaviProps {
   GetCurrentLocation: any;
   location: {latitude: number; longitude: number};
+  route: {params: {destination: {latitude: number; longitude: number}}};
 }
 
-function LoadNaviScreen({GetCurrentLocation, location}: LoadNaviProps) {
-  const [check, setCheck] = useState<boolean>(false);
+const MAPBOX_KEY = '';
 
+function LoadNaviScreen({GetCurrentLocation, location, route}: LoadNaviProps) {
+  console.log(location);
+  const [direction, setDirection] = useState<object[]>();
+  async function getDirection() {
+    const destinationPath = await axios(
+      `https://api.mapbox.com/directions/v5/mapbox/walking/${location.longitude},${location.latitude};${route.params.destination.longitude},${route.params.destination.latitude}?geometries=geojson&access_token=${MAPBOX_KEY}`,
+    ).then((res) => {
+      const coord = res.data.routes[0].geometry.coordinates.map(
+        (item: object[]) => {
+          return {latitude: item[1], longitude: item[0]};
+        },
+      );
+      return coord;
+    });
+    setDirection(destinationPath);
+  }
+  console.log(direction);
   useEffect(() => {
-    GetCurrentLocation();
-    setCheck(true);
+    getDirection();
   }, []);
+
   return (
     <View
       style={{
@@ -22,7 +40,7 @@ function LoadNaviScreen({GetCurrentLocation, location}: LoadNaviProps) {
         justifyContent: 'center',
         backgroundColor: '#F5FCFF',
       }}>
-      {check ? (
+      {direction ? (
         <MapView
           style={{left: 0, right: 0, top: 0, bottom: 0, position: 'absolute'}}
           initialRegion={{
@@ -41,6 +59,5 @@ function LoadNaviScreen({GetCurrentLocation, location}: LoadNaviProps) {
     </View>
   );
 }
-//
 
 export default LoadNaviScreen;
