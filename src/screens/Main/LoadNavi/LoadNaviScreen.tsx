@@ -51,8 +51,14 @@ function LoadNaviScreen({GetCurrentLocation, location, route}: LoadNaviProps) {
           }}
           showsUserLocation={true}
           // showsMyLocationButton={true}
-          followsUserLocation={true}
-        />
+          followsUserLocation={true}>
+          <MapView.Polyline
+            coordinates={direction}
+            strokeColor="red"
+            fillColor="rgba(255,0,0,0.5)"
+            strokeWidth={3}
+          />
+        </MapView>
       ) : (
         <></>
       )}
