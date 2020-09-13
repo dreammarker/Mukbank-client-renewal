@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {Appbar} from 'react-native-paper';
+import React from 'react';
+import {ScrollView} from 'react-native';
+import {Paragraph, Card, useTheme, Appbar} from 'react-native-paper';
 
-function DetailScreen() {
-  const [data] = useState({
+const DetailScreen = () => {
+  const data = {
     id: 34044,
     name: '카페자우 ',
     phone: '02-2283-2175',
@@ -21,22 +22,38 @@ function DetailScreen() {
     createdAt: '2020-03-29T12:16:51.000Z',
     updatedAt: '2020-03-29T12:16:51.000Z',
     deletedAt: null,
-  });
+  };
+
+  const {
+    colors: {background},
+  } = useTheme();
+
   return (
-    <Appbar.Header
-      style={{
-        backgroundColor: '#fff',
-      }}>
-      <Appbar.BackAction onPress={() => console.log('ss')} />
-      <Appbar.Content
-        title={data.name.trim()}
+    <ScrollView
+      style={[{flex: 1}, {backgroundColor: background}]}
+      contentContainerStyle={{padding: 4}}>
+      <Appbar.Header
         style={{
-          alignItems: 'center',
-        }}
-      />
-      <Appbar.Action />
-    </Appbar.Header>
+          backgroundColor: '#fff',
+        }}>
+        <Appbar.BackAction onPress={() => console.log('ss')} />
+        <Appbar.Content
+          title={data.name.trim()}
+          style={{
+            alignItems: 'center',
+          }}
+        />
+        <Appbar.Action />
+      </Appbar.Header>
+      <Card style={{margin: 4}}>
+        <Card.Cover source={{uri: data.image}} />
+        <Card.Title title={data.name.trim()} />
+        <Card.Content>
+          <Paragraph>{data.category}</Paragraph>
+        </Card.Content>
+      </Card>
+    </ScrollView>
   );
-}
+};
 
 export default DetailScreen;
