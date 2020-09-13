@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {View} from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {Polyline, Marker} from 'react-native-maps';
 import styles from './LoadNaviStyles';
 
 interface LoadNaviProps {
@@ -10,7 +10,8 @@ interface LoadNaviProps {
   route: {params: {destination: {latitude: number; longitude: number}}};
 }
 
-const MAPBOX_KEY = '';
+const MAPBOX_KEY =
+  'pk.eyJ1Ijoib2xsYWJ1MyIsImEiOiJja2V2ZmRkbm0yZmIyMnJwbmkzdnhmOWR3In0.IGDwQNEEQN2tbGH00798IA';
 
 function LoadNaviScreen({GetCurrentLocation, location, route}: LoadNaviProps) {
   console.log(location);
@@ -28,7 +29,6 @@ function LoadNaviScreen({GetCurrentLocation, location, route}: LoadNaviProps) {
     });
     setDirection(destinationPath);
   }
-  console.log(direction);
   useEffect(() => {
     getDirection();
   }, []);
@@ -47,11 +47,19 @@ function LoadNaviScreen({GetCurrentLocation, location, route}: LoadNaviProps) {
           showsUserLocation={true}
           // showsMyLocationButton={true}
           followsUserLocation={true}>
-          <MapView.Polyline
+          <Polyline
             coordinates={direction}
             strokeColor="red"
             fillColor="rgba(255,0,0,0.5)"
             strokeWidth={3}
+          />
+          <Marker
+            coordinate={{
+              latitude: Number(route.params.destination.latitude),
+              longitude: Number(route.params.destination.longitude),
+            }}
+            title="this is a marker"
+            description="this is a marker example"
           />
         </MapView>
       ) : (
