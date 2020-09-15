@@ -54,7 +54,9 @@ const DetailScreen = () => {
         <Appbar.Action />
       </Appbar.Header>
       <Card style={{margin: 4}}>
-        <Card.Cover source={{uri: data.image}} />
+        <TouchableOpacity>
+          <Card.Cover source={{uri: data.image}} />
+        </TouchableOpacity>
         <Card.Title title={data.name.trim()} />
         <Card.Content>
           <Paragraph>{data.category}</Paragraph>
@@ -105,6 +107,20 @@ const DetailScreen = () => {
           left={(props) => <List.Icon {...props} icon="content-paste" />}
         />
         <Divider />
+      </Card>
+      <Card style={{margin: 4}}>
+        <Card.Title title="메뉴" />
+        <TouchableOpacity activeOpacity={1}>
+          <Card.Cover source={{uri: data.menuImage}} />
+        </TouchableOpacity>
+        <List.Accordion title="메뉴 보기" titleStyle={{color: 'black'}}>
+          {JSON.parse(data.menu).map((item: string) => (
+            <View key={JSON.stringify(item)}>
+              <List.Item title={item} />
+              <Divider />
+            </View>
+          ))}
+        </List.Accordion>
       </Card>
     </ScrollView>
   );
