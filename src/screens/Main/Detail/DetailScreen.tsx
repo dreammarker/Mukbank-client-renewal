@@ -1,16 +1,25 @@
-import React from 'react';
-import {View, ScrollView, TouchableOpacity, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, ScrollView, TouchableOpacity, Text, Image} from 'react-native';
 import {
   Paragraph,
   Card,
   useTheme,
   Appbar,
-  List,
   Divider,
+  List,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Modal from 'react-native-modal';
 
-const DetailScreen = () => {
+function DetailScreen() {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalImage, setModalImage] = useState<string>('');
+
+  const toggleModal = (e: string) => {
+    setModalImage(e);
+    setModalVisible(!isModalVisible);
+  };
+
   const data = {
     id: 34044,
     name: '카페자우 ',
@@ -39,7 +48,7 @@ const DetailScreen = () => {
   return (
     <ScrollView
       style={[{flex: 1}, {backgroundColor: background}]}
-      contentContainerStyle={{padding: 4}}>
+      contentContainerStyle={[{padding: 4}, {paddingTop: 0}]}>
       <Appbar.Header
         style={{
           backgroundColor: '#fff',
@@ -54,12 +63,15 @@ const DetailScreen = () => {
         <Appbar.Action />
       </Appbar.Header>
       <Card style={{margin: 4}}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => toggleModal(data.image)}>
           <Card.Cover source={{uri: data.image}} />
         </TouchableOpacity>
         <Card.Title title={data.name.trim()} />
         <Card.Content>
           <Paragraph>{data.category}</Paragraph>
+          <Paragraph>{data.restdetail}</Paragraph>
         </Card.Content>
       </Card>
       <Card style={{margin: 4}}>
@@ -110,10 +122,13 @@ const DetailScreen = () => {
       </Card>
       <Card style={{margin: 4}}>
         <Card.Title title="메뉴" />
-        <TouchableOpacity activeOpacity={1}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => toggleModal(data.menuImage)}>
           <Card.Cover source={{uri: data.menuImage}} />
         </TouchableOpacity>
         <List.Accordion title="메뉴 보기" titleStyle={{color: 'black'}}>
+          <Divider />
           {JSON.parse(data.menu).map((item: string) => (
             <View key={JSON.stringify(item)}>
               <List.Item title={item} />
@@ -122,8 +137,29 @@ const DetailScreen = () => {
           ))}
         </List.Accordion>
       </Card>
+      {/* 이미지 클릭했을 때 full 사진 보여주는 모달창 띄우기*/}
+      <Modal
+        isVisible={isModalVisible}
+        useNativeDriver={true}
+        hideModalContentWhileAnimating={true}
+        onBackButtonPress={() => toggleModal('')}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => toggleModal('')}
+          style={{flex: 1, backgroundColor: '#fff'}}>
+          <Icon name="close" size={28} color="black" />
+          <View>
+            <Image
+              source={{
+                uri: `${modalImage}`,
+              }}
+              style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </ScrollView>
   );
-};
+}
 
 export default DetailScreen;
