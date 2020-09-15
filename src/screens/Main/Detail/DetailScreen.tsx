@@ -1,6 +1,14 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
-import {Paragraph, Card, useTheme, Appbar} from 'react-native-paper';
+import {View, ScrollView, TouchableOpacity, Text} from 'react-native';
+import {
+  Paragraph,
+  Card,
+  useTheme,
+  Appbar,
+  List,
+  Divider,
+} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const DetailScreen = () => {
   const data = {
@@ -51,6 +59,52 @@ const DetailScreen = () => {
         <Card.Content>
           <Paragraph>{data.category}</Paragraph>
         </Card.Content>
+      </Card>
+      <Card style={{margin: 4}}>
+        <Card.Actions style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{flex: 1, alignItems: 'center'}}>
+            <View>
+              <Icon name="favorite-border" size={28} color="black" />
+            </View>
+            <View>
+              <Text>좋아요</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{flex: 1, alignItems: 'center'}}>
+            <View>
+              <Icon name="phone" size={28} color="black" />
+            </View>
+            <View>
+              <Text>전화</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{flex: 1, alignItems: 'center'}}>
+            <View>
+              <Icon name="map" size={28} color="black" />
+            </View>
+            <View>
+              <Text>길찾기</Text>
+            </View>
+          </TouchableOpacity>
+        </Card.Actions>
+      </Card>
+      <Card style={{margin: 4}}>
+        <List.Item
+          title={data.clock}
+          left={(props) => <List.Icon {...props} icon="clock-outline" />}
+        />
+        <Divider />
+        <List.Item
+          title={JSON.parse(data.option).join(', ')}
+          left={(props) => <List.Icon {...props} icon="content-paste" />}
+        />
+        <Divider />
       </Card>
     </ScrollView>
   );
