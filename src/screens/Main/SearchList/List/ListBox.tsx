@@ -63,12 +63,15 @@ function ListBox({list, navigation, GetCurrentLocation}: ListBoxProps) {
       <TouchableOpacity
         activeOpacity={1}
         style={styles.sectionCard}
-        onPress={
-          () => console.log('goToDetail')
-          // navigation.navigate('Detail', {
-          //   id: list.id,
-          // })
-        }>
+        onPress={() => {
+          navigation.navigate('Detail', {
+            id: list.id,
+            destination: {
+              latitude: list.latitude,
+              longitude: list.longitude,
+            },
+          });
+        }}>
         <View style={styles.imageView}>
           {list.image === null ? (
             list.firstchild === 'null' ? (
