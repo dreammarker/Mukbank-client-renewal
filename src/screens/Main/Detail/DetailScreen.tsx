@@ -3,7 +3,14 @@ import axios from 'axios';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, ScrollView, TouchableOpacity, Text, Image} from 'react-native';
+import {
+  View,
+  ScrollView,
+  ToastAndroid,
+  TouchableOpacity,
+  Image,
+  Linking,
+} from 'react-native';
 import {
   Paragraph,
   Card,
@@ -16,6 +23,7 @@ import {
 } from 'react-native-paper';
 
 import styles from './DetailStyles';
+import IconBtn from './IconBtn';
 
 interface DetailData {
   name: string;
@@ -44,13 +52,41 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
 
+  const phoneCall = () => {
+    // 전화 아이콘 누를 때
+    if (data.phone === '') {
+      ToastAndroid.showWithGravity(
+        '번호가 존재하지 않습니다.',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else {
+      const phone: string = data.phone.split('-').join('');
+      Linking.openURL(`tel:${phone}`);
+    }
+  };
+
+  const toggleLike = () => {
+    // 좋아요 아이콘 누를 때
+    console.log('좋아요 누름');
+  };
+
+  const gotoDetail = () => {
+    // 길찾기 아이콘 누를 때
+    GetCurrentLocation().then(() =>
+      navigation.navigate('LoadNavi', {
+        destination: route.params.destination,
+      }),
+    );
+  };
+
   const toggleModal = (e: string) => {
     // 모달 보여주는 function
     setModalImage(e);
     setModalVisible(!isModalVisible);
   };
 
-  const closeDiaglog = () => {
+  const closeDialog = () => {
     // 데이터 없을 시 보여주는 alert function
     setIsDialogVisible(false);
     navigation.goBack();
@@ -61,7 +97,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
         .post('http:/172.30.1.30:5001/restaurant/detail', {
-          rest_id: route.params.id, // 7814 3127
+          rest_id: route.params.id, //  3127  7814 route.params.id
         })
         .then((res) => {
           if (res.data === '') {
@@ -85,7 +121,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
         </View>
       ) : data === '' ? (
         // 데이터가 없으면 알람
-        <Dialog visible={isDialogVisible} onDismiss={() => closeDiaglog()}>
+        <Dialog visible={isDialogVisible} onDismiss={() => closeDialog()}>
           <Dialog.Title>죄송합니다</Dialog.Title>
           <Dialog.Content style={styles.dialogContent}>
             <Paragraph>상세정보가 존재하지 않습니다.</Paragraph>
@@ -127,7 +163,6 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
                 <Card.Cover source={{uri: data.image}} />
               </TouchableOpacity>
             )}
-
             <Card.Title title={data.name.trim()} />
             <Card.Content>
               <Paragraph>{data.category}</Paragraph>
@@ -136,39 +171,21 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
           </Card>
           <Card style={styles.cardView}>
             <Card.Actions style={styles.cardActions}>
-              <TouchableOpacity activeOpacity={1} style={styles.icon}>
-                <View>
-                  <Icon name="favorite-border" size={28} color="black" />
-                </View>
-                <View>
-                  <Text>좋아요</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={1} style={styles.icon}>
-                <View>
-                  <Icon name="phone" size={28} color="black" />
-                </View>
-                <View>
-                  <Text>전화</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={1}
-                style={styles.icon}
-                onPress={() =>
-                  GetCurrentLocation().then(() =>
-                    navigation.navigate('LoadNavi', {
-                      destination: route.params.destination,
-                    }),
-                  )
-                }>
-                <View>
-                  <Icon name="map" size={28} color="black" />
-                </View>
-                <View>
-                  <Text>길찾기</Text>
-                </View>
-              </TouchableOpacity>
+              <IconBtn
+                onPressEvent={toggleLike}
+                iconName={'favorite-border'}
+                iconTitle={'좋아요'}
+              />
+              <IconBtn
+                onPressEvent={phoneCall}
+                iconName={'phone'}
+                iconTitle={'전화'}
+              />
+              <IconBtn
+                onPressEvent={gotoDetail}
+                iconName={'map'}
+                iconTitle={'길찾기'}
+              />
             </Card.Actions>
           </Card>
           <Card style={styles.cardView}>
