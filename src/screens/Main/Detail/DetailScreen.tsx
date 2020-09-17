@@ -12,6 +12,8 @@ import {
   Divider,
   List,
   ActivityIndicator,
+  Dialog,
+  Button,
 } from 'react-native-paper';
 
 interface DetailData {
@@ -28,7 +30,6 @@ interface DetailData {
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
 interface DetailProps {
-  data: DetailData;
   navigation: NavigationProp;
   GetCurrentLocation: any;
   route: {
@@ -39,20 +40,36 @@ interface DetailProps {
 function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
   const [data, setData] = useState<DetailData | undefined | string>(undefined);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [modalImage, setModalImage] = useState<string>('');
 
   const toggleModal = (e: string) => {
+    // 모달 보여주는 function
     setModalImage(e);
     setModalVisible(!isModalVisible);
   };
 
+  const closeDiaglog = () => {
+    // 데이터 없을 시 보여주는 alert function
+    setIsDialogVisible(false);
+    navigation.goBack();
+  };
+
   useEffect(() => {
     const getData = () => {
+      // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
         .post('http:/172.30.1.30:5001/restaurant/detail', {
           rest_id: route.params.id,
         })
-        .then((res) => setData(res.data))
+        .then((res) => {
+          if (res.data === '') {
+            // 결과물 데이터가 없으면 알람 띄어줌
+            setIsDialogVisible(true);
+          }
+          // 데이터 있으면 setState
+          setData(res.data);
+        })
         .catch((error) => console.log(error));
     };
     getData();
@@ -65,7 +82,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
   return (
     <>
       {data === undefined ? (
-        <View
+        <View // 로딩중 표시
           style={{
             flex: 1,
             backgroundColor: '#fafafa',
@@ -74,12 +91,27 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
           <ActivityIndicator animating={true} size="large" />
         </View>
       ) : data === '' ? (
-        <></>
+        // 데이터가 없으면 알람
+        <Dialog visible={isDialogVisible} onDismiss={() => closeDiaglog()}>
+          <Dialog.Title>죄송합니다</Dialog.Title>
+          <Dialog.Content style={{paddingBottom: 0}}>
+            <Paragraph>상세정보가 존재하지 않습니다.</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions style={{width: '95%'}}>
+            <Button
+              labelStyle={{fontSize: 15}}
+              onPress={() => navigation.goBack()}>
+              OK
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
       ) : (
+        // 데이터가 존재 할 시
         <ScrollView
           style={[{flex: 1}, {backgroundColor: background}]}
           contentContainerStyle={[{padding: 4}, {paddingTop: 0}]}>
           <Appbar.Header
+            // 스크린 해더에 가게 명 표시
             style={{
               backgroundColor: '#fff',
             }}>
@@ -92,12 +124,14 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
             />
             <Appbar.Action />
           </Appbar.Header>
+
           <Card style={{margin: 4}}>
-            {data.image === '' ? (
+            {data.image === '' ? ( // 이미지 없을 시 file 내에서 가져옴
               <Card.Cover
                 source={require('../../../assets/restaurantData.jpg')}
               />
             ) : (
+              // 있으면 데이터에서 가져옴
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => toggleModal(data.image)}>
@@ -167,8 +201,10 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
           <Card style={{margin: 4}}>
             <Card.Title title="메뉴" />
             {data.menuImage === '' ? (
+              // 이미지 없을 시 file 내에서 가져옴
               <Card.Cover source={require('../../../assets/menu.jpg')} />
             ) : (
+              // 있으면 데이터에서 가져옴
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => toggleModal(data.menuImage)}>
@@ -176,8 +212,10 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
               </TouchableOpacity>
             )}
             {data.menu === '[]' ? (
+              // 데이터에 메뉴정보 없을 시
               <List.Item title="메뉴 준비중" />
             ) : (
+              // 있으면 accordion
               <List.Accordion title="메뉴 보기" titleStyle={{color: 'black'}}>
                 <Divider />
                 {JSON.parse(data.menu).map((item: string) => (
