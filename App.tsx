@@ -65,7 +65,14 @@ function App({Location}: AppProps) {
                 />
               )}
             </Stack.Screen>
-            <Stack.Screen name="Detail" component={DetailScreen} />
+            <Stack.Screen name="Detail">
+              {(props) => (
+                <DetailScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                />
+              )}
+            </Stack.Screen>
             <Stack.Screen name="LoadNavi">
               {(props) => (
                 <LoadNaviScreen
