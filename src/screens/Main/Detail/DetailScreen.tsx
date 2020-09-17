@@ -15,10 +15,10 @@ import {
 } from 'react-native-paper';
 
 interface DetailData {
-  name: string | null;
-  image: string | null;
-  restdetail: string | null;
-  menuImage: string | null;
+  name: string;
+  image: string;
+  restdetail: string;
+  menuImage: string;
   option: string;
   longitude: string;
   menu: string;
@@ -49,7 +49,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
   useEffect(() => {
     const getData = () => {
       axios
-        .post('http:/192.168.0.4:5001/restaurant/detail', {
+        .post('http:/172.30.1.30:5001/restaurant/detail', {
           rest_id: route.params.id,
         })
         .then((res) => setData(res.data))
@@ -93,11 +93,18 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
             <Appbar.Action />
           </Appbar.Header>
           <Card style={{margin: 4}}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => toggleModal(data.image)}>
-              <Card.Cover source={{uri: data.image}} />
-            </TouchableOpacity>
+            {data.image === '' ? (
+              <Card.Cover
+                source={require('../../../assets/restaurantData.jpg')}
+              />
+            ) : (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => toggleModal(data.image)}>
+                <Card.Cover source={{uri: data.image}} />
+              </TouchableOpacity>
+            )}
+
             <Card.Title title={data.name.trim()} />
             <Card.Content>
               <Paragraph>{data.category}</Paragraph>
@@ -159,20 +166,28 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
           </Card>
           <Card style={{margin: 4}}>
             <Card.Title title="메뉴" />
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => toggleModal(data.menuImage)}>
-              <Card.Cover source={{uri: data.menuImage}} />
-            </TouchableOpacity>
-            <List.Accordion title="메뉴 보기" titleStyle={{color: 'black'}}>
-              <Divider />
-              {JSON.parse(data.menu).map((item: string) => (
-                <View key={JSON.stringify(item)}>
-                  <List.Item title={item} />
-                  <Divider />
-                </View>
-              ))}
-            </List.Accordion>
+            {data.menuImage === '' ? (
+              <Card.Cover source={require('../../../assets/menu.jpg')} />
+            ) : (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => toggleModal(data.menuImage)}>
+                <Card.Cover source={{uri: data.menuImage}} />
+              </TouchableOpacity>
+            )}
+            {data.menu === '[]' ? (
+              <List.Item title="메뉴 준비중" />
+            ) : (
+              <List.Accordion title="메뉴 보기" titleStyle={{color: 'black'}}>
+                <Divider />
+                {JSON.parse(data.menu).map((item: string) => (
+                  <View key={JSON.stringify(item)}>
+                    <List.Item title={item} />
+                    <Divider />
+                  </View>
+                ))}
+              </List.Accordion>
+            )}
           </Card>
           {/* 이미지 클릭했을 때 full 사진 보여주는 모달창 띄우기*/}
           <Modal
