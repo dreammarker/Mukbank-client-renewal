@@ -11,6 +11,7 @@ import {
   Appbar,
   Divider,
   List,
+  ActivityIndicator,
 } from 'react-native-paper';
 
 interface DetailData {
@@ -39,7 +40,6 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
   const [data, setData] = useState<DetailData | undefined | string>(undefined);
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalImage, setModalImage] = useState<string>('');
-  console.log(route.params.id);
 
   const toggleModal = (e: string) => {
     setModalImage(e);
@@ -65,7 +65,14 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
   return (
     <>
       {data === undefined ? (
-        <></>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#fafafa',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator animating={true} size="large" />
+        </View>
       ) : data === '' ? (
         <></>
       ) : (
