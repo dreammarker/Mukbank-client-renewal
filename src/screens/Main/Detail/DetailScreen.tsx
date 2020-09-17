@@ -18,11 +18,10 @@ import {
   Divider,
   List,
   ActivityIndicator,
-  Dialog,
-  Button,
 } from 'react-native-paper';
 
 import styles from './DetailStyles';
+import Alert from './Alert';
 import IconBtn from './IconBtn';
 
 interface DetailData {
@@ -121,19 +120,11 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
         </View>
       ) : data === '' ? (
         // 데이터가 없으면 알람
-        <Dialog visible={isDialogVisible} onDismiss={() => closeDialog()}>
-          <Dialog.Title>죄송합니다</Dialog.Title>
-          <Dialog.Content style={styles.dialogContent}>
-            <Paragraph>상세정보가 존재하지 않습니다.</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions style={styles.dialogActions}>
-            <Button
-              labelStyle={styles.alertBtn}
-              onPress={() => navigation.goBack()}>
-              OK
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
+        <Alert
+          isDialogVisible={isDialogVisible}
+          closeDialog={closeDialog}
+          navigation={navigation}
+        />
       ) : (
         // 데이터가 존재 할 시
         <ScrollView
