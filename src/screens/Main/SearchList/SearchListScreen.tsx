@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -35,8 +34,8 @@ interface SearchListScreenProps {
       data: SearchListData;
       location: {latitude: number; longitude: number};
     };
-    GetCurrentLocation: any;
   };
+  GetCurrentLocation: any;
 }
 
 function SearchListScreen({
