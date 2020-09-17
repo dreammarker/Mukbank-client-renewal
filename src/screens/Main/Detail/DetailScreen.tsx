@@ -7,7 +7,6 @@ import {View, ScrollView, TouchableOpacity, Text, Image} from 'react-native';
 import {
   Paragraph,
   Card,
-  useTheme,
   Appbar,
   Divider,
   List,
@@ -15,6 +14,8 @@ import {
   Dialog,
   Button,
 } from 'react-native-paper';
+
+import styles from './DetailStyles';
 
 interface DetailData {
   name: string;
@@ -38,9 +39,9 @@ interface DetailProps {
 }
 
 function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
-  const [data, setData] = useState<DetailData | undefined | string>(undefined);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [data, setData] = useState<DetailData[] | any>(undefined);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
 
   const toggleModal = (e: string) => {
@@ -60,7 +61,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
         .post('http:/172.30.1.30:5001/restaurant/detail', {
-          rest_id: route.params.id,
+          rest_id: route.params.id, // 7814 3127
         })
         .then((res) => {
           if (res.data === '') {
@@ -75,31 +76,23 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
     getData();
   }, []);
 
-  const {
-    colors: {background},
-  } = useTheme();
-
   return (
     <>
       {data === undefined ? (
         <View // 로딩중 표시
-          style={{
-            flex: 1,
-            backgroundColor: '#fafafa',
-            justifyContent: 'center',
-          }}>
+          style={[styles.container, {justifyContent: 'center'}]}>
           <ActivityIndicator animating={true} size="large" />
         </View>
       ) : data === '' ? (
         // 데이터가 없으면 알람
         <Dialog visible={isDialogVisible} onDismiss={() => closeDiaglog()}>
           <Dialog.Title>죄송합니다</Dialog.Title>
-          <Dialog.Content style={{paddingBottom: 0}}>
+          <Dialog.Content style={styles.dialogContent}>
             <Paragraph>상세정보가 존재하지 않습니다.</Paragraph>
           </Dialog.Content>
-          <Dialog.Actions style={{width: '95%'}}>
+          <Dialog.Actions style={styles.dialogActions}>
             <Button
-              labelStyle={{fontSize: 15}}
+              labelStyle={styles.alertBtn}
               onPress={() => navigation.goBack()}>
               OK
             </Button>
@@ -108,24 +101,20 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
       ) : (
         // 데이터가 존재 할 시
         <ScrollView
-          style={[{flex: 1}, {backgroundColor: background}]}
-          contentContainerStyle={[{padding: 4}, {paddingTop: 0}]}>
+          style={styles.container}
+          contentContainerStyle={styles.containerContent}>
           <Appbar.Header
             // 스크린 해더에 가게 명 표시
-            style={{
-              backgroundColor: '#fff',
-            }}>
+            style={styles.header}>
             <Appbar.BackAction onPress={() => navigation.goBack()} />
             <Appbar.Content
               title={data.name.trim()}
-              style={{
-                alignItems: 'center',
-              }}
+              style={styles.headerContent}
             />
             <Appbar.Action />
           </Appbar.Header>
 
-          <Card style={{margin: 4}}>
+          <Card style={styles.cardView}>
             {data.image === '' ? ( // 이미지 없을 시 file 내에서 가져옴
               <Card.Cover
                 source={require('../../../assets/restaurantData.jpg')}
@@ -145,11 +134,9 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
               <Paragraph>{data.restdetail}</Paragraph>
             </Card.Content>
           </Card>
-          <Card style={{margin: 4}}>
-            <Card.Actions style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                activeOpacity={1}
-                style={{flex: 1, alignItems: 'center'}}>
+          <Card style={styles.cardView}>
+            <Card.Actions style={styles.cardActions}>
+              <TouchableOpacity activeOpacity={1} style={styles.icon}>
                 <View>
                   <Icon name="favorite-border" size={28} color="black" />
                 </View>
@@ -157,9 +144,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
                   <Text>좋아요</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={1}
-                style={{flex: 1, alignItems: 'center'}}>
+              <TouchableOpacity activeOpacity={1} style={styles.icon}>
                 <View>
                   <Icon name="phone" size={28} color="black" />
                 </View>
@@ -169,7 +154,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={1}
-                style={{flex: 1, alignItems: 'center'}}
+                style={styles.icon}
                 onPress={() =>
                   GetCurrentLocation().then(() =>
                     navigation.navigate('LoadNavi', {
@@ -186,7 +171,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
               </TouchableOpacity>
             </Card.Actions>
           </Card>
-          <Card style={{margin: 4}}>
+          <Card style={styles.cardView}>
             <List.Item
               title={data.clock}
               left={(props) => <List.Icon {...props} icon="clock-outline" />}
@@ -198,7 +183,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
             />
             <Divider />
           </Card>
-          <Card style={{margin: 4}}>
+          <Card style={styles.cardView}>
             <Card.Title title="메뉴" />
             {data.menuImage === '' ? (
               // 이미지 없을 시 file 내에서 가져옴
@@ -216,7 +201,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
               <List.Item title="메뉴 준비중" />
             ) : (
               // 있으면 accordion
-              <List.Accordion title="메뉴 보기" titleStyle={{color: 'black'}}>
+              <List.Accordion title="메뉴 보기" titleStyle={styles.accordion}>
                 <Divider />
                 {JSON.parse(data.menu).map((item: string) => (
                   <View key={JSON.stringify(item)}>
@@ -236,14 +221,14 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => toggleModal('')}
-              style={{flex: 1, backgroundColor: '#fff'}}>
+              style={styles.modal}>
               <Icon name="close" size={28} color="black" />
               <View>
                 <Image
                   source={{
                     uri: `${modalImage}`,
                   }}
-                  style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+                  style={styles.modalImage}
                 />
               </View>
             </TouchableOpacity>
