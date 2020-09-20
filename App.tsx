@@ -22,13 +22,21 @@ import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
 
 const Stack = createStackNavigator();
 
+type UserInfo = {
+  id: string;
+  password: string;
+};
+
 interface AppProps {
   Location: {latitude: number; longitude: number};
 }
 
-function App({Location}: AppProps) {
+function App({Location, UserInfo}: AppProps) {
   const [location, setLocation] = useState(Location);
-
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    id: 'kduwnd1475',
+    password: 'dsadwdw',
+  });
   function GetCurrentLocation() {
     // 현재위치 표시
     return Geolocation.getCurrentPosition((locationInfo) => {
@@ -52,7 +60,9 @@ function App({Location}: AppProps) {
               headerShown: false, // 위에 바 없애줌
             }}>
             <Stack.Screen name="Home">
-              {(props) => <Home {...props} location={location} />}
+              {(props) => (
+                <Home {...props} location={location} userInfo={userInfo} />
+              )}
             </Stack.Screen>
             <Stack.Screen name="Search">
               {(props) => <SearchScreen {...props} location={location} />}
