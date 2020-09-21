@@ -5,8 +5,6 @@ type Style = {
   container: ViewStyle;
   image: ImageStyle;
   header: TextStyle;
-  button: ViewStyle;
-  text: TextStyle;
 };
 
 const styles = StyleSheet.create<Style>({
@@ -32,15 +30,6 @@ const styles = StyleSheet.create<Style>({
     fontSize: 26,
     fontWeight: 'bold',
     paddingVertical: 14,
-  },
-  button: {
-    width: '100%',
-    marginVertical: 10,
-  },
-  text: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    lineHeight: 26,
   },
 });
 
