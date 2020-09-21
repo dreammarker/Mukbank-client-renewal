@@ -1,10 +1,11 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
+import CustomDrawerContent from './CustomDrawer/CustomDrawerContent';
 import MapScreen from './Map/MapScreen';
+import LikeListScreen from './LikeList/LikeListScreen';
 import SignScreen from './Sign/SignScreen';
-import MypageScreen from './Mypage/MypageScreen';
-import CustomDrawerContent from './CustomDrawerContent';
+import UserInfoScreen from './UserInfo/UserInfoScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,7 +29,8 @@ function Home({location, userInfo}: HomeProps) {
         {(props) => <MapScreen {...props} location={location} />}
       </Drawer.Screen>
       <Drawer.Screen name="Sign" component={SignScreen} />
-      <Drawer.Screen name="Mypage" component={MypageScreen} />
+      <Drawer.Screen name="LikeList" component={LikeListScreen} />
+      <Drawer.Screen name="UserInfo" component={UserInfoScreen} />
     </Drawer.Navigator>
   );
 }
