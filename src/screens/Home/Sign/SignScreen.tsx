@@ -1,10 +1,17 @@
 import React from 'react';
 import {View, KeyboardAvoidingView, Image} from 'react-native';
-import {Button as PaperButton} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 import styles from './SignScreenStyles';
+import Button from './Button';
 
-function SignScreen() {
+type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
+
+interface Props {
+  navigation: NavigationProp;
+}
+
+function SignScreen({navigation}: Props) {
   return (
     <View style={styles.background}>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -12,21 +19,12 @@ function SignScreen() {
           source={require('../../../assets/logo.png')}
           style={styles.image}
         />
-        <PaperButton
-          style={styles.button}
-          onPress={() => console.log('aaaaaaaaaaaa')}
-          labelStyle={styles.text}
-          mode="contained">
+        <Button mode="contained" onPress={() => navigation.navigate('Login')}>
           로그인
-        </PaperButton>
-
-        <PaperButton
-          style={styles.button}
-          onPress={() => console.log('aaaaaaaaaaaa')}
-          labelStyle={styles.text}
-          mode="outlined">
+        </Button>
+        <Button mode="outlined" onPress={() => navigation.navigate('SignUp')}>
           회원가입
-        </PaperButton>
+        </Button>
       </KeyboardAvoidingView>
     </View>
   );
