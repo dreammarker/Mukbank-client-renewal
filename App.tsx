@@ -19,6 +19,8 @@ import SearchScreen from './src/screens/Main/Search/SearchScreen';
 import SearchListScreen from './src/screens/Main/SearchList/SearchListScreen';
 import DetailScreen from './src/screens/Main/Detail/DetailScreen';
 import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
+import LoginScreen from './src/screens/Main/Login/LoginScreen';
+import SignUpScreen from './src/screens/Main/SignUp/SignUpScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,16 +29,21 @@ type UserInfo = {
   password: string;
 };
 
-interface AppProps {
+interface Props {
   Location: {latitude: number; longitude: number};
+  // UserInfo: {
+  //   id: string;
+  //   password: string;
+  // };
 }
 
 function App({Location, UserInfo}: AppProps) {
   const [location, setLocation] = useState(Location);
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    id: 'kduwnd1475',
+    id: '',
     password: 'dsadwdw',
   });
+
   function GetCurrentLocation() {
     // 현재위치 표시
     return Geolocation.getCurrentPosition((locationInfo) => {
@@ -65,7 +72,13 @@ function App({Location, UserInfo}: AppProps) {
               )}
             </Stack.Screen>
             <Stack.Screen name="Search">
-              {(props) => <SearchScreen {...props} location={location} />}
+              {(props) => (
+                <SearchScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                  location={location}
+                />
+              )}
             </Stack.Screen>
             <Stack.Screen name="SearchList">
               {(props) => (
@@ -92,6 +105,8 @@ function App({Location, UserInfo}: AppProps) {
                 />
               )}
             </Stack.Screen>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       ) : (
