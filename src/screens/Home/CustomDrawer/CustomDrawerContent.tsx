@@ -3,22 +3,26 @@ import {View, TouchableOpacity} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {
   DrawerItem,
+  DrawerNavigationProp,
   DrawerContentScrollView,
   DrawerContentOptions,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import {Avatar, Title, Drawer} from 'react-native-paper';
 
-import styles from '../styles';
+import styles from './styles';
+
+type TypeDrawerProp = DrawerNavigationProp<HomeDrawerNaviParamList>;
 
 interface CustomDrawerContentProps {
+  navigation: TypeDrawerProp;
   userInfo: {id: string; password: string};
 
   // 36.9919666, 127.5896299
 }
 
 function CustomDrawerContent(
-  {navigation, userInfo},
+  {navigation, userInfo}: CustomDrawerContentProps,
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) {
   return (
