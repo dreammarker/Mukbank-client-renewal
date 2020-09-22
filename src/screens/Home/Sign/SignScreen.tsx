@@ -3,7 +3,7 @@ import {View, KeyboardAvoidingView, Image} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import styles from './SignScreenStyles';
-import Button from './Button';
+import Btn from '../../components/Btn';
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
@@ -19,12 +19,12 @@ function SignScreen({navigation}: Props) {
           source={require('../../../assets/logo.png')}
           style={styles.image}
         />
-        <Button mode="contained" onPress={() => navigation.navigate('Login')}>
+        <Btn mode="contained" onPress={() => navigation.navigate('Login')}>
           로그인
-        </Button>
-        <Button mode="outlined" onPress={() => navigation.navigate('SignUp')}>
+        </Btn>
+        <Btn mode="outlined" onPress={() => navigation.navigate('SignUp')}>
           회원가입
-        </Button>
+        </Btn>
       </KeyboardAvoidingView>
     </View>
   );
