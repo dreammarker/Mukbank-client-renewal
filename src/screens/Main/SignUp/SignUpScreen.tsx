@@ -16,10 +16,8 @@ interface Props {}
 function SignUpScreen({navigation}) {
   const [id, setId] = useState<checkText>({value: '', error: ''});
   const [password, setPassword] = useState<checkText>({value: '', error: ''});
-  const [chkPwd, setChkPwd] = useState<checkText>({
-    value: '',
-    error: '',
-  });
+  const [chkPwd, setChkPwd] = useState<checkText>({value: '', error: ''});
+  const [nickname, setNickname] = useState<checkText>({value: '', error: ''});
 
   const idValidator = (idVal: string) => {
     var idReg = /^[a-zA-Z](?=.{0,28}[0-9])[0-9a-zA-Z]{5,8}$/; // 영숫자포함 5~8 정규표현식
@@ -34,19 +32,24 @@ function SignUpScreen({navigation}) {
   const checkPassword = (chkPasswordVal: string) => {
     return !(chkPasswordVal === password.value);
   };
-  console.log(chkPwd.error);
+
+  const nickNameValidator = (nicknameVal: string) => {
+    return !(nicknameVal.length > 0 && nicknameVal.length <= 8);
+  };
+
   const SignUpPressed = () => {
     const idError = idValidator(id.value);
     const passwordError = passwordValidator(password.value);
     const chkPwdError = checkPassword(chkPwd.value);
+    const nicknameError = checkPassword(nickname.value);
     if (idError || passwordError || chkPwdError) {
       setId({...id, error: idError});
       setPassword({...password, error: passwordError});
       setChkPwd({...chkPwd, error: chkPwdError});
+      setNickname({...nickname, error: nicknameError});
       return;
-    } else {
-      console.log('통과');
     }
+    console.log('통과');
   };
 
   return (
@@ -97,6 +100,19 @@ function SignUpScreen({navigation}) {
           </HelperText>
         </View>
 
+        <View style={styles.inputContainer}>
+          <TextInput
+            label="닉네임"
+            mode={'outlined'}
+            value={nickname.value}
+            returnKeyType="done"
+            onChangeText={(text) => setNickname({value: text, error: ''})}
+            error={!!nickname.error}
+          />
+          <HelperText type="error" visible={nickNameValidator(nickname.value)}>
+            1 ~ 8 글자 이내
+          </HelperText>
+        </View>
         <Btn mode="contained" onPress={() => SignUpPressed()}>
           회원가입
         </Btn>
