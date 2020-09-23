@@ -9,9 +9,13 @@ type Props = React.ComponentProps<typeof Input> & {errorText?: string} & {
 const TextInput = ({visible, errorText, ...props}: Props) => (
   <View style={styles.container}>
     <Input underlineColor="transparent" mode="outlined" {...props} />
-    <HelperText type="error" visible={visible}>
-      {errorText}
-    </HelperText>
+    {errorText ? (
+      <HelperText type="error" visible={visible}>
+        {errorText}
+      </HelperText>
+    ) : (
+      <View style={styles.notErrorText}></View>
+    )}
   </View>
 );
 
@@ -20,6 +24,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 1,
   },
+  notErrorText: {marginBottom: 12},
 });
 
 export default memo(TextInput);
