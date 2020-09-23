@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-// import {TextInput, HelperText} from 'react-native-paper';
 
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
@@ -35,14 +34,14 @@ function SignUpScreen({navigation}) {
   };
 
   const nickNameValidator = (nicknameVal: string) => {
-    return !(nicknameVal.length > 0 && nicknameVal.length <= 8);
+    return !(nicknameVal !== '' && nicknameVal.length <= 8);
   };
 
   const SignUpPressed = () => {
     const idError = idValidator(id.value);
     const passwordError = passwordValidator(password.value);
     const chkPwdError = checkPassword(chkPwd.value);
-    const nicknameError = checkPassword(nickname.value);
+    const nicknameError = nickNameValidator(nickname.value);
     if (idError || passwordError || chkPwdError || nicknameError) {
       setId({...id, error: idError});
       setPassword({...password, error: passwordError});
@@ -57,7 +56,6 @@ function SignUpScreen({navigation}) {
     <View style={styles.background}>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Text style={styles.header}>SignUp</Text>
-
         <TextInput
           label="아이디"
           returnKeyType="next"
@@ -70,7 +68,6 @@ function SignUpScreen({navigation}) {
           autoCompleteType="username"
           textContentType="username"
         />
-
         <TextInput
           label="비밀번호"
           returnKeyType="next"
@@ -81,7 +78,6 @@ function SignUpScreen({navigation}) {
           visible={passwordValidator(password.value)}
           secureTextEntry
         />
-
         <TextInput
           label="비밀번호 확인"
           returnKeyType="next"
@@ -92,7 +88,6 @@ function SignUpScreen({navigation}) {
           visible={checkPassword(chkPwd.value)}
           secureTextEntry
         />
-
         <TextInput
           label="닉네임"
           returnKeyType="done"
@@ -102,10 +97,15 @@ function SignUpScreen({navigation}) {
           errorText={'1 ~ 8 글자 이내'}
           visible={nickNameValidator(nickname.value)}
         />
-
         <Btn mode="contained" onPress={() => SignUpPressed()}>
           회원가입
         </Btn>
+        <View style={styles.row}>
+          <Text style={styles.label}>이미 계정이 있으신가요? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.link}>로그인</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -141,8 +141,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 4,
   },
-  label: {},
+  label: {color: '#414757'},
   link: {
     fontWeight: 'bold',
+    color: '#600EE6',
   },
 });
