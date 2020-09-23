@@ -10,6 +10,7 @@ type MainStackNaviParamList = {
 type HomeDrawerNaviParamList = {
   Map: undefined;
   Sign: undefined;
+  Login: undefined;
   UserInfo: undefined;
   LikeList: undefined;
 };
