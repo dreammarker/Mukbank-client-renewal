@@ -6,9 +6,10 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import {TextInput, HelperText} from 'react-native-paper';
+// import {TextInput, HelperText} from 'react-native-paper';
 
 import Btn from '../../components/Btn';
+import TextInput from '../../components/TextInput';
 
 type checkText = {value: string; error: string | boolean};
 interface Props {}
@@ -42,7 +43,7 @@ function SignUpScreen({navigation}) {
     const passwordError = passwordValidator(password.value);
     const chkPwdError = checkPassword(chkPwd.value);
     const nicknameError = checkPassword(nickname.value);
-    if (idError || passwordError || chkPwdError) {
+    if (idError || passwordError || chkPwdError || nicknameError) {
       setId({...id, error: idError});
       setPassword({...password, error: passwordError});
       setChkPwd({...chkPwd, error: chkPwdError});
@@ -56,63 +57,52 @@ function SignUpScreen({navigation}) {
     <View style={styles.background}>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Text style={styles.header}>SignUp</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            label="아이디"
-            mode={'outlined'}
-            value={id.value}
-            returnKeyType="next"
-            onChangeText={(text) => setId({value: text, error: ''})}
-            error={!!id.error}
-          />
-          <HelperText type="error" visible={idValidator(id.value)}>
-            {/* visible이 false면 에러 */}
-            영어, 숫자포함 5~8 이내
-          </HelperText>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            label="비밀번호"
-            mode={'outlined'}
-            value={password.value}
-            returnKeyType="done"
-            onChangeText={(text) => setPassword({value: text, error: ''})}
-            error={!!password.error}
-            secureTextEntry
-          />
-          <HelperText type="error" visible={passwordValidator(password.value)}>
-            특수문자, 영대소문자, 숫자포함 8~15 이내
-          </HelperText>
-        </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            label="비밀번호확인"
-            mode={'outlined'}
-            value={chkPwd.value}
-            returnKeyType="done"
-            onChangeText={(text) => setChkPwd({value: text, error: ''})}
-            error={!!chkPwd.error}
-            secureTextEntry
-          />
-          <HelperText type="error" visible={checkPassword(chkPwd.value)}>
-            일치하지 않습니다.
-          </HelperText>
-        </View>
+        <TextInput
+          label="아이디"
+          returnKeyType="next"
+          value={id.value}
+          onChangeText={(text) => setId({value: text, error: ''})}
+          error={!!id.error}
+          errorText={'영어, 숫자포함 5~8 이내'}
+          visible={idValidator(id.value)}
+          autoCapitalize="none"
+          autoCompleteType="username"
+          textContentType="username"
+        />
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            label="닉네임"
-            mode={'outlined'}
-            value={nickname.value}
-            returnKeyType="done"
-            onChangeText={(text) => setNickname({value: text, error: ''})}
-            error={!!nickname.error}
-          />
-          <HelperText type="error" visible={nickNameValidator(nickname.value)}>
-            1 ~ 8 글자 이내
-          </HelperText>
-        </View>
+        <TextInput
+          label="비밀번호"
+          returnKeyType="next"
+          value={password.value}
+          onChangeText={(text) => setPassword({value: text, error: ''})}
+          error={!!password.error}
+          errorText={'특수문자, 영대소문자, 숫자포함 8~15 이내'}
+          visible={passwordValidator(password.value)}
+          secureTextEntry
+        />
+
+        <TextInput
+          label="비밀번호 확인"
+          returnKeyType="next"
+          value={chkPwd.value}
+          onChangeText={(text) => setChkPwd({value: text, error: ''})}
+          error={!!chkPwd.error}
+          errorText={'일치하지 않습니다.'}
+          visible={checkPassword(chkPwd.value)}
+          secureTextEntry
+        />
+
+        <TextInput
+          label="닉네임"
+          returnKeyType="done"
+          value={nickname.value}
+          onChangeText={(text) => setNickname({value: text, error: ''})}
+          error={!!nickname.error}
+          errorText={'1 ~ 8 글자 이내'}
+          visible={nickNameValidator(nickname.value)}
+        />
+
         <Btn mode="contained" onPress={() => SignUpPressed()}>
           회원가입
         </Btn>
@@ -141,10 +131,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     paddingVertical: 14,
-  },
-  inputContainer: {
-    width: '100%',
-    marginVertical: 6,
   },
   forgotPassword: {
     width: '100%',
