@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
+import axios from 'axios';
+import {HelperText} from 'react-native-paper';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 import LabelLink from '../../components/LabelLink';
+import Alert from '../../components/Alert';
 
 type checkText = {value: string; error: string | boolean};
 
@@ -22,44 +25,101 @@ type Props = {
 function LoginScreen({navigation}: Props) {
   const [id, setId] = useState<checkText>({value: '', error: ''});
   const [password, setPassword] = useState<checkText>({value: '', error: ''});
+  const [errorText, setErrorText] = useState<string>('');
+  const [pass, setPass] = useState<boolean>(false);
+
+  const idBlacnkCheck = (idVal: string) => {
+    return idVal === '';
+  };
+
+  const passwordBlacnkCheck = (passwordVal: string) => {
+    return passwordVal === '';
+  };
 
   const onLoginPress = () => {
-    console.log('로그인 눌렀다');
-    // navigation.replace('Map')
+    const idError = idBlacnkCheck(id.value);
+    const passwordError = passwordBlacnkCheck(password.value);
+
+    if (idError || passwordError) {
+      setId({...id, error: idError});
+      setPassword({...password, error: passwordError});
+      return;
+    } else {
+      axios
+        .post('http://192.168.0.4:5001/user/signin', {
+          id: id.value,
+          password: password.value,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data === '없는 아이디거나 잘못된 비밀번호 입니다.') {
+            console.log(res.data);
+            setErrorText(res.data);
+          } else if (res.data === '로그인되었습니다.') {
+            setPass(true);
+          }
+        })
+        .catch((error) => console.error(error));
+    }
   };
 
   return (
-    <View style={styles.background}>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={styles.header}>Login</Text>
-        <TextInput
-          label="아이디"
-          returnKeyType="next"
-          value={id.value}
-          onChangeText={(text) => setId({value: text, error: ''})}
-          autoCapitalize="none"
-          autoCompleteType="username"
-          textContentType="username"
-        />
-        <TextInput
-          label="비밀번호"
-          returnKeyType="done"
-          value={password.value}
-          onChangeText={(text) => setPassword({value: text, error: ''})}
-          secureTextEntry
-        />
-        <Btn mode="contained" onPress={() => onLoginPress()}>
-          로그인
-        </Btn>
-
-        <LabelLink
-          labelText={'계정이 없으신가요? '}
-          LinkText={'회원가입'}
+    <>
+      {pass ? (
+        <Alert
+          title={'로그인'}
+          paragraph={'로그인이 완료되었습니다'}
           navigation={navigation}
-          Navi={'SignUp'}
+          Navi={'Map'}
         />
-      </KeyboardAvoidingView>
-    </View>
+      ) : (
+        <View style={styles.background}>
+          <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <Text style={styles.header}>Login</Text>
+            <TextInput
+              label="아이디"
+              returnKeyType="next"
+              value={id.value}
+              onChangeText={(text) => setId({value: text, error: ''})}
+              autoCapitalize="none"
+              autoCompleteType="username"
+              textContentType="username"
+              error={!!id.error}
+              errorText={'아이디를 입력해 주세요'}
+              visible={idBlacnkCheck(id.value)}
+            />
+
+            <TextInput
+              label="비밀번호"
+              returnKeyType="done"
+              value={password.value}
+              onChangeText={(text) => setPassword({value: text, error: ''})}
+              error={!!password.error}
+              errorText={'비밀번호를 입력해 주세요'}
+              visible={passwordBlacnkCheck(password.value)}
+              secureTextEntry
+            />
+
+            <View style={styles.error}>
+              <HelperText type="error" visible={true}>
+                {errorText}
+              </HelperText>
+            </View>
+
+            <Btn mode="contained" onPress={() => onLoginPress()}>
+              로그인
+            </Btn>
+
+            <LabelLink
+              labelText={'계정이 없으신가요? '}
+              LinkText={'회원가입'}
+              navigation={navigation}
+              Navi={'SignUp'}
+            />
+          </KeyboardAvoidingView>
+        </View>
+      )}
+    </>
   );
 }
 
@@ -85,4 +145,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 14,
   },
+  error: {alignSelf: 'flex-start'},
 });
