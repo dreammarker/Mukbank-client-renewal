@@ -12,7 +12,7 @@ import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StackNavigationProp} from '@react-navigation/stack';
 import styles from './ListStyles';
-import FoodCategory from '../../../../assets/FoodCategory';
+import FoodCategory from '../../../components/FoodCategory';
 
 interface SearchListData {
   address: string;
