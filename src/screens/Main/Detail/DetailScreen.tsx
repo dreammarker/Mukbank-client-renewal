@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {
   View,
@@ -10,6 +12,7 @@ import {
   TouchableOpacity,
   Image,
   Linking,
+  StyleSheet,
 } from 'react-native';
 import {
   Paragraph,
@@ -20,8 +23,7 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 
-import styles from './DetailStyles';
-import Alert from './Alert';
+import Alert from '../../components/Alert';
 import IconBtn from './IconBtn';
 
 interface DetailData {
@@ -35,20 +37,22 @@ interface DetailData {
   category: string;
   phone: string;
 }
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
+type Navigation = CompositeNavigationProp<
+  DrawerNavigationProp<HomeDrawerNaviParamList>,
+  StackNavigationProp<MainStackNaviParamList>
+>;
 
-interface DetailProps {
-  navigation: NavigationProp;
+interface Props {
+  navigation: Navigation;
   GetCurrentLocation: any;
   route: {
     params: {id: number; destination: {latitude: number; longitude: number}};
   };
 }
 
-function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
+function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
   const [data, setData] = useState<DetailData[] | any>(undefined);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
 
   const phoneCall = () => {
@@ -85,12 +89,6 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
     setModalVisible(!isModalVisible);
   };
 
-  const closeDialog = () => {
-    // 데이터 없을 시 보여주는 alert function
-    setIsDialogVisible(false);
-    navigation.goBack();
-  };
-
   useEffect(() => {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
@@ -101,7 +99,6 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
         .then((res) => {
           if (res.data === '') {
             // 결과물 데이터가 없으면 알람 띄어줌
-            setIsDialogVisible(true);
           }
           // 데이터 있으면 setState
           setData(res.data);
@@ -121,8 +118,8 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
       ) : data === '' ? (
         // 데이터가 없으면 알람
         <Alert
-          isDialogVisible={isDialogVisible}
-          closeDialog={closeDialog}
+          title={'죄송합니다'}
+          paragraph={'상세정보가 존재하지 않습니다.'}
           navigation={navigation}
         />
       ) : (
@@ -248,3 +245,25 @@ function DetailScreen({route, navigation, GetCurrentLocation}: DetailProps) {
 }
 
 export default DetailScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+  },
+  containerContent: {
+    paddingTop: 0,
+    paddingLeft: 4,
+    paddingRight: 4,
+    paddingBottom: 4,
+  },
+  header: {backgroundColor: '#fff'},
+  headerContent: {
+    alignItems: 'center',
+  },
+  cardView: {margin: 4},
+  cardActions: {flexDirection: 'row'},
+  accordion: {color: 'black'},
+  modal: {flex: 1, backgroundColor: '#fff'},
+  modalImage: {width: '100%', height: '100%', resizeMode: 'contain'},
+});

@@ -1,13 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-import {HelperText, Dialog, Button, Paragraph} from 'react-native-paper';
+import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
+import {HelperText} from 'react-native-paper';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -15,6 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 import LabelLink from '../../components/LabelLink';
+import Alert from '../../components/Alert';
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<HomeDrawerNaviParamList>,
@@ -33,7 +28,6 @@ function SignUpScreen({navigation}: Props) {
   const [nickname, setNickname] = useState<checkText>({value: '', error: ''});
   const [errorText, setErrorText] = useState<string>('');
   const [pass, setPass] = useState<boolean>(false);
-  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(true);
 
   const idValidator = (idVal: string) => {
     var idReg = /^[a-zA-Z](?=.{0,28}[0-9])[0-9a-zA-Z]{5,8}$/; // 영숫자포함 5~8 정규표현식
@@ -51,11 +45,6 @@ function SignUpScreen({navigation}: Props) {
 
   const nickNameValidator = (nicknameVal: string) => {
     return !(nicknameVal !== '' && nicknameVal.length <= 8);
-  };
-
-  const closeDialog = () => {
-    setIsDialogVisible(false);
-    navigation.navigate('Map');
   };
 
   const onPressSignUp = () => {
@@ -79,7 +68,6 @@ function SignUpScreen({navigation}: Props) {
         .then((res) => {
           const chkId: boolean = res.data.id;
           const chkNik: boolean = res.data.nickname;
-
           if (!chkId && !chkNik) {
             setErrorText('아이디, 닉네임을 다른유저가 사용중 입니다.');
             setId({value: '', error: true});
@@ -100,19 +88,12 @@ function SignUpScreen({navigation}: Props) {
   return (
     <>
       {pass ? (
-        <Dialog visible={isDialogVisible} onDismiss={() => closeDialog()}>
-          <Dialog.Title>완료</Dialog.Title>
-          <Dialog.Content style={styles.dialogContent}>
-            <Paragraph>회원가입이 완료되었습니다.</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions style={styles.dialogActions}>
-            <Button
-              labelStyle={styles.alertBtn}
-              onPress={() => navigation.navigate('Map')}>
-              OK
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
+        <Alert
+          title={'가입 완료'}
+          paragraph={'회원가입이 완료되었습니다.'}
+          navigation={navigation}
+          Navi={'Map'}
+        />
       ) : (
         <View style={styles.background}>
           <KeyboardAvoidingView style={styles.container} behavior="padding">
