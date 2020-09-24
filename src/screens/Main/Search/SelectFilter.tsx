@@ -1,14 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Button, List} from 'react-native-paper';
-import {View, ScrollView, ToastAndroid} from 'react-native';
+import {View, ScrollView, ToastAndroid, StyleSheet} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import styles from './SelectFilterStyles';
+import ChipList from './ChipList';
 import SelectedChip from './SelectedChip';
-import ChipList from './components/ChipList';
-import {ChipListData} from './components/ChipListData';
+import {ChipListData} from './ChipListData';
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
@@ -71,8 +69,8 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
 
   return (
     <>
-      <View style={styles.selectedChipView as any}>
-        <View style={styles.selectedChip as any}>
+      <View style={styles.selectedChipView}>
+        <View style={styles.selectedChip}>
           <ScrollView horizontal={true}>
             {select.map((list: string) => (
               <SelectedChip
@@ -85,7 +83,7 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
             ))}
           </ScrollView>
         </View>
-        <View style={styles.selectedChipBtnView as any}>
+        <View style={styles.selectedChipBtnView}>
           <Button
             style={styles.selectedChipBtn}
             mode="contained"
@@ -95,9 +93,9 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
         </View>
       </View>
 
-      <View style={styles.chipView as any}>
-        <List.Section title="필터" style={styles.chipListTitle as any}>
-          <View style={styles.row as any}>
+      <View style={styles.chipView}>
+        <List.Section title="필터">
+          <View style={styles.row}>
             {chipListData.map((list: ChipData) => (
               <ChipList
                 key={JSON.stringify(list)}
@@ -113,3 +111,27 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
   );
 }
 export default SelectFilter;
+
+const styles = StyleSheet.create({
+  selectedChipView: {
+    flex: 1,
+    flexDirection: 'row',
+    marginLeft: '4%',
+    marginRight: '4%',
+  },
+  selectedChip: {paddingRight: '2%', width: '80%'},
+  selectedChipBtnView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  selectedChipBtn: {justifyContent: 'center'},
+  chipView: {
+    flex: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 12,
+  },
+});

@@ -1,20 +1,19 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {Searchbar} from 'react-native-paper';
+import {Searchbar, List} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, ToastAndroid} from 'react-native';
+import {View, ToastAndroid, StyleSheet} from 'react-native';
 
-import SelectFilter from './select/SelectFilter';
-import styles from './SearchScreenStyle';
+import SelectFilter from './SelectFilter';
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
-interface SearchScreenProps {
+interface Props {
   navigation: NavigationProp;
   location: {latitude: number; longitude: number};
 }
 
-function SearchScreen({navigation, location}: SearchScreenProps) {
+function SearchScreen({navigation, location}: Props) {
   const [text, setText] = useState<string>('');
 
   const sendText = () => {
@@ -49,11 +48,11 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
   };
 
   return (
-    <View style={styles.container as any}>
-      <View style={styles.searchBarView as any}>
+    <View style={styles.container}>
+      <View style={styles.searchBarView}>
         <Searchbar
           icon="chevron-left"
-          style={styles.searchBar as any}
+          style={styles.searchBar}
           placeholder="검색"
           onIconPress={() => navigation.goBack()}
           onChangeText={(t) => setText(t)}
@@ -61,7 +60,8 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
         />
       </View>
       {/* 필터 */}
-      <View style={styles.filterChipsContainer as any}>
+      <View style={styles.filterChipsContainer}>
+        <List.Section title="선택된 필터"></List.Section>
         <SelectFilter navigation={navigation} location={location} />
       </View>
     </View>
@@ -69,3 +69,24 @@ function SearchScreen({navigation, location}: SearchScreenProps) {
 }
 
 export default SearchScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+  },
+  searchBarView: {
+    flex: 1,
+    position: 'relative',
+  },
+  searchBar: {
+    top: '40%',
+    marginLeft: '4%',
+    marginRight: '4%',
+    position: 'absolute',
+    backgroundColor: 'white',
+  },
+  filterChipsContainer: {
+    flex: 7.5,
+  },
+});

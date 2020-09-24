@@ -1,17 +1,17 @@
 import React from 'react';
-import {Image} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import {Chip} from 'react-native-paper';
 
-import FoodCategory from '../../../../../assets/FoodCategory';
-import styles from './ChipListStyles';
+import FoodCategory from '../../components/FoodCategory';
 
-interface ChipListProps {
+interface Props {
   list: {name: string; isSelected: boolean};
   select: string[];
   setSelect: React.Dispatch<React.SetStateAction<string[]>>;
+  toggleCheck: (e: boolean) => void;
 }
 
-function ChipList({list, select, setSelect}: ChipListProps) {
+function ChipList({list, select, setSelect}: Props) {
   function SelectChip(e: string) {
     // 밑의 칩 종류 선택 시 서버에 보내 줄 text 추가
     if (list.isSelected) {
@@ -40,3 +40,7 @@ function ChipList({list, select, setSelect}: ChipListProps) {
   );
 }
 export default ChipList;
+
+const styles = StyleSheet.create({
+  filterchips: {margin: 5.5},
+});
