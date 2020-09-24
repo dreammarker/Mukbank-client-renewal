@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import {
   View,
   StyleSheet,
@@ -6,18 +7,32 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+import {HelperText, Dialog, Button, Paragraph} from 'react-native-paper';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 
+type Navigation = CompositeNavigationProp<
+  DrawerNavigationProp<HomeDrawerNaviParamList>,
+  StackNavigationProp<MainStackNaviParamList>
+>;
 type checkText = {value: string; error: string | boolean};
-interface Props {}
 
-function SignUpScreen({navigation}) {
+interface Props {
+  navigation: Navigation;
+}
+
+function SignUpScreen({navigation}: Props) {
   const [id, setId] = useState<checkText>({value: '', error: ''});
   const [password, setPassword] = useState<checkText>({value: '', error: ''});
   const [chkPwd, setChkPwd] = useState<checkText>({value: '', error: ''});
   const [nickname, setNickname] = useState<checkText>({value: '', error: ''});
+  const [errorText, setErrorText] = useState<string>('');
+  const [pass, setPass] = useState<boolean>(false);
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(true);
 
   const idValidator = (idVal: string) => {
     var idReg = /^[a-zA-Z](?=.{0,28}[0-9])[0-9a-zA-Z]{5,8}$/; // 영숫자포함 5~8 정규표현식
@@ -37,7 +52,12 @@ function SignUpScreen({navigation}) {
     return !(nicknameVal !== '' && nicknameVal.length <= 8);
   };
 
-  const SignUpPressed = () => {
+  const closeDialog = () => {
+    setIsDialogVisible(false);
+    navigation.navigate('Map');
+  };
+
+  const onPressSignUp = () => {
     const idError = idValidator(id.value);
     const passwordError = passwordValidator(password.value);
     const chkPwdError = checkPassword(chkPwd.value);
@@ -48,66 +68,115 @@ function SignUpScreen({navigation}) {
       setChkPwd({...chkPwd, error: chkPwdError});
       setNickname({...nickname, error: nicknameError});
       return;
+    } else {
+      axios
+        .post('http://172.30.1.30:5001/user/signup', {
+          id: id.value,
+          nickname: nickname.value,
+          password: password.value,
+        })
+        .then((res) => {
+          const chkId: boolean = res.data.id;
+          const chkNik: boolean = res.data.nickname;
+
+          if (!chkId && !chkNik) {
+            setErrorText('아이디, 닉네임을 다른유저가 사용중 입니다.');
+            setId({value: '', error: true});
+            setNickname({value: '', error: true});
+          } else if (!chkId) {
+            setErrorText('아이디를 다른유저가 사용중 입니다.');
+            setId({value: '', error: true});
+          } else if (!chkNik) {
+            setErrorText('닉네임을 다른유저가 사용중 입니다.');
+            setNickname({value: '', error: true});
+          } else if (chkId && chkNik) {
+            setPass(true);
+          }
+        });
     }
-    console.log('통과');
   };
 
   return (
-    <View style={styles.background}>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={styles.header}>SignUp</Text>
-        <TextInput
-          label="아이디"
-          returnKeyType="next"
-          value={id.value}
-          onChangeText={(text) => setId({value: text, error: ''})}
-          error={!!id.error}
-          errorText={'영어, 숫자포함 5~8 이내'}
-          visible={idValidator(id.value)}
-          autoCapitalize="none"
-          autoCompleteType="username"
-          textContentType="username"
-        />
-        <TextInput
-          label="비밀번호"
-          returnKeyType="next"
-          value={password.value}
-          onChangeText={(text) => setPassword({value: text, error: ''})}
-          error={!!password.error}
-          errorText={'특수문자, 영대소문자, 숫자포함 8~15 이내'}
-          visible={passwordValidator(password.value)}
-          secureTextEntry
-        />
-        <TextInput
-          label="비밀번호 확인"
-          returnKeyType="next"
-          value={chkPwd.value}
-          onChangeText={(text) => setChkPwd({value: text, error: ''})}
-          error={!!chkPwd.error}
-          errorText={'일치하지 않습니다.'}
-          visible={checkPassword(chkPwd.value)}
-          secureTextEntry
-        />
-        <TextInput
-          label="닉네임"
-          returnKeyType="done"
-          value={nickname.value}
-          onChangeText={(text) => setNickname({value: text, error: ''})}
-          error={!!nickname.error}
-          errorText={'1 ~ 8 글자 이내'}
-          visible={nickNameValidator(nickname.value)}
-        />
-        <Btn mode="contained" onPress={() => SignUpPressed()}>
-          회원가입
-        </Btn>
-        <View style={styles.row}>
-          <Text style={styles.label}>이미 계정이 있으신가요? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.link}>로그인</Text>
-          </TouchableOpacity>
+    <>
+      {pass ? (
+        <Dialog visible={isDialogVisible} onDismiss={() => closeDialog()}>
+          <Dialog.Title>완료</Dialog.Title>
+          <Dialog.Content style={styles.dialogContent}>
+            <Paragraph>회원가입이 완료되었습니다.</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions style={styles.dialogActions}>
+            <Button
+              labelStyle={styles.alertBtn}
+              onPress={() => navigation.navigate('Map')}>
+              OK
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      ) : (
+        <View style={styles.background}>
+          <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <Text style={styles.header}>SignUp</Text>
+            <TextInput
+              label="아이디"
+              returnKeyType="next"
+              value={id.value}
+              onChangeText={(text) => setId({value: text, error: ''})}
+              error={!!id.error}
+              errorText={'영어, 숫자포함 5~8 이내'}
+              visible={idValidator(id.value)}
+              autoCapitalize="none"
+              autoCompleteType="username"
+              textContentType="username"
+            />
+            <TextInput
+              label="비밀번호"
+              returnKeyType="next"
+              value={password.value}
+              onChangeText={(text) => setPassword({value: text, error: ''})}
+              error={!!password.error}
+              errorText={'특수문자, 영대소문자, 숫자포함 8~15 이내'}
+              visible={passwordValidator(password.value)}
+              secureTextEntry
+            />
+            <TextInput
+              label="비밀번호 확인"
+              returnKeyType="next"
+              value={chkPwd.value}
+              onChangeText={(text) => setChkPwd({value: text, error: ''})}
+              error={!!chkPwd.error}
+              errorText={'일치하지 않습니다.'}
+              visible={checkPassword(chkPwd.value)}
+              secureTextEntry
+            />
+            <TextInput
+              label="닉네임"
+              returnKeyType="done"
+              value={nickname.value}
+              onChangeText={(text) => setNickname({value: text, error: ''})}
+              error={!!nickname.error}
+              errorText={'1 ~ 8 글자 이내'}
+              visible={nickNameValidator(nickname.value)}
+            />
+            <View style={styles.error}>
+              <HelperText type="error" visible={true}>
+                {errorText}
+              </HelperText>
+            </View>
+
+            <Btn mode="contained" onPress={() => onPressSignUp()}>
+              회원가입
+            </Btn>
+
+            <View style={styles.row}>
+              <Text style={styles.label}>이미 계정이 있으신가요? </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.link}>로그인</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      )}
+    </>
   );
 }
 
@@ -132,6 +201,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 14,
   },
+  dialogContent: {paddingBottom: 0},
+  dialogActions: {width: '95%'},
+  alertBtn: {fontSize: 15},
+  error: {alignSelf: 'flex-start'},
   forgotPassword: {
     width: '100%',
     alignItems: 'flex-end',
