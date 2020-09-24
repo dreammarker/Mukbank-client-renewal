@@ -26,22 +26,18 @@ const Stack = createStackNavigator();
 
 type UserInfo = {
   id: string;
-  password: string;
+  nickname: string;
 };
 
 interface Props {
   Location: {latitude: number; longitude: number};
-  // UserInfo: {
-  //   id: string;
-  //   password: string;
-  // };
 }
 
-function App({Location, UserInfo}: AppProps) {
+function App({Location}: Props) {
   const [location, setLocation] = useState(Location);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: '',
-    password: 'dsadwdw',
+    nickname: '',
   });
 
   function GetCurrentLocation() {
