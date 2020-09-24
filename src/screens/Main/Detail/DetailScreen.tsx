@@ -24,7 +24,7 @@ import {
 } from 'react-native-paper';
 
 import Alert from '../../components/Alert';
-import IconBtn from './IconBtn';
+import IconBtn from '../../components/IconBtn';
 
 interface DetailData {
   name: string;
@@ -93,8 +93,8 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
-        .post('http:/172.30.1.30:5001/restaurant/detail', {
-          rest_id: route.params.id, //  3127  7814 route.params.id
+        .post('http:/192.168.0.4:5001/restaurant/detail', {
+          rest_id: 7814, //  3127  7814 route.params.id
         })
         .then((res) => {
           if (res.data === '') {
@@ -160,19 +160,19 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
           <Card style={styles.cardView}>
             <Card.Actions style={styles.cardActions}>
               <IconBtn
-                onPressEvent={toggleLike}
                 iconName={'favorite-border'}
                 iconTitle={'좋아요'}
+                onPressEvent={toggleLike}
               />
               <IconBtn
-                onPressEvent={phoneCall}
                 iconName={'phone'}
                 iconTitle={'전화'}
+                onPressEvent={phoneCall}
               />
               <IconBtn
-                onPressEvent={gotoDetail}
                 iconName={'map'}
                 iconTitle={'길찾기'}
+                onPressEvent={gotoDetail}
               />
             </Card.Actions>
           </Card>
