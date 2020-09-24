@@ -14,6 +14,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
+import LabelLink from '../../components/LabelLink';
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<HomeDrawerNaviParamList>,
@@ -167,12 +168,12 @@ function SignUpScreen({navigation}: Props) {
               회원가입
             </Btn>
 
-            <View style={styles.row}>
-              <Text style={styles.label}>이미 계정이 있으신가요? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.link}>로그인</Text>
-              </TouchableOpacity>
-            </View>
+            <LabelLink
+              labelText={'이미 계정이 있으신가요? '}
+              LinkText={'로그인'}
+              navigation={navigation}
+              Navi={'Login'}
+            />
           </KeyboardAvoidingView>
         </View>
       )}
@@ -201,22 +202,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 14,
   },
+  error: {alignSelf: 'flex-start'},
   dialogContent: {paddingBottom: 0},
   dialogActions: {width: '95%'},
   alertBtn: {fontSize: 15},
-  error: {alignSelf: 'flex-start'},
-  forgotPassword: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  label: {color: '#414757'},
-  link: {
-    fontWeight: 'bold',
-    color: '#600EE6',
-  },
 });

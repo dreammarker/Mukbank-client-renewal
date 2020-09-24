@@ -1,17 +1,12 @@
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
+import LabelLink from '../../components/LabelLink';
 
 type checkText = {value: string; error: string | boolean};
 
@@ -56,12 +51,13 @@ function LoginScreen({navigation}: Props) {
         <Btn mode="contained" onPress={() => onLoginPress()}>
           로그인
         </Btn>
-        <View style={styles.row}>
-          <Text style={styles.label}>계정이 없으신가요? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.link}>회원가입</Text>
-          </TouchableOpacity>
-        </View>
+
+        <LabelLink
+          labelText={'계정이 없으신가요? '}
+          LinkText={'회원가입'}
+          navigation={navigation}
+          Navi={'SignUp'}
+        />
       </KeyboardAvoidingView>
     </View>
   );
@@ -88,15 +84,5 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     paddingVertical: 14,
-  },
-
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  label: {color: '#414757'},
-  link: {
-    fontWeight: 'bold',
-    color: '#600EE6',
   },
 });
