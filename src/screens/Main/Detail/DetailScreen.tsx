@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Modal from 'react-native-modal';
+import MapView, {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
@@ -54,7 +55,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
   const [data, setData] = useState<DetailData[] | any>(undefined);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
-
+  console.log(data);
   const phoneCall = () => {
     // 전화 아이콘 누를 때
     if (data.phone === '') {
@@ -74,7 +75,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     console.log('좋아요 누름');
   };
 
-  const gotoDetail = () => {
+  const gotoLoad = () => {
     // 길찾기 아이콘 누를 때
     GetCurrentLocation().then(() =>
       navigation.navigate('LoadNavi', {
@@ -94,7 +95,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
         .post('http:/192.168.0.4:5001/restaurant/detail', {
-          rest_id: 7814, //  3127  7814 route.params.id
+          rest_id: route.params.id, //  3127  7814 route.params.id
         })
         .then((res) => {
           if (res.data === '') {
@@ -172,7 +173,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
               <IconBtn
                 iconName={'map'}
                 iconTitle={'길찾기'}
-                onPressEvent={gotoDetail}
+                onPressEvent={gotoLoad}
               />
             </Card.Actions>
           </Card>
@@ -216,6 +217,26 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
                 ))}
               </List.Accordion>
             )}
+          </Card>
+          <Card style={styles.cardView}>
+            <Card.Title title="위치" />
+            <View style={styles.mapContainer}>
+              <MapView
+                style={styles.map}
+                initialRegion={{
+                  latitude: Number(route.params.destination.latitude), // 37.568735912,
+                  longitude: Number(route.params.destination.longitude), //  127.007650958,
+                  latitudeDelta: 0.004,
+                  longitudeDelta: 0.004,
+                }}>
+                <Marker
+                  coordinate={{
+                    latitude: Number(route.params.destination.latitude), // 37.568735912,
+                    longitude: Number(route.params.destination.longitude), // 127.007650958,
+                  }}
+                />
+              </MapView>
+            </View>
           </Card>
           {/* 이미지 클릭했을 때 full 사진 보여주는 모달창 띄우기*/}
           <Modal
@@ -264,6 +285,14 @@ const styles = StyleSheet.create({
   cardView: {margin: 4},
   cardActions: {flexDirection: 'row'},
   accordion: {color: 'black'},
+  mapContainer: {margin: 10, height: 200},
+  map: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+  },
   modal: {flex: 1, backgroundColor: '#fff'},
   modalImage: {width: '100%', height: '100%', resizeMode: 'contain'},
 });
