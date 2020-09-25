@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, StyleSheet} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
-import styles from './SearchListScreenStyle';
-import ListBox from './List/ListBox';
-import RandomList from './List/RandomList';
+import ListBox from './ListBox';
+import RandomList from './RandomList';
 
 interface SearchListData {
   address: string;
@@ -24,7 +23,7 @@ interface SearchListData {
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
-interface SearchListScreenProps {
+interface Props {
   navigation: NavigationProp;
   location: {latitude: number; longitude: number};
   route: {
@@ -38,11 +37,7 @@ interface SearchListScreenProps {
   GetCurrentLocation: any;
 }
 
-function SearchListScreen({
-  navigation,
-  route,
-  GetCurrentLocation,
-}: SearchListScreenProps) {
+function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
   const [data, setData] = useState<SearchListData[]>(route.params.data); // 데이터 담을 list
   const [refreshing, setRefreshing] = useState<boolean>(false); // 위로 새로 고침 확인
   const [count, setCount] = useState<number>(1); // pagination 기능을 위한 page 숫자
@@ -57,7 +52,7 @@ function SearchListScreen({
     const postURL: string = route.params.sendURL;
     try {
       const sendPost = await axios
-        .post(`http://172.30.1.30:5001/restaurant/${postURL}`, {
+        .post(`http://192.168.0.4:5001/restaurant/${postURL}`, {
           latitude: latitude, // 37.570652
           longitude: longitude, // 127.007307
           text: postText,
@@ -167,3 +162,20 @@ function SearchListScreen({
 }
 
 export default SearchListScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+  },
+  noneResult: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  noneResultText: {fontSize: 15},
+  flatListContainer: {
+    margin: '6%',
+  },
+});
