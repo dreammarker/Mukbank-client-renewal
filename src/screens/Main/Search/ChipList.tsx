@@ -1,40 +1,52 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet} from 'react-native';
 import {Chip} from 'react-native-paper';
 
 import FoodCategory from '../../components/FoodCategory';
 
 interface Props {
-  list: {name: string; isSelected: boolean};
+  list: string;
   select: string[];
   setSelect: React.Dispatch<React.SetStateAction<string[]>>;
-  toggleCheck: (e: boolean) => void;
 }
 
 function ChipList({list, select, setSelect}: Props) {
-  function SelectChip(e: string) {
-    // 밑의 칩 종류 선택 시 서버에 보내 줄 text 추가
-    if (list.isSelected) {
-      // 이미 선택 되어있는 chip이라면 취소하기
-      const findChip: number = select.indexOf(e);
+  const [chk, setChk] = useState<boolean>(false);
+
+  const toggleChip = () => {
+    if (select.indexOf(list) === -1) {
+      // 선택안됐으면 넣음
+      setSelect([...select, list]);
+      setChk(true);
+    } else {
+      // 칩 선택됐으면 빼고
+      const findChip: number = select.indexOf(list);
       select.splice(findChip, 1);
       setSelect([...select]);
-      list.isSelected = false;
-    } else if (list.isSelected === false) {
-      // 선택 안해놓은 chip이라면 select에 추가
-      setSelect([...select, e]);
-      list.isSelected = true;
+      setChk(false);
     }
-  }
+  };
+
+  useEffect(() => {
+    const toggleChk = () => {
+      if (select.indexOf(list) === -1) {
+        setChk(false);
+      } else {
+        setChk(true);
+      }
+    };
+    toggleChk();
+  }, [select]);
 
   return (
     <>
       <Chip
-        avatar={<Image source={FoodCategory[list.name]} />}
-        style={styles.filterchips as any}
+        avatar={<Image source={FoodCategory[list]} />}
+        style={styles.filterchips}
         mode="outlined"
-        onPress={() => SelectChip(list.name)}>
-        {list.name}
+        selected={chk}
+        onPress={() => toggleChip()}>
+        {list}
       </Chip>
     </>
   );
