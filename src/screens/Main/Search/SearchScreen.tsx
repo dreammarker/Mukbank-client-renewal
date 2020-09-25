@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import axios from 'axios';
 import {Searchbar, List} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -68,7 +68,7 @@ function SearchScreen({navigation, location}: Props) {
   );
 }
 
-export default SearchScreen;
+export default memo(SearchScreen);
 
 const styles = StyleSheet.create({
   container: {
