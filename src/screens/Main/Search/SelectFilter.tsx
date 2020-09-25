@@ -1,29 +1,38 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {Button, List} from 'react-native-paper';
-import {View, ScrollView, ToastAndroid, StyleSheet} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {View, ScrollView, ToastAndroid, StyleSheet} from 'react-native';
 
 import ChipList from './ChipList';
 import SelectedChip from './SelectedChip';
-import {ChipListData} from './ChipListData';
+
+export const ChipListData = [
+  '카페',
+  '한식',
+  '일식',
+  '양식',
+  '남미음식',
+  '치킨',
+  '중식',
+  '술집',
+  '분식',
+  '동남아음식',
+  '인도음식',
+  '아시아음식',
+  '퓨전음식',
+];
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
-interface ChipData {
-  name: string;
-  isSelected: boolean;
-}
-
-interface SelectFilterProps {
+interface Props {
   navigation: NavigationProp;
   location: {latitude: number; longitude: number};
 }
 
-function SelectFilter({navigation, location}: SelectFilterProps) {
-  const [chipListData] = useState<ChipData[]>(ChipListData); // 기존 선택사항 chip들
+function SelectFilter({navigation, location}: Props) {
+  const [chipListData] = useState<string[]>(ChipListData); // 기존 선택사항 chip들
   const [select, setSelect] = useState<string[]>([]); // 선택된 chip의 name들
-  const [canceledChip, setCanceledChip] = useState<string>(''); // SelectedChip에서 취소된 chip의 name 표시
 
   const sendFilterText = () => {
     if (select.length === 0) {
@@ -55,18 +64,6 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
     }
   };
 
-  useEffect(() => {
-    // cancelChip과 chipListData[i].name이 같다면 chipListData[i].isSelected = false
-    const toggleChips = () => {
-      chipListData.forEach((curr: ChipData) => {
-        if (canceledChip === curr.name) {
-          curr.isSelected = false;
-        }
-      });
-    };
-    toggleChips();
-  }, [canceledChip]);
-
   return (
     <>
       <View style={styles.selectedChipView}>
@@ -78,7 +75,6 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
                 list={list}
                 select={select}
                 setSelect={setSelect}
-                setCanceledChip={setCanceledChip}
               />
             ))}
           </ScrollView>
@@ -96,7 +92,7 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
       <View style={styles.chipView}>
         <List.Section title="필터">
           <View style={styles.row}>
-            {chipListData.map((list: ChipData) => (
+            {chipListData.map((list: string) => (
               <ChipList
                 key={JSON.stringify(list)}
                 list={list}
@@ -110,6 +106,7 @@ function SelectFilter({navigation, location}: SelectFilterProps) {
     </>
   );
 }
+
 export default SelectFilter;
 
 const styles = StyleSheet.create({
