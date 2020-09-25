@@ -7,12 +7,12 @@ import {
   Image,
   ToastAndroid,
   Linking,
+  StyleSheet,
 } from 'react-native';
 import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StackNavigationProp} from '@react-navigation/stack';
-import styles from './ListStyles';
-import FoodCategory from '../../../components/FoodCategory';
+import FoodCategory from '../../components/FoodCategory';
 
 interface SearchListData {
   address: string;
@@ -30,13 +30,13 @@ interface SearchListData {
 }
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
-interface ListBoxProps {
+interface Props {
   list: SearchListData;
   navigation: NavigationProp;
   GetCurrentLocation: any;
 }
 
-function ListBox({list, navigation, GetCurrentLocation}: ListBoxProps) {
+function ListBox({list, navigation, GetCurrentLocation}: Props) {
   const convertDistance = () => {
     if (list.distance >= 1) {
       return Math.ceil(list.distance * 100) / 100 + 'km';
@@ -116,6 +116,15 @@ function ListBox({list, navigation, GetCurrentLocation}: ListBoxProps) {
           <View style={styles.listBtn}>
             <View style={styles.listBtnFlex}>
               <Button
+                icon="heart-outline"
+                mode="text"
+                color={'black'}
+                onPress={() => phoneCall()}>
+                좋아요
+              </Button>
+            </View>
+            <View style={styles.listBtnFlex}>
+              <Button
                 icon="phone"
                 mode="text"
                 color={'black'}
@@ -149,3 +158,57 @@ function ListBox({list, navigation, GetCurrentLocation}: ListBoxProps) {
 }
 
 export default ListBox;
+
+const styles = StyleSheet.create({
+  sectionCard: {
+    backgroundColor: '#fff',
+    elevation: 2,
+    flexDirection: 'row',
+    height: 148,
+  },
+  imageView: {
+    flex: 1,
+    margin: '3%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+  },
+  avatar: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  detailView: {
+    flex: 3,
+    marginTop: '2%',
+    marginLeft: '2%',
+    marginRight: '2%',
+  },
+  detailFlex: {
+    flexDirection: 'row',
+    height: '73%',
+  },
+  textFlex: {
+    flex: 7,
+  },
+  listName: {fontSize: 16, marginBottom: '2%'},
+  listSecondChild: {fontSize: 12.5, marginRight: '3%'},
+  listDistance: {fontSize: 12.5, marginLeft: '3%'},
+  caDiView: {flexDirection: 'row', marginBottom: '1.8%'},
+  rightIcon: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  listBtnFlex: {flex: 1},
+  listBtn: {
+    position: 'absolute',
+    flexDirection: 'row',
+    bottom: 0,
+  },
+});

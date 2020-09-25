@@ -1,10 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import styles from './ListStyles';
 import ListBox from './ListBox';
 
 interface SearchListData {
@@ -24,7 +23,7 @@ interface SearchListData {
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
-interface RandomListProps {
+interface Props {
   navigation: NavigationProp;
   randomList: SearchListData;
   resetRandomData: any;
@@ -36,10 +35,10 @@ function RandomList({
   resetRandomData,
   navigation,
   GetCurrentLocation,
-}: RandomListProps) {
+}: Props) {
   return (
     <>
-      <View style={{marginBottom: '5%'}}>
+      <View style={styles.container}>
         <View style={styles.subHeader}>
           <View style={styles.sectionTitleView}>
             <Text style={styles.sectionTitle}>오늘의 추천</Text>
@@ -72,3 +71,20 @@ function RandomList({
 }
 
 export default RandomList;
+
+const styles = StyleSheet.create({
+  container: {marginBottom: '5%'},
+  subHeader: {
+    marginBottom: '3%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  sectionTitleView: {position: 'relative', height: '100%'},
+  sectionTitle: {fontSize: 17.5, color: 'black'},
+  refreshBtnView: {
+    position: 'relative',
+    height: '100%',
+    width: '15%',
+    alignItems: 'center',
+  },
+});

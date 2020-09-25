@@ -46,7 +46,7 @@ function SelectFilter({navigation, location}: Props) {
       const postText: string = select.join(', ');
       const postURL: string = 'selectFilter';
       axios
-        .post('http://172.30.1.30:5001/restaurant/selectFilter', {
+        .post('http://192.168.0.4:5001/restaurant/selectFilter', {
           latitude: Math.floor(location.latitude * 10000) / 10000,
           longitude: Math.floor(location.longitude * 10000) / 10000,
           text: postText,
