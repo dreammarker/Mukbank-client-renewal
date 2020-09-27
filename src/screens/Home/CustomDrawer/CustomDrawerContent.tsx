@@ -14,15 +14,14 @@ import styles from './styles';
 
 type TypeDrawerProp = DrawerNavigationProp<HomeDrawerNaviParamList>;
 
-interface CustomDrawerContentProps {
+interface Props {
   navigation: TypeDrawerProp;
-  userInfo: {id: string; password: string};
-
+  userInfo: {id: string; nickname: string};
   // 36.9919666, 127.5896299
 }
 
 function CustomDrawerContent(
-  {navigation, userInfo}: CustomDrawerContentProps,
+  {navigation, userInfo}: Props,
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) {
   return (
@@ -45,7 +44,7 @@ function CustomDrawerContent(
             }}
             size={50}
           /> */}
-              <Title style={styles.title}>{userInfo.id}님</Title>
+              <Title style={styles.title}>{userInfo.nickname}님</Title>
               <View style={styles.row}></View>
             </View>
 
