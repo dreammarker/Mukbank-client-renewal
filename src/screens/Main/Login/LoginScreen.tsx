@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import {HelperText} from 'react-native-paper';
+import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
@@ -20,9 +21,10 @@ type Navigation = CompositeNavigationProp<
 
 type Props = {
   navigation: Navigation;
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function LoginScreen({navigation}: Props) {
+function LoginScreen({navigation, setIsLogin}: Props) {
   const [id, setId] = useState<checkText>({value: '', error: ''});
   const [password, setPassword] = useState<checkText>({value: '', error: ''});
   const [errorText, setErrorText] = useState<string>('');
@@ -46,16 +48,29 @@ function LoginScreen({navigation}: Props) {
       return;
     } else {
       axios
-        .post('http://192.168.0.4:5001/user/signin', {
-          id: id.value,
-          password: password.value,
-        })
+        .post(
+          'http://192.168.0.4:5001/user/signin',
+          {
+            id: id.value,
+            password: password.value,
+          },
+          {withCredentials: true},
+        )
         .then((res) => {
-          console.log(res.data);
           if (res.data === '없는 아이디거나 잘못된 비밀번호 입니다.') {
-            console.log(res.data);
             setErrorText(res.data);
           } else if (res.data === '로그인되었습니다.') {
+            const storageToken = async () => {
+              try {
+                const [cookie] = res.headers['set-cookie']; // 헤더로 들어온 쿠키
+                await AsyncStorage.setItem('userData', JSON.stringify(cookie));
+                return cookie;
+              } catch (error) {
+                console.error(error);
+              }
+            };
+            storageToken();
+            setIsLogin(true);
             setPass(true);
           }
         })
