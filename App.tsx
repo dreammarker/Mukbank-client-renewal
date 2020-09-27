@@ -13,6 +13,8 @@ import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Geolocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Home from './src/screens/Home/Home';
 import SearchScreen from './src/screens/Main/Search/SearchScreen';
@@ -39,6 +41,7 @@ function App({Location}: Props) {
     id: '',
     nickname: '',
   });
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
   function GetCurrentLocation() {
     // 현재위치 표시
@@ -50,8 +53,40 @@ function App({Location}: Props) {
     });
   }
 
+  const getUserInfo = async () => {
+    try {
+      const cookie = await AsyncStorage.getItem('userData');
+      if (cookie !== null) {
+        // AsyncStorage에 토큰 남아있으면
+        const token = await JSON.parse(cookie);
+        const response = await axios
+          .get('http://192.168.0.4:5001/user/usertokenCheck', {
+            headers: {userToken: `${token}`},
+          })
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+
+        if (response.token) {
+          setUserInfo({
+            id: response.data.identity,
+            nickname: response.data.nick,
+          });
+        }
+      } else if (cookie === null) {
+        //안남아있으면
+        setUserInfo({id: '', nickname: ''});
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     GetCurrentLocation();
+  }, []);
+
+  useEffect(() => {
+    getUserInfo();
   }, []);
 
   return (
@@ -64,17 +99,18 @@ function App({Location}: Props) {
             }}>
             <Stack.Screen name="Home">
               {(props) => (
-                <Home {...props} location={location} userInfo={userInfo} />
+                <Home
+                  {...props}
+                  location={location}
+                  userInfo={userInfo}
+                  getUserInfo={getUserInfo}
+                  GetCurrentLocation={GetCurrentLocation}
+                  isLogin={isLogin}
+                />
               )}
             </Stack.Screen>
             <Stack.Screen name="Search">
-              {(props) => (
-                <SearchScreen
-                  {...props}
-                  GetCurrentLocation={GetCurrentLocation}
-                  location={location}
-                />
-              )}
+              {(props) => <SearchScreen {...props} location={location} />}
             </Stack.Screen>
             <Stack.Screen name="SearchList">
               {(props) => (
@@ -101,7 +137,10 @@ function App({Location}: Props) {
                 />
               )}
             </Stack.Screen>
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Login">
+              {(props) => <LoginScreen {...props} setIsLogin={setIsLogin} />}
+            </Stack.Screen>
+
             <Stack.Screen name="SignUp" component={SignUpScreen} />
           </Stack.Navigator>
         </NavigationContainer>
