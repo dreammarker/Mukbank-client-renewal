@@ -1,34 +1,41 @@
-import React, {useState, useEffect} from 'react';
-import {Searchbar} from 'react-native-paper';
-import MapView from 'react-native-maps';
+import React, {useEffect} from 'react';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Geolocation from '@react-native-community/geolocation';
 import {View} from 'react-native';
+import MapView from 'react-native-maps';
+import {Searchbar} from 'react-native-paper';
 
 import styles from './MapScreenStyle';
 
-type Location = {
-  latitude: number; // 36.9919666
-  longitude: number; // 127.5896299
-};
+type Navigation = CompositeNavigationProp<
+  DrawerNavigationProp<HomeDrawerNaviParamList>,
+  StackNavigationProp<MainStackNaviParamList>
+>;
 
-function MapScreen({navigation}: any) {
-  const [location, setLocation] = useState<Location | undefined>(undefined);
-
-  const GetCurrentLocation = () => {
-    // 현재위치 표시
-    Geolocation.getCurrentPosition((locationInfo) => {
-      setLocation({
-        latitude: locationInfo.coords.latitude,
-        longitude: locationInfo.coords.longitude,
-      });
-    });
+interface Props {
+  location: {
+    latitude: number; // 36.9919666
+    longitude: number; // 127.5896299
   };
+  navigation: Navigation;
+  getUserInfo: () => Promise<void>;
+  GetCurrentLocation: () => void;
+  isLogin: boolean;
+}
 
+function MapScreen({
+  location,
+  navigation,
+  getUserInfo,
+  GetCurrentLocation,
+  isLogin,
+}: Props) {
   useEffect(() => {
-    GetCurrentLocation();
-  }, []);
-
+    if (isLogin) {
+      getUserInfo();
+    }
+  }, [isLogin]);
   return (
     <View style={styles.container}>
       {location ? (
