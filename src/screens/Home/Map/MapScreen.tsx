@@ -2,11 +2,9 @@ import React, {useEffect} from 'react';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import MapView from 'react-native-maps';
 import {Searchbar} from 'react-native-paper';
-
-import styles from './MapScreenStyle';
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<HomeDrawerNaviParamList>,
@@ -32,15 +30,13 @@ function MapScreen({
   isLogin,
 }: Props) {
   useEffect(() => {
-    if (isLogin) {
-      getUserInfo();
-    }
+    getUserInfo();
   }, [isLogin]);
   return (
     <View style={styles.container}>
       {location ? (
         <MapView
-          style={styles.map as any}
+          style={styles.map}
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
@@ -55,7 +51,7 @@ function MapScreen({
         <></>
       )}
       <Searchbar
-        style={styles.searchBar as any}
+        style={styles.searchBar}
         icon="menu"
         placeholder="검색"
         onIconPress={() => navigation.openDrawer()}
@@ -66,3 +62,26 @@ function MapScreen({
 }
 
 export default MapScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  map: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+  },
+  searchBar: {
+    top: '5%',
+    marginLeft: '4%',
+    marginRight: '4%',
+    position: 'absolute',
+    backgroundColor: 'white',
+  },
+});
