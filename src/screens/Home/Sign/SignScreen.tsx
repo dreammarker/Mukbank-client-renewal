@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, KeyboardAvoidingView, Image} from 'react-native';
+import {View, KeyboardAvoidingView, Image, StyleSheet} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import styles from './SignScreenStyles';
 import Btn from '../../components/Btn';
 
 type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
@@ -35,3 +34,29 @@ export default SignScreen;
 /*
 아이콘 제작자 <a href="https://www.flaticon.com/kr/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/kr/" title="Flaticon"> www.flaticon.com</a>
 */
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+    width: '100%',
+    maxWidth: 340,
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    marginTop: '50%',
+    width: 200,
+    height: 200,
+    marginBottom: 50,
+  },
+  header: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    paddingVertical: 14,
+  },
+});
