@@ -19,6 +19,8 @@ interface Props {
   GetCurrentLocation: () => void;
   // 36.9919666, 127.5896299
   isLogin: boolean;
+  setUserInfo: any;
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function Home({
@@ -27,12 +29,19 @@ function Home({
   getUserInfo,
   GetCurrentLocation,
   isLogin,
+  setUserInfo,
+  setIsLogin,
 }: Props) {
   return (
     <Drawer.Navigator
       initialRouteName="Map"
       drawerContent={(prop) => (
-        <CustomDrawerContent {...prop} userInfo={userInfo} />
+        <CustomDrawerContent
+          {...prop}
+          userInfo={userInfo}
+          setUserInfo={setUserInfo}
+          setIsLogin={setIsLogin}
+        />
       )}>
       <Drawer.Screen name="Map">
         {(props) => (

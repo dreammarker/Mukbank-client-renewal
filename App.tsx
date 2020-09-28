@@ -60,7 +60,7 @@ function App({Location}: Props) {
         // AsyncStorage에 토큰 남아있으면
         const token = await JSON.parse(cookie);
         const response = await axios
-          .get('http://192.168.0.4:5001/user/usertokenCheck', {
+          .get('http://172.30.1.52:5001/user/usertokenCheck', {
             headers: {userToken: `${token}`},
           })
           .then((res) => res.data)
@@ -106,6 +106,8 @@ function App({Location}: Props) {
                   getUserInfo={getUserInfo}
                   GetCurrentLocation={GetCurrentLocation}
                   isLogin={isLogin}
+                  setUserInfo={setUserInfo}
+                  setIsLogin={setIsLogin}
                 />
               )}
             </Stack.Screen>
