@@ -3,8 +3,9 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, StyleSheet} from 'react-native';
-import MapView from 'react-native-maps';
 import {Searchbar} from 'react-native-paper';
+
+import Map from '../../components/Map';
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<HomeDrawerNaviParamList>,
@@ -35,17 +36,13 @@ function MapScreen({
   return (
     <View style={styles.container}>
       {location ? (
-        <MapView
-          style={styles.map}
+        <Map
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           }}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          followsUserLocation={true}
         />
       ) : (
         <></>
@@ -69,13 +66,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  map: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    position: 'absolute',
   },
   searchBar: {
     top: '5%',

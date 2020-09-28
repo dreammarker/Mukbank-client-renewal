@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Modal from 'react-native-modal';
-import MapView, {Marker} from 'react-native-maps';
+import {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
@@ -26,6 +26,7 @@ import {
 
 import Alert from '../../components/Alert';
 import IconBtn from '../../components/IconBtn';
+import Map from '../../components/Map';
 
 interface DetailData {
   name: string;
@@ -55,7 +56,6 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
   const [data, setData] = useState<DetailData[] | any>(undefined);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
-  console.log(data);
   const phoneCall = () => {
     // 전화 아이콘 누를 때
     if (data.phone === '') {
@@ -94,7 +94,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
-        .post('http:/192.168.0.4:5001/restaurant/detail', {
+        .post('http:/172.30.1.52:5001/restaurant/detail', {
           rest_id: route.params.id, //  3127  7814 route.params.id
         })
         .then((res) => {
@@ -220,23 +220,25 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
           </Card>
           <Card style={styles.cardView}>
             <Card.Title title="위치" />
-            <View style={styles.mapContainer}>
-              <MapView
-                style={styles.map}
+            <TouchableOpacity style={styles.mapContainer} activeOpacity={1}>
+              <Map
                 initialRegion={{
-                  latitude: Number(route.params.destination.latitude), // 37.568735912,
-                  longitude: Number(route.params.destination.longitude), //  127.007650958,
+                  latitude: Number(route.params.destination.latitude), //  Number(route.params.destination.latitude),
+                  longitude: Number(route.params.destination.longitude), //  Number(route.params.destination.longitude),
                   latitudeDelta: 0.004,
                   longitudeDelta: 0.004,
-                }}>
+                }}
+                scrollEnabled={false}>
                 <Marker
                   coordinate={{
-                    latitude: Number(route.params.destination.latitude), // 37.568735912,
-                    longitude: Number(route.params.destination.longitude), // 127.007650958,
+                    latitude: Number(route.params.destination.latitude), // 37.568735912, Number(route.params.destination.latitude),
+                    longitude: Number(route.params.destination.longitude), // Number(route.params.destination.longitude),
+                    title: data.name.trim(),
+                    subtitle: data.roadAddress,
                   }}
                 />
-              </MapView>
-            </View>
+              </Map>
+            </TouchableOpacity>
           </Card>
           {/* 이미지 클릭했을 때 full 사진 보여주는 모달창 띄우기*/}
           <Modal
@@ -285,13 +287,9 @@ const styles = StyleSheet.create({
   cardView: {margin: 4},
   cardActions: {flexDirection: 'row'},
   accordion: {color: 'black'},
-  mapContainer: {margin: 10, height: 200},
-  map: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    position: 'absolute',
+  mapContainer: {
+    margin: 15,
+    height: 150,
   },
   modal: {flex: 1, backgroundColor: '#fff'},
   modalImage: {width: '100%', height: '100%', resizeMode: 'contain'},
