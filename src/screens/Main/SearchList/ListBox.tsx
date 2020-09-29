@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect, memo} from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,14 @@ import {
   ToastAndroid,
   Linking,
   StyleSheet,
+  Alert,
 } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StackNavigationProp} from '@react-navigation/stack';
+
 import FoodCategory from '../../components/FoodCategory';
 
 interface SearchListData {
@@ -37,6 +41,8 @@ interface Props {
 }
 
 function ListBox({list, navigation, GetCurrentLocation}: Props) {
+  const [chkLike, setChkLike] = useState<boolean>(false);
+
   const convertDistance = () => {
     if (list.distance >= 1) {
       return Math.ceil(list.distance * 100) / 100 + 'km';
@@ -57,6 +63,74 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       Linking.openURL(`tel:${phone}`);
     }
   };
+  const onPressLike = async () => {
+    try {
+      const cookie = await AsyncStorage.getItem('userData');
+      if (cookie === null) {
+        Alert.alert(
+          '로그인',
+          '로그인이 필요합니다',
+          [
+            {
+              text: '아니요',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {
+              text: '예',
+              onPress: () => navigation.navigate('Login'),
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        const response = await axios
+          .post(
+            'http://172.30.1.52:5001/user/restlikeupdate',
+            {
+              rest_id: list.id,
+            },
+            {withCredentials: true},
+          )
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+        setChkLike(response.likecheck);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getLike = async () => {
+    try {
+      const cookie = await AsyncStorage.getItem('userData');
+      if (cookie !== null) {
+        const response = await axios
+          .post(
+            'http://172.30.1.52:5001/user/userrestsel',
+            {
+              rest_id: list.id,
+            },
+            {withCredentials: true},
+          )
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+        setChkLike(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted: boolean = true;
+    if (isMounted) {
+      getLike();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <List.Section>
@@ -115,13 +189,23 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
           </View>
           <View style={styles.listBtn}>
             <View style={styles.listBtnFlex}>
-              <Button
-                icon="heart-outline"
-                mode="text"
-                color={'black'}
-                onPress={() => phoneCall()}>
-                좋아요
-              </Button>
+              {chkLike === true ? (
+                <Button
+                  icon="heart"
+                  mode="text"
+                  color={'red'}
+                  onPress={() => onPressLike()}>
+                  좋아요
+                </Button>
+              ) : (
+                <Button
+                  icon="heart-outline"
+                  mode="text"
+                  color={'black'}
+                  onPress={() => onPressLike()}>
+                  좋아요
+                </Button>
+              )}
             </View>
             <View style={styles.listBtnFlex}>
               <Button
@@ -157,7 +241,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
   );
 }
 
-export default ListBox;
+export default memo(ListBox);
 
 const styles = StyleSheet.create({
   sectionCard: {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, memo} from 'react';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
@@ -52,9 +52,9 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
     const postURL: string = route.params.sendURL;
     try {
       const sendPost = await axios
-        .post(`http://192.168.0.4:5001/restaurant/${postURL}`, {
-          latitude: latitude, // 37.570652
-          longitude: longitude, // 127.007307
+        .post(`http://172.30.1.52:5001/restaurant/${postURL}`, {
+          latitude: latitude, // 37.570652 latitude
+          longitude: longitude, // 127.007307 longitude
           text: postText,
           paging: count,
         })
@@ -68,7 +68,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
         setData(data.concat(sendPost));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -88,25 +88,6 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
   }, []);
 
   // ------------------------------------------- 여기서부터 FlatList Component
-
-  const listHeaderComponent = () => (
-    // 첫 헤더에 랜덤리스트
-    <RandomList
-      GetCurrentLocation={GetCurrentLocation}
-      randomList={randomData}
-      resetRandomData={resetRandomData}
-      navigation={navigation}
-    />
-  );
-
-  const renderItem = ({item}: SearchListData) => (
-    // paging 랜더 될 리스트 컴포넌트
-    <ListBox
-      list={item}
-      navigation={navigation}
-      GetCurrentLocation={GetCurrentLocation}
-    />
-  );
 
   const onEndReached = () => {
     // list가 bottom 끝까지 닿았을 때
@@ -147,8 +128,21 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
           <FlatList
             data={data}
             keyExtractor={(item) => JSON.stringify(item.id)}
-            ListHeaderComponent={listHeaderComponent}
-            renderItem={renderItem}
+            ListHeaderComponent={() => (
+              <RandomList
+                GetCurrentLocation={GetCurrentLocation}
+                randomList={randomData}
+                resetRandomData={resetRandomData}
+                navigation={navigation}
+              />
+            )}
+            renderItem={({item}) => (
+              <ListBox
+                list={item}
+                navigation={navigation}
+                GetCurrentLocation={GetCurrentLocation}
+              />
+            )}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.5}
             ListFooterComponent={ListFooterComponent}
@@ -161,7 +155,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
   );
 }
 
-export default SearchListScreen;
+export default memo(SearchListScreen);
 
 const styles = StyleSheet.create({
   container: {
