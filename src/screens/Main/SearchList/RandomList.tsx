@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -36,6 +36,7 @@ function RandomList({
   navigation,
   GetCurrentLocation,
 }: Props) {
+  console.log('randomList', randomList.id);
   return (
     <>
       <View style={styles.container}>
@@ -70,7 +71,7 @@ function RandomList({
   );
 }
 
-export default RandomList;
+export default memo(RandomList);
 
 const styles = StyleSheet.create({
   container: {marginBottom: '5%'},
