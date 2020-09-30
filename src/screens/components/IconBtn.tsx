@@ -9,13 +9,13 @@ type Props = React.ComponentProps<typeof TouchableOpacity> &
     onPressEvent: () => void;
   };
 
-const IconBtn = ({iconName, iconTitle, onPressEvent}: Props) => (
+const IconBtn = ({color, iconName, iconTitle, onPressEvent}: Props) => (
   <TouchableOpacity
     activeOpacity={1}
     style={styles.icon}
     onPress={() => onPressEvent()}>
     <View>
-      <Icon name={iconName} size={28} color="black" />
+      <Icon name={iconName} size={28} color={color} />
     </View>
     <View>
       <Text>{iconTitle}</Text>
