@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,6 +8,7 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {
+  Alert,
   View,
   ScrollView,
   ToastAndroid,
@@ -24,11 +26,12 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 
-import Alert from '../../components/Alert';
+import Dial from '../../components/Dial';
 import IconBtn from '../../components/IconBtn';
 import Map from '../../components/Map';
 
 interface DetailData {
+  id: number;
   name: string;
   image: string;
   restdetail: string;
@@ -56,6 +59,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
   const [data, setData] = useState<DetailData[] | any>(undefined);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
+  const [chkLike, setChkLike] = useState<boolean>(false);
   const phoneCall = () => {
     // 전화 아이콘 누를 때
     if (data.phone === '') {
@@ -69,12 +73,6 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       Linking.openURL(`tel:${phone}`);
     }
   };
-
-  const toggleLike = () => {
-    // 좋아요 아이콘 누를 때
-    console.log('좋아요 누름');
-  };
-
   const gotoLoad = () => {
     // 길찾기 아이콘 누를 때
     GetCurrentLocation().then(() =>
@@ -90,11 +88,80 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     setModalVisible(!isModalVisible);
   };
 
+  const onPressLike = async () => {
+    try {
+      const cookie = await AsyncStorage.getItem('userData');
+      if (cookie === null) {
+        Alert.alert(
+          '로그인',
+          '로그인이 필요합니다',
+          [
+            {
+              text: '아니요',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {
+              text: '예',
+              onPress: () => navigation.navigate('Login'),
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        const response = await axios
+          .post(
+            'http://172.30.1.50:5001/user/restlikeupdate',
+            {
+              rest_id: route.params.id,
+            },
+            {withCredentials: true},
+          )
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+        setChkLike(response.likecheck);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getLike = async () => {
+    try {
+      const cookie = await AsyncStorage.getItem('userData');
+      if (cookie !== null) {
+        const response = await axios
+          .post(
+            'http://172.30.1.50:5001/user/userrestsel',
+            {
+              rest_id: route.params.id,
+            },
+            {withCredentials: true},
+          )
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+        setChkLike(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted: boolean = true;
+    if (isMounted) {
+      getLike();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   useEffect(() => {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
-        .post('http:/172.30.1.52:5001/restaurant/detail', {
+        .post('http:/172.30.1.50:5001/restaurant/detail', {
           rest_id: route.params.id, //  3127  7814 route.params.id
         })
         .then((res) => {
@@ -104,7 +171,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
           // 데이터 있으면 setState
           setData(res.data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     };
     getData();
   }, []);
@@ -118,7 +185,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
         </View>
       ) : data === '' ? (
         // 데이터가 없으면 알람
-        <Alert
+        <Dial
           title={'죄송합니다'}
           paragraph={'상세정보가 존재하지 않습니다.'}
           navigation={navigation}
@@ -160,32 +227,59 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
           </Card>
           <Card style={styles.cardView}>
             <Card.Actions style={styles.cardActions}>
-              <IconBtn
-                iconName={'favorite-border'}
-                iconTitle={'좋아요'}
-                onPressEvent={toggleLike}
-              />
+              {chkLike === true ? (
+                <IconBtn
+                  iconName={'favorite'}
+                  iconTitle={'좋아요'}
+                  onPressEvent={onPressLike}
+                  color={'red'}
+                />
+              ) : (
+                <IconBtn
+                  iconName={'favorite-border'}
+                  iconTitle={'좋아요'}
+                  onPressEvent={onPressLike}
+                  color={'black'}
+                />
+              )}
+
               <IconBtn
                 iconName={'phone'}
                 iconTitle={'전화'}
                 onPressEvent={phoneCall}
+                color={'black'}
               />
               <IconBtn
                 iconName={'map'}
                 iconTitle={'길찾기'}
                 onPressEvent={gotoLoad}
+                color={'black'}
               />
             </Card.Actions>
           </Card>
           <Card style={styles.cardView}>
             <List.Item
+              title={data.phone}
+              left={(props) => <List.Icon {...props} icon="phone" />}
+              titleStyle={styles.listTitle}
+            />
+            <Divider />
+            <List.Item
               title={data.clock}
               left={(props) => <List.Icon {...props} icon="clock-outline" />}
+              titleStyle={styles.listTitle}
             />
             <Divider />
             <List.Item
               title={JSON.parse(data.option).join(', ')}
               left={(props) => <List.Icon {...props} icon="content-paste" />}
+              titleStyle={styles.listTitle}
+            />
+            <Divider />
+            <List.Item
+              title={data.roadAddress}
+              left={(props) => <List.Icon {...props} icon="map" />}
+              titleStyle={styles.listTitle}
             />
             <Divider />
           </Card>
@@ -286,6 +380,7 @@ const styles = StyleSheet.create({
   },
   cardView: {margin: 4},
   cardActions: {flexDirection: 'row'},
+  listTitle: {fontSize: 15, flexDirection: 'row'},
   accordion: {color: 'black'},
   mapContainer: {
     margin: 15,
