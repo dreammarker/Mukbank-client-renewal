@@ -9,7 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 import LabelLink from '../../components/LabelLink';
-import Alert from '../../components/Alert';
+import Dial from '../../components/Dial';
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<HomeDrawerNaviParamList>,
@@ -60,7 +60,7 @@ function SignUpScreen({navigation}: Props) {
       return;
     } else {
       axios
-        .post('http://172.30.1.30:5001/user/signup', {
+        .post('http://172.30.1.50:5001/user/signup', {
           id: id.value,
           nickname: nickname.value,
           password: password.value,
@@ -88,7 +88,7 @@ function SignUpScreen({navigation}: Props) {
   return (
     <>
       {pass ? (
-        <Alert
+        <Dial
           title={'가입 완료'}
           paragraph={'회원가입이 완료되었습니다.'}
           navigation={navigation}
