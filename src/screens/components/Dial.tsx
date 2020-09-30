@@ -17,7 +17,7 @@ type Props = React.ComponentProps<typeof Dialog> & {
   navigation: Navigation;
 };
 
-function Alert({title, Navi, paragraph, navigation}: Props) {
+function Dial({title, Navi, paragraph, navigation}: Props) {
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(true);
 
   const closeDialog = () => {
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
   alertBtn: {fontSize: 15},
 });
 
-export default memo(Alert);
+export default memo(Dial);

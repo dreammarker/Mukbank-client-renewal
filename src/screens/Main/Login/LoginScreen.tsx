@@ -10,7 +10,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 import LabelLink from '../../components/LabelLink';
-import Alert from '../../components/Alert';
+import Dial from '../../components/Dial';
 
 type checkText = {value: string; error: string | boolean};
 
@@ -41,7 +41,6 @@ function LoginScreen({navigation, setIsLogin}: Props) {
   const onLoginPress = () => {
     const idError = idBlacnkCheck(id.value);
     const passwordError = passwordBlacnkCheck(password.value);
-
     if (idError || passwordError) {
       setId({...id, error: idError});
       setPassword({...password, error: passwordError});
@@ -49,7 +48,7 @@ function LoginScreen({navigation, setIsLogin}: Props) {
     } else {
       axios
         .post(
-          'http://192.168.0.4:5001/user/signin',
+          'http://172.30.1.50:5001/user/signin',
           {
             id: id.value,
             password: password.value,
@@ -81,7 +80,7 @@ function LoginScreen({navigation, setIsLogin}: Props) {
   return (
     <>
       {pass ? (
-        <Alert
+        <Dial
           title={'로그인'}
           paragraph={'로그인이 완료되었습니다'}
           navigation={navigation}
