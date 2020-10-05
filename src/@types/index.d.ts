@@ -1,8 +1,8 @@
 type MainStackNaviParamList = {
   Search: undefined;
   SearchList: undefined;
-  SignIn: undefined;
   SignUp: undefined;
+  LikeList: undefined;
   Detail: undefined;
   loadNavi: undefined;
 };
@@ -12,5 +12,4 @@ type HomeDrawerNaviParamList = {
   Sign: undefined;
   Login: undefined;
   UserInfo: undefined;
-  LikeList: undefined;
 };

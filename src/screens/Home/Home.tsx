@@ -3,7 +3,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from './CustomDrawer/CustomDrawerContent';
 import MapScreen from './Map/MapScreen';
 import SignScreen from './Sign/SignScreen';
-import LikeListScreen from './LikeList/LikeListScreen';
 import UserInfoScreen from './UserInfo/UserInfoScreen';
 
 const Drawer = createDrawerNavigator();
@@ -55,7 +54,6 @@ function Home({
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Sign" component={SignScreen} />
-      <Drawer.Screen name="LikeList" component={LikeListScreen} />
       <Drawer.Screen name="UserInfo" component={UserInfoScreen} />
     </Drawer.Navigator>
   );

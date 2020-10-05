@@ -35,7 +35,7 @@ function CustomDrawerContent(
   const logout = async () => {
     try {
       const response = await axios
-        .get('http://172.30.1.52:5001/user/signout')
+        .get('http://172.30.1.33:5001/user/signout')
         .then((res) => res.data)
         .catch((error) => console.error(error));
 
@@ -112,7 +112,11 @@ function CustomDrawerContent(
                   )}
                   label="음식점"
                   labelStyle={styles.drawerItemLabel}
-                  onPress={() => navigation.navigate('LikeList')}
+                  onPress={() =>
+                    navigation.navigate('LikeList', {
+                      parent: '음식점',
+                    })
+                  }
                 />
                 <DrawerItem
                   icon={() => (
@@ -120,7 +124,11 @@ function CustomDrawerContent(
                   )}
                   label="카페"
                   labelStyle={styles.drawerItemLabel}
-                  onPress={() => console.log('라이크리스트눌렀다')}
+                  onPress={() =>
+                    navigation.navigate('LikeList', {
+                      parent: '카페',
+                    })
+                  }
                 />
               </Drawer.Section>
 
