@@ -16,16 +16,11 @@ import {
   Image,
   Linking,
   StyleSheet,
+  DeviceEventEmitter,
 } from 'react-native';
-import {
-  Paragraph,
-  Card,
-  Appbar,
-  Divider,
-  List,
-  ActivityIndicator,
-} from 'react-native-paper';
+import {Paragraph, Card, Appbar, Divider, List} from 'react-native-paper';
 
+import Loading from '../../components/Loading';
 import Dial from '../../components/Dial';
 import IconBtn from '../../components/IconBtn';
 import Map from '../../components/Map';
@@ -111,7 +106,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       } else {
         const response = await axios
           .post(
-            'http://172.30.1.50:5001/user/restlikeupdate',
+            'http://172.30.1.33:5001/user/restlikeupdate',
             {
               rest_id: route.params.id,
             },
@@ -132,7 +127,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       if (cookie !== null) {
         const response = await axios
           .post(
-            'http://172.30.1.50:5001/user/userrestsel',
+            'http://172.30.1.33:5001/user/userrestsel',
             {
               rest_id: route.params.id,
             },
@@ -154,6 +149,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     }
     return () => {
       isMounted = false;
+      DeviceEventEmitter.emit('Detail');
     };
   }, []);
 
@@ -161,7 +157,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
-        .post('http:/172.30.1.50:5001/restaurant/detail', {
+        .post('http:/172.30.1.33:5001/restaurant/detail', {
           rest_id: route.params.id, //  3127  7814 route.params.id
         })
         .then((res) => {
@@ -179,10 +175,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
   return (
     <>
       {data === undefined ? (
-        <View // 로딩중 표시
-          style={[styles.container, {justifyContent: 'center'}]}>
-          <ActivityIndicator animating={true} size="large" />
-        </View>
+        <Loading />
       ) : data === '' ? (
         // 데이터가 없으면 알람
         <Dial
