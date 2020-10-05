@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Home from './src/screens/Home/Home';
 import SearchScreen from './src/screens/Main/Search/SearchScreen';
 import SearchListScreen from './src/screens/Main/SearchList/SearchListScreen';
+import LikeListScreen from './src/screens/Main/LikeList/LikeListScreen';
 import DetailScreen from './src/screens/Main/Detail/DetailScreen';
 import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
 import LoginScreen from './src/screens/Main/Login/LoginScreen';
@@ -59,7 +60,7 @@ function App({Location}: Props) {
       if (cookie !== null) {
         // AsyncStorage에 토큰 남아있으면
         const response = await axios
-          .get('http://172.30.1.52:5001/user/usertokenCheck', {
+          .get('http://172.30.1.33:5001/user/usertokenCheck', {
             withCredentials: true,
           })
           .then((res) => res.data)
@@ -121,6 +122,7 @@ function App({Location}: Props) {
                 />
               )}
             </Stack.Screen>
+            <Stack.Screen name="LikeList" component={LikeListScreen} />
             <Stack.Screen name="Detail">
               {(props) => (
                 <DetailScreen
