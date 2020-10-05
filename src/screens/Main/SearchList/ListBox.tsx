@@ -86,7 +86,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       } else {
         const response = await axios
           .post(
-            'http://172.30.1.52:5001/user/restlikeupdate',
+            'http://172.30.1.33:5001/user/restlikeupdate',
             {
               rest_id: list.id,
             },
@@ -107,7 +107,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       if (cookie !== null) {
         const response = await axios
           .post(
-            'http://172.30.1.52:5001/user/userrestsel',
+            'http://172.30.1.33:5001/user/userrestsel',
             {
               rest_id: list.id,
             },
@@ -121,7 +121,6 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       console.error(error);
     }
   };
-
   useEffect(() => {
     let isMounted: boolean = true;
     if (isMounted) {
@@ -175,9 +174,19 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
             <View style={styles.textFlex}>
               <Text style={styles.listName}>{list.name}</Text>
               <View style={styles.caDiView}>
-                <Text style={styles.listSecondChild}>{list.secondchild}</Text>
-                <Text style={{fontSize: 12.5}}>|</Text>
-                <Text style={styles.listDistance}>{convertDistance()}</Text>
+                {list.secondchild === 'null' ? (
+                  <>
+                    <Text style={styles.listDistance}>{convertDistance()}</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.listSecondChild}>
+                      {list.secondchild}
+                    </Text>
+                    <Text style={{fontSize: 12.5}}>|</Text>
+                    <Text style={styles.listDistance}>{convertDistance()}</Text>
+                  </>
+                )}
               </View>
               <View>
                 <Text>{list.address}</Text>
