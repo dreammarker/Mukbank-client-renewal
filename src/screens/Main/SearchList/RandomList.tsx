@@ -36,7 +36,6 @@ function RandomList({
   navigation,
   GetCurrentLocation,
 }: Props) {
-  console.log('randomList', randomList.id);
   return (
     <>
       <View style={styles.container}>
