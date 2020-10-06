@@ -1,33 +1,16 @@
 import React, {useState, useEffect, memo} from 'react';
 import axios from 'axios';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {View, FlatList, Text, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 
+import {Location, SearchListData, Navigation} from '../../../types';
 import NoneResult from '../../components/NoneResult';
 import ListBox from './ListBox';
 import RandomList from './RandomList';
 
-interface SearchListData {
-  address: string;
-  distance: number;
-  firstchild: string;
-  id: number;
-  image: string | null;
-  latitude: string;
-  longitude: string;
-  name: string;
-  parent: string;
-  phone: string;
-  roadAddress: string;
-  secondchild: string;
-}
-
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
-
 interface Props {
-  navigation: NavigationProp;
-  location: {latitude: number; longitude: number};
+  navigation: Navigation;
+  location: Location;
   route: {
     params: {
       sendText: string;
@@ -36,7 +19,7 @@ interface Props {
       location: {latitude: number; longitude: number};
     };
   };
-  GetCurrentLocation: any;
+  GetCurrentLocation: () => void;
 }
 
 function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
@@ -54,7 +37,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
     const postURL: string = route.params.sendURL;
     try {
       const sendPost = await axios
-        .post(`http://172.30.1.33:5001/restaurant/${postURL}`, {
+        .post(`http://172.30.1.7:5001/restaurant/${postURL}`, {
           latitude: latitude, // 37.570652 latitude
           longitude: longitude, // 127.007307 longitude
           text: postText,
@@ -162,13 +145,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fafafa',
   },
-  noneResult: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-  },
-  noneResultText: {fontSize: 15},
   flatListContainer: {
     margin: '6%',
   },

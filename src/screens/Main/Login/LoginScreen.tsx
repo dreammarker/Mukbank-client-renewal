@@ -3,21 +3,12 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import {HelperText} from 'react-native-paper';
 import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {StackNavigationProp} from '@react-navigation/stack';
 
+import {CheckText, Navigation} from '../../../types';
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 import LabelLink from '../../components/LabelLink';
 import Dial from '../../components/Dial';
-
-type checkText = {value: string; error: string | boolean};
-
-type Navigation = CompositeNavigationProp<
-  DrawerNavigationProp<HomeDrawerNaviParamList>,
-  StackNavigationProp<MainStackNaviParamList>
->;
 
 type Props = {
   navigation: Navigation;
@@ -25,8 +16,8 @@ type Props = {
 };
 
 function LoginScreen({navigation, setIsLogin}: Props) {
-  const [id, setId] = useState<checkText>({value: '', error: ''});
-  const [password, setPassword] = useState<checkText>({value: '', error: ''});
+  const [id, setId] = useState<CheckText>({value: '', error: ''});
+  const [password, setPassword] = useState<CheckText>({value: '', error: ''});
   const [errorText, setErrorText] = useState<string>('');
   const [pass, setPass] = useState<boolean>(false);
 
@@ -48,7 +39,7 @@ function LoginScreen({navigation, setIsLogin}: Props) {
     } else {
       axios
         .post(
-          'http://172.30.1.50:5001/user/signin',
+          'http://172.30.1.7:5001/user/signin',
           {
             id: id.value,
             password: password.value,

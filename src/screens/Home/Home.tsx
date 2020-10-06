@@ -5,20 +5,17 @@ import MapScreen from './Map/MapScreen';
 import SignScreen from './Sign/SignScreen';
 import UserInfoScreen from './UserInfo/UserInfoScreen';
 
+import {UserInfo, Location} from '../../types';
+
 const Drawer = createDrawerNavigator();
 
 interface Props {
-  userInfo: {id: string; nickname: string};
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-
+  userInfo: UserInfo;
+  location: Location;
   getUserInfo: () => Promise<void>;
   GetCurrentLocation: () => void;
-  // 36.9919666, 127.5896299
   isLogin: boolean;
-  setUserInfo: any;
+  setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

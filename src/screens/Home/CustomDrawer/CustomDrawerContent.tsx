@@ -11,20 +11,18 @@ import {
 import Icons from 'react-native-vector-icons/Ionicons';
 import {
   DrawerItem,
-  DrawerNavigationProp,
   DrawerContentScrollView,
   DrawerContentOptions,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import {Title, Drawer} from 'react-native-paper';
 
-type TypeDrawerProp = DrawerNavigationProp<HomeDrawerNaviParamList>;
+import {UserInfo, Navigation} from '../../../types';
 
 interface Props {
-  navigation: TypeDrawerProp;
-  userInfo: {id: string; nickname: string};
-  // 36.9919666, 127.5896299:
-  setUserInfo: any;
+  navigation: Navigation;
+  userInfo: UserInfo;
+  setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -35,7 +33,7 @@ function CustomDrawerContent(
   const logout = async () => {
     try {
       const response = await axios
-        .get('http://172.30.1.33:5001/user/signout')
+        .get('http://172.30.1.7:5001/user/signout')
         .then((res) => res.data)
         .catch((error) => console.error(error));
 

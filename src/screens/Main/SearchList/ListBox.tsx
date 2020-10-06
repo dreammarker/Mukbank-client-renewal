@@ -14,30 +14,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import {List, Button, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {StackNavigationProp} from '@react-navigation/stack';
 
+import {SearchListData, Navigation} from '../../../types';
 import FoodCategory from '../../components/FoodCategory';
-
-interface SearchListData {
-  address: string;
-  distance: number;
-  firstchild: string;
-  id: number;
-  image: string | null;
-  latitude: string;
-  longitude: string;
-  name: string;
-  parent: string;
-  phone: string;
-  roadAddress: string;
-  secondchild: string;
-}
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 
 interface Props {
   list: SearchListData;
-  navigation: NavigationProp;
-  GetCurrentLocation: any;
+  navigation: Navigation;
+  GetCurrentLocation: () => void;
 }
 
 function ListBox({list, navigation, GetCurrentLocation}: Props) {
@@ -86,7 +70,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       } else {
         const response = await axios
           .post(
-            'http://172.30.1.33:5001/user/restlikeupdate',
+            'http://172.30.1.7:5001/user/restlikeupdate',
             {
               rest_id: list.id,
             },
@@ -107,7 +91,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       if (cookie !== null) {
         const response = await axios
           .post(
-            'http://172.30.1.33:5001/user/userrestsel',
+            'http://172.30.1.7:5001/user/userrestsel',
             {
               rest_id: list.id,
             },
@@ -289,9 +273,9 @@ const styles = StyleSheet.create({
     flex: 7,
   },
   listName: {fontSize: 16, marginBottom: '2%'},
+  caDiView: {flexDirection: 'row', marginBottom: '1.8%'},
   listSecondChild: {fontSize: 12.5, marginRight: '3%'},
   listDistance: {fontSize: 12.5, marginLeft: '3%'},
-  caDiView: {flexDirection: 'row', marginBottom: '1.8%'},
   rightIcon: {
     flex: 1,
     justifyContent: 'center',
