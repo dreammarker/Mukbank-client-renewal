@@ -5,6 +5,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {View, StyleSheet, ToastAndroid, BackHandler} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 
+import Loading from '../../components/Loading';
 import Map from '../../components/Map';
 
 type Navigation = CompositeNavigationProp<
@@ -66,27 +67,29 @@ function MapScreen({
   }, [isLogin]);
 
   return (
-    <View style={styles.container}>
-      {location ? (
-        <Map
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-        />
+    <>
+      {location === undefined ? (
+        <Loading />
       ) : (
-        <></>
+        <View style={styles.container}>
+          <Map
+            initialRegion={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+          />
+          <Searchbar
+            style={styles.searchBar}
+            icon="menu"
+            placeholder="검색"
+            onIconPress={() => navigation.openDrawer()}
+            onFocus={() => navigation.navigate('Search')}
+          />
+        </View>
       )}
-      <Searchbar
-        style={styles.searchBar}
-        icon="menu"
-        placeholder="검색"
-        onIconPress={() => navigation.openDrawer()}
-        onFocus={() => navigation.navigate('Search')}
-      />
-    </View>
+    </>
   );
 }
 
