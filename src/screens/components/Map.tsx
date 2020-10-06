@@ -8,10 +8,10 @@ type Props = React.ComponentProps<typeof MapView> & {
     | React.ComponentProps<typeof Polyline>;
 };
 
-const Map = ({initialRegion, children, ...props}: Props) => (
+const Map = ({region, children, ...props}: Props) => (
   <MapView
     style={styles.map}
-    initialRegion={initialRegion}
+    region={region}
     showsUserLocation={true}
     followsUserLocation={true}
     showsMyLocationButton={false}
