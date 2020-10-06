@@ -3,6 +3,8 @@ import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {View, FlatList, Text, StyleSheet} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
+
+import NoneResult from '../../components/NoneResult';
 import ListBox from './ListBox';
 import RandomList from './RandomList';
 
@@ -52,7 +54,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
     const postURL: string = route.params.sendURL;
     try {
       const sendPost = await axios
-        .post(`http://172.30.1.52:5001/restaurant/${postURL}`, {
+        .post(`http://172.30.1.33:5001/restaurant/${postURL}`, {
           latitude: latitude, // 37.570652 latitude
           longitude: longitude, // 127.007307 longitude
           text: postText,
@@ -120,9 +122,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
   return (
     <View style={styles.container}>
       {data.length === 0 ? (
-        <View style={styles.noneResult}>
-          <Text style={styles.noneResultText}>검색결과가 없습니다</Text>
-        </View>
+        <NoneResult text={'검색결과가 존재하지 않습니다'} />
       ) : (
         <View style={styles.flatListContainer}>
           <FlatList
