@@ -7,6 +7,7 @@ import {Searchbar} from 'react-native-paper';
 
 import Loading from '../../components/Loading';
 import Map from '../../components/Map';
+import CurrentLocationBtn from '../../components/CurrentLocationBtn';
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<HomeDrawerNaviParamList>,
@@ -15,8 +16,8 @@ type Navigation = CompositeNavigationProp<
 
 interface Props {
   location: {
-    latitude: number; // 36.9919666
-    longitude: number; // 127.5896299
+    latitude: number;
+    longitude: number;
   };
   navigation: Navigation;
   getUserInfo: () => Promise<void>;
@@ -73,7 +74,7 @@ function MapScreen({
       ) : (
         <View style={styles.container}>
           <Map
-            initialRegion={{
+            region={{
               latitude: location.latitude,
               longitude: location.longitude,
               latitudeDelta: 0.01,
@@ -87,6 +88,7 @@ function MapScreen({
             onIconPress={() => navigation.openDrawer()}
             onFocus={() => navigation.navigate('Search')}
           />
+          <CurrentLocationBtn GetCurrentLocation={GetCurrentLocation} />
         </View>
       )}
     </>

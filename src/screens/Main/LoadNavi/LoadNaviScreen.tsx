@@ -4,6 +4,8 @@ import {View, StyleSheet} from 'react-native';
 import {Polyline, Marker} from 'react-native-maps';
 
 import Map from '../../components/Map';
+import CurrentLocationBtn from '../../components/CurrentLocationBtn';
+import Loading from '../../components/Loading';
 
 interface Props {
   GetCurrentLocation: () => void;
@@ -33,33 +35,36 @@ function LoadNaviScreen({GetCurrentLocation, location, route}: Props) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <>
       {direction ? (
-        <Map
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}>
-          <Polyline
-            coordinates={direction}
-            strokeColor="red"
-            fillColor="rgba(255,0,0,0.5)"
-            strokeWidth={3}
-          />
-          <Marker
-            coordinate={{
-              latitude: Number(route.params.destination.latitude),
-              longitude: Number(route.params.destination.longitude),
-            }}
-            title="목적지"
-          />
-        </Map>
+        <View style={styles.container}>
+          <Map
+            region={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            }}>
+            <Polyline
+              coordinates={direction}
+              strokeColor="red"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={3}
+            />
+            <Marker
+              coordinate={{
+                latitude: Number(route.params.destination.latitude),
+                longitude: Number(route.params.destination.longitude),
+              }}
+              title="목적지"
+            />
+          </Map>
+          <CurrentLocationBtn GetCurrentLocation={GetCurrentLocation} />
+        </View>
       ) : (
-        <></>
+        <Loading />
       )}
-    </View>
+    </>
   );
 }
 
