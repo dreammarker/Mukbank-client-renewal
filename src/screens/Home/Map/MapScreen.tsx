@@ -1,24 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {CompositeNavigationProp, useIsFocused} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {useIsFocused} from '@react-navigation/native';
 import {View, StyleSheet, ToastAndroid, BackHandler} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 
+import {Location, Navigation} from '../../../types';
 import Loading from '../../components/Loading';
 import Map from '../../components/Map';
 import CurrentLocationBtn from '../../components/CurrentLocationBtn';
 
-type Navigation = CompositeNavigationProp<
-  DrawerNavigationProp<HomeDrawerNaviParamList>,
-  StackNavigationProp<MainStackNaviParamList>
->;
-
 interface Props {
-  location: {
-    latitude: number;
-    longitude: number;
-  };
+  location: Location;
   navigation: Navigation;
   getUserInfo: () => Promise<void>;
   GetCurrentLocation: () => void;

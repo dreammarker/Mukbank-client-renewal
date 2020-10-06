@@ -10,30 +10,14 @@ import {
 import axios from 'axios';
 import {List, Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
+import {LikeListData, Navigation} from '../../../types';
 import FoodCategory from '../../components/FoodCategory';
 
-interface SearchListData {
-  address: string;
-  distance: number;
-  firstchild: string;
-  id: number;
-  image: string | null;
-  latitude: string;
-  longitude: string;
-  name: string;
-  parent: string;
-  phone: string;
-  roadAddress: string;
-  secondchild: string;
-}
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
-
 interface Props {
-  list: SearchListData;
-  navigation: NavigationProp;
+  list: LikeListData;
+  navigation: Navigation;
 }
 
 function LikeListBox({list, navigation}: Props) {
@@ -45,7 +29,7 @@ function LikeListBox({list, navigation}: Props) {
     try {
       const response = await axios
         .post(
-          'http://172.30.1.33:5001/user/restlikeupdate',
+          'http://172.30.1.7:5001/user/restlikeupdate',
           {
             rest_id: list.rest_id,
           },
@@ -63,7 +47,7 @@ function LikeListBox({list, navigation}: Props) {
     try {
       const response = await axios
         .post(
-          'http://172.30.1.33:5001/user/userrestsel',
+          'http://172.30.1.7:5001/user/userrestsel',
           {
             rest_id: list.rest_id,
           },
@@ -86,7 +70,6 @@ function LikeListBox({list, navigation}: Props) {
       }
     }, []),
   );
-  console.log(typeof list.secondchild);
   return (
     <List.Section>
       <TouchableOpacity

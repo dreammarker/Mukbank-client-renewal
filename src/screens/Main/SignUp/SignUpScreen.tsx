@@ -2,30 +2,22 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 import {HelperText} from 'react-native-paper';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {StackNavigationProp} from '@react-navigation/stack';
 
+import {CheckText, Navigation} from '../../../types';
 import Btn from '../../components/Btn';
 import TextInput from '../../components/TextInput';
 import LabelLink from '../../components/LabelLink';
 import Dial from '../../components/Dial';
-
-type Navigation = CompositeNavigationProp<
-  DrawerNavigationProp<HomeDrawerNaviParamList>,
-  StackNavigationProp<MainStackNaviParamList>
->;
-type checkText = {value: string; error: string | boolean};
 
 interface Props {
   navigation: Navigation;
 }
 
 function SignUpScreen({navigation}: Props) {
-  const [id, setId] = useState<checkText>({value: '', error: ''});
-  const [password, setPassword] = useState<checkText>({value: '', error: ''});
-  const [chkPwd, setChkPwd] = useState<checkText>({value: '', error: ''});
-  const [nickname, setNickname] = useState<checkText>({value: '', error: ''});
+  const [id, setId] = useState<CheckText>({value: '', error: ''});
+  const [password, setPassword] = useState<CheckText>({value: '', error: ''});
+  const [chkPwd, setChkPwd] = useState<CheckText>({value: '', error: ''});
+  const [nickname, setNickname] = useState<CheckText>({value: '', error: ''});
   const [errorText, setErrorText] = useState<string>('');
   const [pass, setPass] = useState<boolean>(false);
 
@@ -60,7 +52,7 @@ function SignUpScreen({navigation}: Props) {
       return;
     } else {
       axios
-        .post('http://172.30.1.50:5001/user/signup', {
+        .post('http://172.30.1.7:5001/user/signup', {
           id: id.value,
           nickname: nickname.value,
           password: password.value,
@@ -184,7 +176,4 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   error: {alignSelf: 'flex-start'},
-  dialogContent: {paddingBottom: 0},
-  dialogActions: {width: '95%'},
-  alertBtn: {fontSize: 15},
 });

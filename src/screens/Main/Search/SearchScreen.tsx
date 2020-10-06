@@ -1,16 +1,14 @@
 import React, {useState, memo} from 'react';
 import axios from 'axios';
 import {Searchbar, List} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {View, ToastAndroid, StyleSheet} from 'react-native';
 
+import {Location, Navigation} from '../../../types';
 import SelectFilter from './SelectFilter';
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
-
 interface Props {
-  navigation: NavigationProp;
-  location: {latitude: number; longitude: number};
+  navigation: Navigation;
+  location: Location;
 }
 
 function SearchScreen({navigation, location}: Props) {
@@ -29,7 +27,7 @@ function SearchScreen({navigation, location}: Props) {
       const postText: string = text.trim();
       const postURL: string = 'search';
       axios
-        .post('http://172.30.1.52:5001/restaurant/search', {
+        .post('http://172.30.1.7:5001/restaurant/search', {
           latitude: Math.floor(location.latitude * 10000) / 10000,
           longitude: Math.floor(location.longitude * 10000) / 10000,
           text: postText,

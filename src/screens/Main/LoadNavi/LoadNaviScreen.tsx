@@ -3,13 +3,14 @@ import axios from 'axios';
 import {View, StyleSheet} from 'react-native';
 import {Polyline, Marker} from 'react-native-maps';
 
+import {Location} from '../../../types';
 import Map from '../../components/Map';
 import CurrentLocationBtn from '../../components/CurrentLocationBtn';
 import Loading from '../../components/Loading';
 
 interface Props {
   GetCurrentLocation: () => void;
-  location: {latitude: number; longitude: number};
+  location: Location;
   route: {params: {destination: {latitude: number; longitude: number}}};
 }
 

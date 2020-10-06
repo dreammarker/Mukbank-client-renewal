@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {Button, List} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {View, ScrollView, ToastAndroid, StyleSheet} from 'react-native';
 
+import {Location, Navigation} from '../../../types';
 import ChipList from './ChipList';
 import SelectedChip from './SelectedChip';
 
-export const ChipListData = [
+export const ChipListData: string[] = [
   '카페',
   '한식',
   '일식',
@@ -23,11 +23,9 @@ export const ChipListData = [
   '퓨전음식',
 ];
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
-
 interface Props {
-  navigation: NavigationProp;
-  location: {latitude: number; longitude: number};
+  navigation: Navigation;
+  location: Location;
 }
 
 function SelectFilter({navigation, location}: Props) {
@@ -46,7 +44,7 @@ function SelectFilter({navigation, location}: Props) {
       const postText: string = select.join(', ');
       const postURL: string = 'selectFilter';
       axios
-        .post('http://192.168.0.4:5001/restaurant/selectFilter', {
+        .post('http://172.30.1.7:5001/restaurant/selectFilter', {
           latitude: Math.floor(location.latitude * 10000) / 10000,
           longitude: Math.floor(location.longitude * 10000) / 10000,
           text: postText,

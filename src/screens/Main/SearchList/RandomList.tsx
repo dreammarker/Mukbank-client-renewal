@@ -1,33 +1,15 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {memo} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import {SearchListData, Navigation} from '../../../types';
 import ListBox from './ListBox';
 
-interface SearchListData {
-  address: string;
-  distance: number;
-  firstchild: string;
-  id: number;
-  image: string | null;
-  latitude: string;
-  longitude: string;
-  name: string;
-  parent: string;
-  phone: string;
-  roadAddress: string;
-  secondchild: string;
-}
-
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
-
 interface Props {
-  navigation: NavigationProp;
-  randomList: SearchListData;
-  resetRandomData: any;
-  GetCurrentLocation: any;
+  navigation: Navigation;
+  randomList: SearchListData[];
+  resetRandomData: () => void;
+  GetCurrentLocation: () => void;
 }
 
 function RandomList({

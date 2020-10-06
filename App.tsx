@@ -25,19 +25,16 @@ import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
 import LoginScreen from './src/screens/Main/Login/LoginScreen';
 import SignUpScreen from './src/screens/Main/SignUp/SignUpScreen';
 
+import {UserInfo, Location} from './src/types';
+
 const Stack = createStackNavigator();
 
-type UserInfo = {
-  id: string;
-  nickname: string;
-};
-
 interface Props {
-  Location: {latitude: number; longitude: number};
+  userLocation: Location;
 }
 
-function App({Location}: Props) {
-  const [location, setLocation] = useState(Location);
+function App({userLocation}: Props) {
+  const [location, setLocation] = useState(userLocation);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: '',
     nickname: '',
@@ -60,7 +57,7 @@ function App({Location}: Props) {
       if (cookie !== null) {
         // AsyncStorage에 토큰 남아있으면
         const response = await axios
-          .get('http://172.30.1.33:5001/user/usertokenCheck', {
+          .get('http://172.30.1.7:5001/user/usertokenCheck', {
             withCredentials: true,
           })
           .then((res) => res.data)
@@ -143,7 +140,6 @@ function App({Location}: Props) {
             <Stack.Screen name="Login">
               {(props) => <LoginScreen {...props} setIsLogin={setIsLogin} />}
             </Stack.Screen>
-
             <Stack.Screen name="SignUp" component={SignUpScreen} />
           </Stack.Navigator>
         </NavigationContainer>

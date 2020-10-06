@@ -1,27 +1,25 @@
 import React, {useEffect, useState, memo} from 'react';
 
 import axios from 'axios';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {Appbar} from 'react-native-paper';
 
+import {Navigation, LikeListData} from '../../../types';
 import Loading from '../../components/Loading';
 import NoneResult from '../../components/NoneResult';
 import LikeListBox from './LikeListBox';
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
 interface Props {
-  navigation: NavigationProp;
+  navigation: Navigation;
   route: {params: {parent: string}};
 }
 
 function LikeListScreen({route, navigation}: Props) {
-  const [list, setList] = useState(undefined);
-
+  const [list, setList] = useState<LikeListData[] | undefined>(undefined);
   const setLikeList = async () => {
     try {
       const response = await axios
-        .post('http://172.30.1.33:5001/user/userrestlist', {
+        .post('http://172.30.1.7:5001/user/userrestlist', {
           parent: route.params.parent,
         })
         .then((res) => res.data)
@@ -36,6 +34,7 @@ function LikeListScreen({route, navigation}: Props) {
   useEffect(() => {
     setLikeList();
   }, []);
+
   return (
     <>
       {list === undefined ? (
@@ -59,10 +58,10 @@ function LikeListScreen({route, navigation}: Props) {
               style={styles.container}
               contentContainerStyle={styles.containerContent}>
               <View style={styles.listContainer}>
-                {list.map((list: any) => (
+                {list.map((data: LikeListData) => (
                   <LikeListBox
-                    key={JSON.stringify(list)}
-                    list={list}
+                    key={JSON.stringify(data)}
+                    list={data}
                     navigation={navigation}
                   />
                 ))}
@@ -95,15 +94,5 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     margin: '5%',
-  },
-  noneResult: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-  },
-  noneResultText: {fontSize: 15},
-  flatListContainer: {
-    margin: '6%',
   },
 });

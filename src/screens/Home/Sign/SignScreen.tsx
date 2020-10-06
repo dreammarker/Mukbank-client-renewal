@@ -1,13 +1,11 @@
 import React from 'react';
 import {View, KeyboardAvoidingView, Image, StyleSheet} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
 
+import {Navigation} from '../../../types';
 import Btn from '../../components/Btn';
 
-type NavigationProp = StackNavigationProp<MainStackNaviParamList>;
-
 interface Props {
-  navigation: NavigationProp;
+  navigation: Navigation;
 }
 
 function SignScreen({navigation}: Props) {
@@ -53,10 +51,5 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     marginBottom: 50,
-  },
-  header: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    paddingVertical: 14,
   },
 });
