@@ -53,11 +53,7 @@ function LikeListScreen({route, navigation}: Props) {
             <Appbar.Action />
           </Appbar.Header>
           {list.length === 0 ? (
-            <View style={styles.noneResult}>
-              <Text style={styles.noneResultText}>
-                결과가 존재하지 않습니다.
-              </Text>
-            </View>
+            <NoneResult text={'검색결과가 존재하지 않습니다.'} />
           ) : (
             <ScrollView
               style={styles.container}
