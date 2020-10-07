@@ -33,7 +33,7 @@ function CustomDrawerContent(
   const logout = async () => {
     try {
       const response = await axios
-        .get('http://172.30.1.7:5001/user/signout')
+        .get('http://13.125.78.204:5001/user/signout')
         .then((res) => res.data)
         .catch((error) => console.error(error));
 

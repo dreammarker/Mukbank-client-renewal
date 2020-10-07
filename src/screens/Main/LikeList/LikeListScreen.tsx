@@ -19,7 +19,7 @@ function LikeListScreen({route, navigation}: Props) {
   const setLikeList = async () => {
     try {
       const response = await axios
-        .post('http://172.30.1.7:5001/user/userrestlist', {
+        .post('http://13.125.78.204:5001/user/userrestlist', {
           parent: route.params.parent,
         })
         .then((res) => res.data)

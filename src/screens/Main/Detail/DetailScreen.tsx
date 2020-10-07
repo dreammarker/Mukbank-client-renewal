@@ -4,9 +4,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {
   Alert,
   View,
@@ -90,7 +87,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       } else {
         const response = await axios
           .post(
-            'http://172.30.1.7:5001/user/restlikeupdate',
+            'http://13.125.78.204:5001/user/restlikeupdate',
             {
               rest_id: route.params.id,
             },
@@ -111,7 +108,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       if (cookie !== null) {
         const response = await axios
           .post(
-            'http://172.30.1.7:5001/user/userrestsel',
+            'http://13.125.78.204:5001/user/userrestsel',
             {
               rest_id: route.params.id,
             },
@@ -141,7 +138,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
-        .post('http:/172.30.1.7:5001/restaurant/detail', {
+        .post('http://13.125.78.204:5001/restaurant/detail', {
           rest_id: route.params.id, //  3127  7814 route.params.id
         })
         .then((res) => {

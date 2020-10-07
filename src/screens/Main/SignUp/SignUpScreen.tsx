@@ -52,7 +52,7 @@ function SignUpScreen({navigation}: Props) {
       return;
     } else {
       axios
-        .post('http://172.30.1.7:5001/user/signup', {
+        .post('http://13.125.78.204:5001/user/signup', {
           id: id.value,
           nickname: nickname.value,
           password: password.value,

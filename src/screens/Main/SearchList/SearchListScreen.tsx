@@ -37,7 +37,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
     const postURL: string = route.params.sendURL;
     try {
       const sendPost = await axios
-        .post(`http://172.30.1.7:5001/restaurant/${postURL}`, {
+        .post(`http://13.125.78.204:5001/restaurant/${postURL}`, {
           latitude: latitude, // 37.570652 latitude
           longitude: longitude, // 127.007307 longitude
           text: postText,
