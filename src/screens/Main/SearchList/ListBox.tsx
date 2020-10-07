@@ -70,7 +70,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       } else {
         const response = await axios
           .post(
-            'http://172.30.1.7:5001/user/restlikeupdate',
+            'http://13.125.78.204:5001/user/restlikeupdate',
             {
               rest_id: list.id,
             },
@@ -91,7 +91,7 @@ function ListBox({list, navigation, GetCurrentLocation}: Props) {
       if (cookie !== null) {
         const response = await axios
           .post(
-            'http://172.30.1.7:5001/user/userrestsel',
+            'http://13.125.78.204:5001/user/userrestsel',
             {
               rest_id: list.id,
             },

@@ -57,7 +57,7 @@ function App({userLocation}: Props) {
       if (cookie !== null) {
         // AsyncStorage에 토큰 남아있으면
         const response = await axios
-          .get('http://172.30.1.7:5001/user/usertokenCheck', {
+          .get('http://13.125.78.204:5001/user/usertokenCheck', {
             withCredentials: true,
           })
           .then((res) => res.data)

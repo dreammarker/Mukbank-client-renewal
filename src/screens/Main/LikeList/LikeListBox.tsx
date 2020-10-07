@@ -29,7 +29,7 @@ function LikeListBox({list, navigation}: Props) {
     try {
       const response = await axios
         .post(
-          'http://172.30.1.7:5001/user/restlikeupdate',
+          'http://13.125.78.204:5001/user/restlikeupdate',
           {
             rest_id: list.rest_id,
           },
@@ -47,7 +47,7 @@ function LikeListBox({list, navigation}: Props) {
     try {
       const response = await axios
         .post(
-          'http://172.30.1.7:5001/user/userrestsel',
+          'http://13.125.78.204:5001/user/userrestsel',
           {
             rest_id: list.rest_id,
           },
