@@ -55,7 +55,7 @@ function RandomList({
 export default memo(RandomList);
 
 const styles = StyleSheet.create({
-  container: {marginBottom: '5%'},
+  container: {marginTop: '5%', marginBottom: '5%'},
   subHeader: {
     marginBottom: '3%',
     flexDirection: 'row',

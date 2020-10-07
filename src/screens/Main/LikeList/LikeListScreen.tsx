@@ -1,10 +1,10 @@
 import React, {useEffect, useState, memo} from 'react';
 import axios from 'axios';
 import {View, StyleSheet, ScrollView, BackHandler} from 'react-native';
-import {Appbar} from 'react-native-paper';
 
 import {Navigation, LikeListData} from '../../../types';
 import Loading from '../../components/Loading';
+import Header from '../../components/Header';
 import NoneResult from '../../components/NoneResult';
 import LikeListBox from './LikeListBox';
 
@@ -54,16 +54,10 @@ function LikeListScreen({route, navigation}: Props) {
         <Loading />
       ) : (
         <View style={styles.container}>
-          <Appbar.Header
-            // 스크린 해더에 가게 명 표시
-            style={styles.header}>
-            <Appbar.BackAction onPress={() => navigation.goBack()} />
-            <Appbar.Content
-              title={`좋아요한 ${route.params.parent}`}
-              style={styles.headerContent}
-            />
-            <Appbar.Action />
-          </Appbar.Header>
+          <Header
+            navigation={navigation}
+            title={`좋아요한 ${route.params.parent}`}
+          />
           {list.length === 0 ? (
             <NoneResult text={'검색결과가 존재하지 않습니다.'} />
           ) : (
@@ -93,10 +87,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
-  },
-  header: {backgroundColor: '#fff'},
-  headerContent: {
-    alignItems: 'center',
   },
   position: {justifyContent: 'center'},
   containerContent: {

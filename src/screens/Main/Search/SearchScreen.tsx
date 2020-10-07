@@ -4,6 +4,7 @@ import {Searchbar, List} from 'react-native-paper';
 import {View, ToastAndroid, StyleSheet} from 'react-native';
 
 import {Location, Navigation} from '../../../types';
+import Header from '../../components/Header';
 import SelectFilter from './SelectFilter';
 
 interface Props {
@@ -47,12 +48,13 @@ function SearchScreen({navigation, location}: Props) {
 
   return (
     <View style={styles.container}>
+      <Header navigation={navigation} title={'검색'} />
+
       <View style={styles.searchBarView}>
         <Searchbar
-          icon="chevron-left"
           style={styles.searchBar}
-          placeholder="검색"
-          onIconPress={() => navigation.goBack()}
+          placeholder="검색어를 입력해 주세요"
+          onIconPress={() => sendText()}
           onChangeText={(t) => setText(t)}
           onSubmitEditing={() => sendText()}
         />

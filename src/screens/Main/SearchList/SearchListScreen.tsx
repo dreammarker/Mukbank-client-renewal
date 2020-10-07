@@ -5,6 +5,7 @@ import {ActivityIndicator} from 'react-native-paper';
 
 import {Location, SearchListData, Navigation} from '../../../types';
 import NoneResult from '../../components/NoneResult';
+import Header from '../../components/Header';
 import ListBox from './ListBox';
 import RandomList from './RandomList';
 
@@ -15,7 +16,7 @@ interface Props {
     params: {
       sendText: string;
       sendURL: string;
-      data: SearchListData;
+      data: SearchListData[];
       location: {latitude: number; longitude: number};
     };
   };
@@ -104,6 +105,11 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
   // ---------------------------------------------------------------------
   return (
     <View style={styles.container}>
+      <Header
+        navigation={navigation}
+        title={`'${route.params.sendText}' 검색 결과`}
+      />
+
       {data.length === 0 ? (
         <NoneResult text={'검색결과가 존재하지 않습니다'} />
       ) : (
@@ -146,6 +152,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
   flatListContainer: {
-    margin: '6%',
+    marginTop: 0,
+    marginLeft: '6%',
+    marginRight: '6%',
+    marginBottom: '6%',
   },
 });
