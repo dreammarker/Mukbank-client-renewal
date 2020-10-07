@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState, useCallback} from 'react';
 import {View, StyleSheet, ToastAndroid, BackHandler} from 'react-native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {Searchbar} from 'react-native-paper';
 
 import {Location, Navigation} from '../../../types';
@@ -28,31 +28,33 @@ function MapScreen({
   const isFocused = useIsFocused();
 
   const backAction = () => {
-    if (exitApp == false) {
+    if (exitApp === false) {
       SETexitApp(true);
       ToastAndroid.showWithGravity(
         '한번 더 누르시면 종료됩니다.',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
-    } else if (exitApp == true) {
+    } else if (exitApp === true) {
       BackHandler.exitApp();
     }
     setTimeout(() => {
       SETexitApp(false);
-    }, 2000);
+    }, 1000);
     return true;
   };
 
-  useEffect(() => {
-    if (isFocused === true) {
-      const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        backAction,
-      );
-      return () => backHandler.remove();
-    }
-  }, [exitApp]);
+  useFocusEffect(
+    useCallback(() => {
+      if (isFocused === true) {
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+        return () => backHandler.remove();
+      }
+    }, [exitApp]),
+  );
 
   useEffect(() => {
     getUserInfo();
