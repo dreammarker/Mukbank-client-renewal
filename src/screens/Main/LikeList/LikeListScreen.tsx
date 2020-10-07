@@ -1,7 +1,6 @@
 import React, {useEffect, useState, memo} from 'react';
-
 import axios from 'axios';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, BackHandler} from 'react-native';
 import {Appbar} from 'react-native-paper';
 
 import {Navigation, LikeListData} from '../../../types';
@@ -16,6 +15,20 @@ interface Props {
 
 function LikeListScreen({route, navigation}: Props) {
   const [list, setList] = useState<LikeListData[] | undefined>(undefined);
+
+  const backPress = () => {
+    navigation.goBack();
+    return true;
+  };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backPress,
+    );
+    return () => backHandler.remove();
+  }, []);
+
   const setLikeList = async () => {
     try {
       const response = await axios
