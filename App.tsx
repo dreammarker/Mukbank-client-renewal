@@ -7,33 +7,154 @@
  *
  * @format
  */
-
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-// import {createDrawerNavigator} from '@react-navigation/drawer';
-
-import MapScreen from './Screen/Home/Map/MapScreen';
-import SearchScreen from './Screen/Search/SearchScreen';
-import SearchListScreen from './Screen/SearchList/SearchListScreen';
-import DetailScreen from './Screen/Detail/DetailScreen';
-
 // declare const global: {HermesInternal: null | {}};
 
-const Stack = createStackNavigator();
-// const Drawer = createDrawerNavigator();
+import React, {useState, useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import Geolocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
-const App = () => {
+import Home from './src/screens/Home/Home';
+import SearchScreen from './src/screens/Main/Search/SearchScreen';
+import SearchListScreen from './src/screens/Main/SearchList/SearchListScreen';
+import LikeListScreen from './src/screens/Main/LikeList/LikeListScreen';
+import DetailScreen from './src/screens/Main/Detail/DetailScreen';
+import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
+import LoginScreen from './src/screens/Main/Login/LoginScreen';
+import SignUpScreen from './src/screens/Main/SignUp/SignUpScreen';
+
+import {UserInfo, Location} from './src/types';
+
+const Stack = createStackNavigator();
+
+interface Props {
+  userLocation: Location;
+}
+
+function App({userLocation}: Props) {
+  const [location, setLocation] = useState(userLocation);
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    id: '',
+    nickname: '',
+  });
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  function GetCurrentLocation() {
+    // 현재위치 표시
+    return Geolocation.getCurrentPosition((locationInfo) => {
+      setLocation({
+        latitude: locationInfo.coords.latitude,
+        longitude: locationInfo.coords.longitude,
+      });
+    });
+  }
+
+  const getUserInfo = async () => {
+    try {
+      const cookie = await AsyncStorage.getItem('userData');
+      if (cookie !== null) {
+        // AsyncStorage에 토큰 남아있으면
+        const response = await axios
+          .get('http://13.125.78.204:5001/user/usertokenCheck', {
+            withCredentials: true,
+          })
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+
+        if (response.token) {
+          setUserInfo({
+            id: response.data.identity,
+            nickname: response.data.nick,
+          });
+        }
+      } else if (cookie === null) {
+        //안남아있으면
+        setUserInfo({id: '', nickname: ''});
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    GetCurrentLocation();
+  }, []);
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Map" component={MapScreen} />
-        <Stack.Screen name="Search" component={SearchScreen} />
-        <Stack.Screen name="SearchList" component={SearchListScreen} />
-        <Stack.Screen name="DetailS" component={DetailScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      {location ? (
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false, // 위에 바 없애줌
+            }}>
+            <Stack.Screen name="Home">
+              {(props) => (
+                <Home
+                  {...props}
+                  location={location}
+                  userInfo={userInfo}
+                  getUserInfo={getUserInfo}
+                  GetCurrentLocation={GetCurrentLocation}
+                  isLogin={isLogin}
+                  setUserInfo={setUserInfo}
+                  setIsLogin={setIsLogin}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Search">
+              {(props) => <SearchScreen {...props} location={location} />}
+            </Stack.Screen>
+            <Stack.Screen name="SearchList">
+              {(props) => (
+                <SearchListScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="LikeList" component={LikeListScreen} />
+            <Stack.Screen name="Detail">
+              {(props) => (
+                <DetailScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="LoadNavi">
+              {(props) => (
+                <LoadNaviScreen
+                  {...props}
+                  GetCurrentLocation={GetCurrentLocation}
+                  location={location}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Login">
+              {(props) => <LoginScreen {...props} setIsLogin={setIsLogin} />}
+            </Stack.Screen>
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      ) : (
+        <></>
+      )}
+    </>
   );
-};
+}
 
 export default App;
