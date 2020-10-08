@@ -15,6 +15,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
 import Home from './src/screens/Home/Home';
 import SearchScreen from './src/screens/Main/Search/SearchScreen';
@@ -77,6 +78,12 @@ function App({userLocation}: Props) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     GetCurrentLocation();
