@@ -26,9 +26,10 @@ export const ChipListData: string[] = [
 interface Props {
   navigation: Navigation;
   location: Location;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function SelectFilter({navigation, location}: Props) {
+function SelectFilter({navigation, location, setLoading}: Props) {
   const [chipListData] = useState<string[]>(ChipListData); // 기존 선택사항 chip들
   const [select, setSelect] = useState<string[]>([]); // 선택된 chip의 name들
 
@@ -41,6 +42,7 @@ function SelectFilter({navigation, location}: Props) {
         ToastAndroid.CENTER,
       );
     } else {
+      setLoading(true);
       const postText: string = select.join(', ');
       const postURL: string = 'selectFilter';
       axios
@@ -51,14 +53,15 @@ function SelectFilter({navigation, location}: Props) {
           paging: 1,
         })
         .then((res) => res.data)
-        .then((data) =>
+        .then((data) => {
+          setLoading(false);
           navigation.navigate('SearchList', {
             sendText: postText,
             sendURL: postURL,
             data: data,
             location: location,
-          }),
-        );
+          });
+        });
     }
   };
 
