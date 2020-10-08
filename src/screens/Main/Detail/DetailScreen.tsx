@@ -36,6 +36,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>('');
   const [chkLike, setChkLike] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(0);
   const phoneCall = () => {
     // 전화 아이콘 누를 때
     if (data.phone === '') {
@@ -139,7 +140,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
         .post('http://13.125.78.204:5001/restaurant/detail', {
-          rest_id: route.params.id, //  3127  7814 route.params.id
+          rest_id: route.params.id,
         })
         .then((res) => {
           if (res.data === '') {
@@ -152,6 +153,25 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    const getRestLike = () => {
+      // 좋아요 누적 확인
+      axios
+        .post('http://13.125.78.204:5001/restaurant/restlike', {
+          rest_id: route.params.id,
+        })
+        .then((res) => {
+          if (res.data !== false) {
+            setLikeCount(res.data.count);
+          } else if (res.data === false) {
+            setLikeCount(0);
+          }
+        })
+        .catch((error) => console.error(error));
+    };
+    getRestLike();
+  }, [chkLike]);
 
   return (
     <>
@@ -232,6 +252,11 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
             </Card.Actions>
           </Card>
           <Card style={styles.cardView}>
+            <List.Item
+              title={`${likeCount}명이 좋아합니다`}
+              left={(props) => <List.Icon {...props} icon="heart" />}
+              titleStyle={styles.listTitle}
+            />
             <List.Item
               title={data.phone}
               left={(props) => <List.Icon {...props} icon="phone" />}
