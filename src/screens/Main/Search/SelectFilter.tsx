@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import axios from 'axios';
 import {Button, List} from 'react-native-paper';
-import {View, ScrollView, ToastAndroid, StyleSheet} from 'react-native';
+import {View, ScrollView, StyleSheet} from 'react-native';
 
 import {Location, Navigation} from '../../../types';
 import ChipList from './ChipList';
@@ -27,43 +26,13 @@ interface Props {
   navigation: Navigation;
   location: Location;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  select: string[];
+  setSelect: React.Dispatch<React.SetStateAction<string[]>>;
+  sendText: () => void;
 }
 
-function SelectFilter({navigation, location, setLoading}: Props) {
+function SelectFilter({select, setSelect, sendText}: Props) {
   const [chipListData] = useState<string[]>(ChipListData); // 기존 선택사항 chip들
-  const [select, setSelect] = useState<string[]>([]); // 선택된 chip의 name들
-
-  const sendFilterText = () => {
-    if (select.length === 0) {
-      // 필터 선택 한 것 없을 때
-      ToastAndroid.showWithGravity(
-        '필터를 선택 해 주세요.',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
-    } else {
-      setLoading(true);
-      const postText: string = select.join(', ');
-      const postURL: string = 'selectFilter';
-      axios
-        .post('http://13.125.78.204:5001/restaurant/selectFilter', {
-          latitude: Math.floor(location.latitude * 10000) / 10000,
-          longitude: Math.floor(location.longitude * 10000) / 10000,
-          text: postText,
-          paging: 1,
-        })
-        .then((res) => res.data)
-        .then((data) => {
-          setLoading(false);
-          navigation.navigate('SearchList', {
-            sendText: postText,
-            sendURL: postURL,
-            data: data,
-            location: location,
-          });
-        });
-    }
-  };
 
   return (
     <>
@@ -84,14 +53,14 @@ function SelectFilter({navigation, location, setLoading}: Props) {
           <Button
             style={styles.selectedChipBtn}
             mode="contained"
-            onPress={() => sendFilterText()}>
+            onPress={() => sendText()}>
             검색
           </Button>
         </View>
       </View>
 
       <View style={styles.chipView}>
-        <List.Section title="필터">
+        <List.Section title="필터" titleStyle={styles.title}>
           <View style={styles.row}>
             {chipListData.map((list: string) => (
               <ChipList
@@ -127,6 +96,7 @@ const styles = StyleSheet.create({
   chipView: {
     flex: 16,
   },
+  title: {color: 'black'},
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',

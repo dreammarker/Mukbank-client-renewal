@@ -131,7 +131,13 @@ function App({userLocation}: Props) {
               )}
             </Stack.Screen>
             <Stack.Screen name="Search">
-              {(props) => <SearchScreen {...props} location={location} />}
+              {(props) => (
+                <SearchScreen
+                  {...props}
+                  location={location}
+                  GetCurrentLocation={GetCurrentLocation}
+                />
+              )}
             </Stack.Screen>
             <Stack.Screen name="SearchList">
               {(props) => (

@@ -1,7 +1,7 @@
-import React, {useState, useEffect, memo} from 'react';
+import React, {useState, memo} from 'react';
 import axios from 'axios';
 import {Searchbar, List, ActivityIndicator} from 'react-native-paper';
-import {View, ToastAndroid, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import {Location, Navigation} from '../../../types';
 import Header from '../../components/Header';
@@ -10,43 +10,37 @@ import SelectFilter from './SelectFilter';
 interface Props {
   navigation: Navigation;
   location: Location;
+  GetCurrentLocation: () => void;
 }
 
-function SearchScreen({navigation, location}: Props) {
+function SearchScreen({navigation, GetCurrentLocation, location}: Props) {
   const [text, setText] = useState<string>('');
+  const [select, setSelect] = useState<string[]>([]); // 선택된 chip의 name들
   const [loading, setLoading] = useState<boolean>(false);
 
   const sendText = () => {
-    // 서치 했을 때 axios
-    if (text === '') {
-      // 검색어 입력한 것 없을 때
-      ToastAndroid.showWithGravity(
-        '검색어를 입력 해 주세요.',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
-    } else {
-      setLoading(true);
-      const postText: string = text.trim();
-      const postURL: string = 'search';
+    setLoading(true);
+    const search: string = text.trim();
+    const filter: string = select.join(', ');
+    GetCurrentLocation().then(() =>
       axios
-        .post('http://13.125.78.204:5001/restaurant/search', {
+        .post('http://13.125.78.204:5001/restaurant/restfilersearch', {
           latitude: Math.floor(location.latitude * 10000) / 10000,
           longitude: Math.floor(location.longitude * 10000) / 10000,
-          text: postText,
+          filter: filter,
+          search: search,
           paging: 1,
         })
-        .then((res) => res.data)
-        .then((data) => {
+        .then((res) => {
           setLoading(false);
           navigation.navigate('SearchList', {
-            sendText: postText,
-            sendURL: postURL,
-            data: data,
+            search: search,
+            filter: filter,
+            data: res.data,
             location: location,
           });
-        });
-    }
+        }),
+    );
   };
 
   return (
@@ -65,11 +59,16 @@ function SearchScreen({navigation, location}: Props) {
         </View>
         {/* 필터 */}
         <View style={styles.filterChipsContainer}>
-          <List.Section title="선택된 필터"></List.Section>
+          <List.Section
+            title="선택된 필터"
+            titleStyle={styles.title}></List.Section>
           <SelectFilter
             navigation={navigation}
             location={location}
             setLoading={setLoading}
+            select={select}
+            setSelect={setSelect}
+            sendText={sendText}
           />
         </View>
       </View>
@@ -106,6 +105,7 @@ const styles = StyleSheet.create({
   filterChipsContainer: {
     flex: 7.5,
   },
+  title: {color: 'black'},
   loadingView: {
     zIndex: 1,
     position: 'absolute',
