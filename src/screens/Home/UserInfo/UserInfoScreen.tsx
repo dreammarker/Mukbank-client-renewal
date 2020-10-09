@@ -6,9 +6,10 @@ import {
   KeyboardAvoidingView,
   Text,
 } from 'react-native';
-import {Divider, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 import {Navigation, UserInfo} from '../../../types';
+import InfoText from '../../components/InfoText';
 
 type Props = {
   navigation: Navigation;
@@ -25,39 +26,9 @@ function UserInfoScreen({navigation, userInfo, logout}: Props) {
           style={styles.image}
         />
         <Text style={styles.header}>회원정보</Text>
-        <View style={styles.textContainer}>
-          <View style={styles.flexDirection}>
-            <View style={styles.titleView}>
-              <Text style={styles.title}>아이디</Text>
-            </View>
-            <View style={styles.infoView}>
-              <Text style={styles.info}>{userInfo.id}</Text>
-            </View>
-          </View>
-          <Divider />
-        </View>
-        <View style={styles.textContainer}>
-          <View style={styles.flexDirection}>
-            <View style={styles.titleView}>
-              <Text style={styles.title}>닉네임</Text>
-            </View>
-            <View style={styles.infoView}>
-              <Text style={styles.info}>{userInfo.nickname}</Text>
-            </View>
-          </View>
-          <Divider />
-        </View>
-        <View style={styles.textContainer}>
-          <View style={styles.flexDirection}>
-            <View style={styles.titleView}>
-              <Text style={styles.title}>가입일</Text>
-            </View>
-            <View style={styles.infoView}>
-              <Text style={styles.info}>{userInfo.joined}</Text>
-            </View>
-          </View>
-          <Divider />
-        </View>
+        <InfoText title={'아이디'} info={userInfo.id} />
+        <InfoText title={'아이디'} info={userInfo.nickname} />
+        <InfoText title={'가입일'} info={userInfo.joined} />
         <View style={styles.btnView}>
           <Button
             style={styles.btn}
@@ -99,23 +70,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     marginBottom: '10%',
   },
-  textContainer: {
-    marginBottom: '5%',
-  },
-  flexDirection: {
-    width: '100%',
-    flexDirection: 'row',
-    marginBottom: '5%',
-    alignItems: 'center',
-  },
-  titleView: {flex: 1},
-  title: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'left',
-  },
-  infoView: {flex: 2},
-  info: {fontSize: 16, textAlign: 'left'},
+
   btnView: {width: '100%', marginTop: '5%'},
   btn: {alignSelf: 'flex-end', alignItems: 'flex-end'},
 });
