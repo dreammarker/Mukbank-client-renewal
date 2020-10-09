@@ -39,17 +39,28 @@ function App({userLocation}: Props) {
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: '',
     nickname: '',
+    joined: '',
   });
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   function GetCurrentLocation() {
     // 현재위치 표시
-    return Geolocation.getCurrentPosition((locationInfo) => {
-      setLocation({
-        latitude: locationInfo.coords.latitude,
-        longitude: locationInfo.coords.longitude,
-      });
-    });
+    return Geolocation.getCurrentPosition(
+      (locationInfo) => {
+        setLocation({
+          latitude: locationInfo.coords.latitude,
+          longitude: locationInfo.coords.longitude,
+        });
+      },
+      (error) => {
+        console.log(error.code, error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 50000,
+        maximumAge: 10000,
+      },
+    );
   }
 
   const getUserInfo = async () => {
@@ -65,14 +76,19 @@ function App({userLocation}: Props) {
           .catch((error) => console.error(error));
 
         if (response.token) {
+          setIsLogin(true);
+          let createAtData: string = response.data.createdAt;
+          const findIndex: number = createAtData.indexOf('T');
+          createAtData = createAtData.slice(0, findIndex);
           setUserInfo({
             id: response.data.identity,
             nickname: response.data.nick,
+            joined: createAtData,
           });
         }
       } else if (cookie === null) {
         //안남아있으면
-        setUserInfo({id: '', nickname: ''});
+        setIsLogin(false);
       }
     } catch (error) {
       console.error(error);
@@ -110,7 +126,6 @@ function App({userLocation}: Props) {
                   getUserInfo={getUserInfo}
                   GetCurrentLocation={GetCurrentLocation}
                   isLogin={isLogin}
-                  setUserInfo={setUserInfo}
                   setIsLogin={setIsLogin}
                 />
               )}
