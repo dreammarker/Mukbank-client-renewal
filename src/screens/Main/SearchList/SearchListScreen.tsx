@@ -14,8 +14,8 @@ interface Props {
   location: Location;
   route: {
     params: {
-      sendText: string;
-      sendURL: string;
+      search: string;
+      filter: string;
       data: SearchListData[];
       location: {latitude: number; longitude: number};
     };
@@ -29,22 +29,23 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
   const [count, setCount] = useState<number>(1); // pagination 기능을 위한 page 숫자
   const [randomData, setRandomData] = useState<SearchListData[]>([]);
   const [moving, setMoving] = useState<boolean>(false); // 위로새로고침, paging 이벤트가 발생했는지 구분
-
   async function sendSearchFilterText() {
     setMoving(false);
     const latitude: number = route.params.location.latitude;
     const longitude: number = route.params.location.longitude;
-    const postText: string = route.params.sendText;
-    const postURL: string = route.params.sendURL;
+    const search: string = route.params.search;
+    const filter: string = route.params.filter;
     try {
       const sendPost = await axios
-        .post(`http://13.125.78.204:5001/restaurant/${postURL}`, {
-          latitude: latitude, // 37.570652 latitude
-          longitude: longitude, // 127.007307 longitude
-          text: postText,
+        .post('http://13.125.78.204:5001/restaurant/restfilersearch', {
+          latitude: latitude,
+          longitude: longitude,
+          filter: filter,
+          search: search,
           paging: count,
         })
         .then((res) => res.data);
+
       if (refreshing) {
         // pulldown 새로고침 시
         setRefreshing(false); // 새로고침 false
@@ -102,13 +103,26 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
     }
   }, [moving]);
 
+  // useEffect(() => {
+  //   // if (moving === true) {
+  //   // 이벤트가 발생했으면
+  //   sendSearchFilterText();
+  //   // }
+  // }, []);
+
   // ---------------------------------------------------------------------
+  const headerTitle = () => {
+    let name: string = '';
+    if (route.params.search === '' && route.params.filter === '') {
+      return (name = '내 주변 맛집');
+    }
+    name = route.params.search + ' ' + route.params.filter;
+    return name.trim();
+  };
+
   return (
     <View style={styles.container}>
-      <Header
-        navigation={navigation}
-        title={`'${route.params.sendText}' 검색 결과`}
-      />
+      <Header navigation={navigation} title={`${headerTitle()} 검색 결과`} />
 
       {data.length === 0 ? (
         <NoneResult text={'검색결과가 존재하지 않습니다'} />
