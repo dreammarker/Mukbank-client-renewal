@@ -77,6 +77,7 @@ function MapScreen({
           <Searchbar
             style={styles.searchBar}
             icon="menu"
+            iconColor="black"
             placeholder="검색"
             onIconPress={() => navigation.openDrawer()}
             onFocus={() => navigation.navigate('Search')}
