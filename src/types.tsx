@@ -10,6 +10,7 @@ export type Navigation = CompositeNavigationProp<
 export type UserInfo = {
   id: string;
   nickname: string;
+  joined: string;
 };
 
 export type SearchListData = {
