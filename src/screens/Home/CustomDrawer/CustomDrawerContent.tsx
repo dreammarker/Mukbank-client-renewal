@@ -22,36 +22,15 @@ import {UserInfo, Navigation} from '../../../types';
 interface Props {
   navigation: Navigation;
   userInfo: UserInfo;
-  setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
+  isLogin: boolean;
+  logout: () => Promise<void>;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function CustomDrawerContent(
-  {navigation, userInfo, setUserInfo, setIsLogin}: Props,
+  {navigation, userInfo, isLogin, logout}: Props,
   props: DrawerContentComponentProps<DrawerContentOptions>,
 ) {
-  const logout = async () => {
-    try {
-      const response = await axios
-        .get('http://13.125.78.204:5001/user/signout')
-        .then((res) => res.data)
-        .catch((error) => console.error(error));
-
-      if (response === '로그아웃 되었습니다.') {
-        await AsyncStorage.removeItem('userData');
-        setUserInfo({id: '', nickname: ''});
-        setIsLogin(false);
-        ToastAndroid.showWithGravity(
-          '로그아웃이 완료되었습니다.',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const logoutAlert = () => {
     Alert.alert(
       '로그아웃',
@@ -64,7 +43,7 @@ function CustomDrawerContent(
         },
         {
           text: '예',
-          onPress: () => logout().then(() => navigation.closeDrawer()),
+          onPress: () => logout().then(() => navigation.goBack()),
         },
       ],
       {cancelable: false},
@@ -74,7 +53,7 @@ function CustomDrawerContent(
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
-        {userInfo.id === '' ? (
+        {isLogin === false ? (
           <TouchableOpacity
             style={styles.logIn}
             activeOpacity={1}
@@ -134,14 +113,14 @@ function CustomDrawerContent(
                 <View style={styles.drawerSectionMargin}>
                   <Title style={styles.drawerItemTitle}>회원</Title>
                 </View>
-                {/* <DrawerItem
+                <DrawerItem
                   icon={() => (
                     <Icons name="person-outline" color={'black'} size={22} />
                   )}
                   label="회원정보"
                   labelStyle={styles.drawerItemLabel}
                   onPress={() => navigation.navigate('UserInfo')}
-                /> */}
+                />
                 <DrawerItem
                   icon={() => (
                     <Icons name="log-out-outline" color={'black'} size={22} />
