@@ -51,7 +51,8 @@ function SearchScreen({navigation, GetCurrentLocation, location}: Props) {
         <View style={styles.searchBarView}>
           <Searchbar
             style={styles.searchBar}
-            placeholder="검색어를 입력해 주세요"
+            placeholder="음식점을 입력해 주세요"
+            iconColor="black"
             onIconPress={() => sendText()}
             onChangeText={(t) => setText(t)}
             onSubmitEditing={() => sendText()}

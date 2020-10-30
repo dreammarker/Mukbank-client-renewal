@@ -1,13 +1,5 @@
 import React from 'react';
-import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ToastAndroid,
-} from 'react-native';
+import {View, StyleSheet, Alert} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {
   DrawerItem,
@@ -15,7 +7,7 @@ import {
   DrawerContentOptions,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import {Title, Drawer} from 'react-native-paper';
+import {Title, Drawer, Button} from 'react-native-paper';
 
 import {UserInfo, Navigation} from '../../../types';
 
@@ -54,22 +46,17 @@ function CustomDrawerContent(
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
         {isLogin === false ? (
-          <TouchableOpacity
-            style={styles.logIn}
-            activeOpacity={1}
-            onPress={() => navigation.navigate('Sign')}>
-            <Title style={styles.loginTitle}>로그인해주세요</Title>
-          </TouchableOpacity>
+          <View style={styles.logIn}>
+            <Button
+              labelStyle={styles.btnLabel}
+              mode="contained"
+              onPress={() => navigation.navigate('Sign')}>
+              로그인
+            </Button>
+          </View>
         ) : (
           <>
             <View style={styles.userInfoSection}>
-              {/* <Avatar.Image
-            source={{
-              uri:
-                'https://pbs.twimg.com/profile_images/952545910990495744/b59hSXUd_400x400.jpg',
-            }}
-            size={50}
-          /> */}
               <Title style={styles.title}>{userInfo.nickname}님</Title>
               <View style={styles.row}></View>
             </View>
@@ -145,9 +132,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logIn: {
+    marginVertical: 10,
     paddingTop: 50,
+    marginLeft: '15%',
+    marginRight: '15%',
   },
-  loginTitle: {textAlign: 'center'},
+  btnLabel: {fontWeight: 'bold', fontSize: 16, lineHeight: 28},
   userInfoSection: {
     paddingTop: 20,
     paddingLeft: 20,
