@@ -1,6 +1,7 @@
 # BapSearching
 
-> 내 주변에 있는 맛집을 검색, 필터링 하는 어플입니다. 기존에 있는 먹뱅크 프로젝트의 기능과 UI를 개선하기 위해 프로젝트를 진행하였습니다. <br/><br/> > [플레이스토어](https://play.google.com/store/apps/details?id=com.bapsearching)
+> 내 주변에 있는 맛집을 검색, 필터링 하는 어플입니다. 기존에 있는 먹뱅크 프로젝트의 기능과 UI를 개선하기 위해 프로젝트를 진행하였습니다. (리뉴얼 전 링크 [github](https://github.com/ollabu3/MukBank-client) , [notion](https://www.notion.so/3-ToNaEat-MukBank-a87f0fa125d14655b4040433da09da56))
+> <br/><br/> > [플레이스토어](https://play.google.com/store/apps/details?id=com.bapsearching)
 
 ## 주요기능
 
