@@ -1,4 +1,4 @@
-package com.bapsearching;
+package com.ollabu.bapsearching;
 
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
