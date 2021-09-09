@@ -37,7 +37,7 @@ function SearchListScreen({navigation, route, GetCurrentLocation}: Props) {
     const filter: string = route.params.filter;
     try {
       const sendPost = await axios
-        .post('http://13.125.78.204:5001/restaurant/restfilersearch', {
+        .post('restaurant/restfilersearch', {
           latitude: latitude,
           longitude: longitude,
           filter: filter,
