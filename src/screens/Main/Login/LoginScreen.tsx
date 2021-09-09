@@ -39,7 +39,7 @@ function LoginScreen({navigation, setIsLogin}: Props) {
     } else {
       axios
         .post(
-          'http://13.125.78.204:5001/user/signin',
+          'user/signin',
           {
             id: id.value,
             password: password.value,

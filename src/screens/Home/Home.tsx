@@ -33,7 +33,7 @@ function Home({
   const logout = async () => {
     try {
       const response = await axios
-        .get('http://13.125.78.204:5001/user/signout')
+        .get('user/signout')
         .then((res) => res.data)
         .catch((error) => console.error(error));
 

@@ -24,7 +24,7 @@ function SearchScreen({navigation, GetCurrentLocation, location}: Props) {
     const filter: string = select.join(', ');
     GetCurrentLocation().then(() =>
       axios
-        .post('http://13.125.78.204:5001/restaurant/restfilersearch', {
+        .post('restaurant/restfilersearch', {
           latitude: Math.floor(location.latitude * 10000) / 10000,
           longitude: Math.floor(location.longitude * 10000) / 10000,
           filter: filter,

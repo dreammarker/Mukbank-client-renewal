@@ -14,13 +14,15 @@ interface Props {
   route: {params: {destination: {latitude: number; longitude: number}}};
 }
 
-const MAPBOX_KEY = '';
+const MAPBOX_KEY =
+  'pk.eyJ1Ijoib2xsYWJ1MyIsImEiOiJja2Y1Z2s0eGYwbXVrMnFwOXR4OHV2dWhkIn0.5PyRaOk8aaRUGn4mbXOABg';
 
 function LoadNaviScreen({GetCurrentLocation, location, route}: Props) {
   const [direction, setDirection] = useState<object[]>();
   async function getDirection() {
     const destinationPath = await axios(
       `https://api.mapbox.com/directions/v5/mapbox/walking/${location.longitude},${location.latitude};${route.params.destination.longitude},${route.params.destination.latitude}?geometries=geojson&access_token=${MAPBOX_KEY}`,
+      {withCredentials: true},
     ).then((res) => {
       const coord = res.data.routes[0].geometry.coordinates.map(
         (item: object[]) => {

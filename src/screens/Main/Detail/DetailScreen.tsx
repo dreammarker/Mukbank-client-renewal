@@ -88,7 +88,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       } else {
         const response = await axios
           .post(
-            'http://13.125.78.204:5001/user/restlikeupdate',
+            'user/restlikeupdate',
             {
               rest_id: route.params.id,
             },
@@ -109,7 +109,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
       if (cookie !== null) {
         const response = await axios
           .post(
-            'http://13.125.78.204:5001/user/userrestsel',
+            'user/userrestsel',
             {
               rest_id: route.params.id,
             },
@@ -139,7 +139,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     const getData = () => {
       // ListBox 누를 시 넘겨주는 id번호를 이용해 detail api 가져옴
       axios
-        .post('http://13.125.78.204:5001/restaurant/detail', {
+        .post('restaurant/detail', {
           rest_id: route.params.id,
         })
         .then((res) => {
@@ -158,7 +158,7 @@ function DetailScreen({route, navigation, GetCurrentLocation}: Props) {
     const getRestLike = () => {
       // 좋아요 누적 확인
       axios
-        .post('http://13.125.78.204:5001/restaurant/restlike', {
+        .post('restaurant/restlike', {
           rest_id: route.params.id,
         })
         .then((res) => {
