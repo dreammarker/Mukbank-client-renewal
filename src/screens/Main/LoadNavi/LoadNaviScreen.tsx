@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {View, StyleSheet} from 'react-native';
 import {Polyline, Marker} from 'react-native-maps';
+import Config from 'react-native-config';
 
 import {Location} from '../../../types';
 import Map from '../../components/Map';
@@ -14,8 +15,7 @@ interface Props {
   route: {params: {destination: {latitude: number; longitude: number}}};
 }
 
-const MAPBOX_KEY =
-  'pk.eyJ1Ijoib2xsYWJ1MyIsImEiOiJja2Y1Z2s0eGYwbXVrMnFwOXR4OHV2dWhkIn0.5PyRaOk8aaRUGn4mbXOABg';
+const MAPBOX_KEY = Config.MAPBOX_KEY;
 
 function LoadNaviScreen({GetCurrentLocation, location, route}: Props) {
   const [direction, setDirection] = useState<object[]>();

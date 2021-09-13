@@ -25,6 +25,7 @@ import DetailScreen from './src/screens/Main/Detail/DetailScreen';
 import LoadNaviScreen from './src/screens/Main/LoadNavi/LoadNaviScreen';
 import LoginScreen from './src/screens/Main/Login/LoginScreen';
 import SignUpScreen from './src/screens/Main/SignUp/SignUpScreen';
+import Config from 'react-native-config';
 
 import {UserInfo, Location} from './src/types';
 
@@ -35,6 +36,8 @@ interface Props {
 }
 
 function App({userLocation}: Props) {
+  axios.defaults.baseURL = Config.base_URL;
+
   const [location, setLocation] = useState(userLocation);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     id: '',
@@ -69,7 +72,7 @@ function App({userLocation}: Props) {
       if (cookie !== null) {
         // AsyncStorage에 토큰 남아있으면
         const response = await axios
-          .get('http://13.125.78.204:5001/user/usertokenCheck', {
+          .get('user/usertokenCheck', {
             withCredentials: true,
           })
           .then((res) => res.data)
